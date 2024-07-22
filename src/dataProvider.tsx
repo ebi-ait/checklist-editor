@@ -5,8 +5,19 @@ const httpClient = fetchUtils.fetchJson;
 
 const dataProvider: DataProvider = {
     getList: (resource, params) => {
+        const { filter = {}, pagination, sort } = params;
+
+        const query = new URLSearchParams({
+            ...filter.q ? { text: filter.q } : {}, // Add the 'text' parameter if 'q' is provided
+            start: pagination.page * pagination.perPage - pagination.perPage,
+            limit: pagination.perPage,
+            sort: sort.field,
+            order: sort.order,
+        }).toString();
+
         // Adjust the URL to point to the right endpoint for lists
-        return httpClient(`${apiUrl}${resource}/search`).then(({ json }) => {
+        const url = `${apiUrl}${resource}/search?${query}`;
+        return httpClient(url).then(({ json }) => {
             // Extract the embedded resources
             const data = json._embedded?.[resource] || [];
             return {
