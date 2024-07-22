@@ -1,0 +1,50 @@
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# Yarn
+.yarn/*
+!.yarn/patches
+!.yarn/releases
+!.yarn/plugins
+!.yarn/versions
+
+# Environment files
+.env
+.env.local
+.env.*.local
+
+# Ignore all files in .storybook
+.storybook/*
+
+# But include specific files or directories
+!.storybook/main.js
+!.storybook/preview.js
+
+# Logs
+*.log
+
+# Node
+node_modules
+dist
+dist-ssr
+*.local
+
+# Ignore auto-generated Vite config files
+vite.config.*.mjs
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
