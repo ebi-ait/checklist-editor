@@ -26,9 +26,6 @@ lerna-debug.log*
 !.storybook/main.js
 !.storybook/preview.js
 
-# Logs
-*.log
-
 # Node
 node_modules
 dist
