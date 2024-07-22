@@ -2797,7 +2797,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@tanstack/react-query@npm:^5.8.4":
+"@tanstack/react-query@npm:^5.51.11, @tanstack/react-query@npm:^5.8.4":
   version: 5.51.11
   resolution: "@tanstack/react-query@npm:5.51.11"
   dependencies:
@@ -3957,6 +3957,7 @@ __metadata:
     "@storybook/react": ^8.2.5
     "@storybook/react-vite": ^8.2.5
     "@storybook/test": ^8.2.5
+    "@tanstack/react-query": ^5.51.11
     "@types/react": ^18.3.3
     "@types/react-dom": ^18.3.0
     "@typescript-eslint/eslint-plugin": ^7.15.0
