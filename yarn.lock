@@ -1545,7 +1545,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@emotion/react@npm:^11.4.1":
+"@emotion/react@npm:^11.13.0, @emotion/react@npm:^11.4.1":
   version: 11.13.0
   resolution: "@emotion/react@npm:11.13.0"
   dependencies:
@@ -1586,7 +1586,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@emotion/styled@npm:^11.3.0":
+"@emotion/styled@npm:^11.13.0, @emotion/styled@npm:^11.3.0":
   version: 11.13.0
   resolution: "@emotion/styled@npm:11.13.0"
   dependencies:
@@ -1966,7 +1966,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@mui/icons-material@npm:^5.15.20":
+"@mui/icons-material@npm:^5.15.20, @mui/icons-material@npm:^5.16.4":
   version: 5.16.4
   resolution: "@mui/icons-material@npm:5.16.4"
   dependencies:
@@ -3944,6 +3944,9 @@ __metadata:
   resolution: "checklist-editor@workspace:."
   dependencies:
     "@chromatic-com/storybook": ^1.6.1
+    "@emotion/react": ^11.13.0
+    "@emotion/styled": ^11.13.0
+    "@mui/icons-material": ^5.16.4
     "@mui/material": ^5.16.4
     "@mui/utils": ^5.16.4
     "@storybook/addon-essentials": ^8.2.5
@@ -3967,6 +3970,7 @@ __metadata:
     react-admin: ^5.0.5
     react-dom: ^18.3.1
     react-is: ^18.3.1
+    react-router-dom: ^6.25.1
     storybook: ^8.2.5
     typescript: ^5.2.2
     vite: ^5.3.4
@@ -7381,7 +7385,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-router-dom@npm:^6.22.0":
+"react-router-dom@npm:^6.22.0, react-router-dom@npm:^6.25.1":
   version: 6.25.1
   resolution: "react-router-dom@npm:6.25.1"
   dependencies:
