@@ -5,7 +5,7 @@ import {
     List,
     RichTextField,
     SearchInput,
-    SelectColumnsButton, SimpleList,
+    SelectColumnsButton,
     SimpleShowLayout,
     TextField,
     TopToolbar,

@@ -2,7 +2,7 @@ import {Datagrid, ListContextProvider, TextField, useRecordContext} from "react-
 import React, {useMemo} from "react";
 import {FieldProps} from "../model/Field.tsx";
 import {Abc, RadioButtonChecked, RadioButtonUnchecked, Reorder, Spellcheck} from "@mui/icons-material";
-import {IconField, IconMapping} from "./IconField.tsx";
+import {IconField} from "./IconField.tsx";
 
 export const FieldList = () => {
     const record = useRecordContext();
@@ -21,9 +21,9 @@ export const FieldList = () => {
 
     function fieldType(label: string) {
         const textAttribute = characteristics.properties[label].items.properties.text;
-        if (textAttribute.hasOwnProperty('enum')) {
+        if (Object.prototype.hasOwnProperty.call(textAttribute, 'enum')) {
             return 'choice';
-        } else if (textAttribute.hasOwnProperty('pattern')) {
+        } else if (Object.prototype.hasOwnProperty.call(textAttribute, 'pattern')) {
             return 'pattern';
         } else {
         return "text";
@@ -53,8 +53,15 @@ export const FieldList = () => {
             <Datagrid>
                 <TextField source="label"/>
                 {/*<TextField source="name" label="Name" />*/}
-                <IconField source="mandatory" iconMapping={mandatoryIconMapping}/>
-                <IconField source="type" iconMapping={fieldTypeIconMapping}/>
+                <IconField source="mandatory" iconMapping={{
+                    mandatory: RadioButtonChecked,
+                    optional: RadioButtonUnchecked,
+                }}/>
+                <IconField source="type" iconMapping={{
+                    text: Abc,
+                    choice: Reorder,
+                    pattern: Spellcheck
+                }}/>
                 {/*<TextField source="description" label="Description" />*/}
                 {/*<TextField source="cardinality" label="Cardinality" />*/}
             </Datagrid>
@@ -62,12 +69,5 @@ export const FieldList = () => {
     );
 };
 
-const mandatoryIconMapping:IconMapping = {
-    mandatory: RadioButtonChecked,
-    optional: RadioButtonUnchecked,
-};
-const fieldTypeIconMapping:IconMapping = {
-    text: Abc,
-    choice: Reorder,
-    pattern: Spellcheck
-};
+
+
