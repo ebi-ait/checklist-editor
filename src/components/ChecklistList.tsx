@@ -5,7 +5,7 @@ import {
     List,
     RichTextField,
     SearchInput,
-    SelectColumnsButton,
+    SelectColumnsButton, SimpleList,
     SimpleShowLayout,
     TextField,
     TopToolbar,
@@ -34,8 +34,10 @@ const schemaFilters = [
 
 ];
 export const ChecklistList = () => (
-    <List actions={<SchemaListActions/>}
-          filters={schemaFilters}>
+    <List
+          actions={<SchemaListActions/>}
+          filters={schemaFilters}
+    >
         <DatagridConfigurable expand={SchemaPreviewPanel}>
             {/*<TextField source="id" />*/}
             <TextField source="accession"/>
