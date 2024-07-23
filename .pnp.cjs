@@ -31,6 +31,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@chromatic-com/storybook", "npm:1.6.1"],\
             ["@emotion/react", "virtual:649cf923b9cf48d66828148e86dca4b341d86578e894579741cdb15bd9072cd217e3c4ce22eee13f7783913e82a1592f96b78ad29779a78eb16f7ba47b38bbac#npm:11.13.0"],\
             ["@emotion/styled", "virtual:649cf923b9cf48d66828148e86dca4b341d86578e894579741cdb15bd9072cd217e3c4ce22eee13f7783913e82a1592f96b78ad29779a78eb16f7ba47b38bbac#npm:11.13.0"],\
+            ["@fontsource/ibm-plex-sans", "npm:5.0.20"],\
             ["@mui/icons-material", "virtual:649cf923b9cf48d66828148e86dca4b341d86578e894579741cdb15bd9072cd217e3c4ce22eee13f7783913e82a1592f96b78ad29779a78eb16f7ba47b38bbac#npm:5.16.4"],\
             ["@mui/material", "virtual:649cf923b9cf48d66828148e86dca4b341d86578e894579741cdb15bd9072cd217e3c4ce22eee13f7783913e82a1592f96b78ad29779a78eb16f7ba47b38bbac#npm:5.16.4"],\
             ["@mui/utils", "virtual:649cf923b9cf48d66828148e86dca4b341d86578e894579741cdb15bd9072cd217e3c4ce22eee13f7783913e82a1592f96b78ad29779a78eb16f7ba47b38bbac#npm:5.16.4"],\
@@ -3117,6 +3118,15 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/cache/@eslint-js-npm-8.57.0-00ead3710a-315dc65b0e.zip/node_modules/@eslint/js/",\
           "packageDependencies": [\
             ["@eslint/js", "npm:8.57.0"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
+      ["@fontsource/ibm-plex-sans", [\
+        ["npm:5.0.20", {\
+          "packageLocation": "./.yarn/cache/@fontsource-ibm-plex-sans-npm-5.0.20-f625fd495a-bb469532fd.zip/node_modules/@fontsource/ibm-plex-sans/",\
+          "packageDependencies": [\
+            ["@fontsource/ibm-plex-sans", "npm:5.0.20"]\
           ],\
           "linkType": "HARD"\
         }]\
@@ -6230,6 +6240,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@chromatic-com/storybook", "npm:1.6.1"],\
             ["@emotion/react", "virtual:649cf923b9cf48d66828148e86dca4b341d86578e894579741cdb15bd9072cd217e3c4ce22eee13f7783913e82a1592f96b78ad29779a78eb16f7ba47b38bbac#npm:11.13.0"],\
             ["@emotion/styled", "virtual:649cf923b9cf48d66828148e86dca4b341d86578e894579741cdb15bd9072cd217e3c4ce22eee13f7783913e82a1592f96b78ad29779a78eb16f7ba47b38bbac#npm:11.13.0"],\
+            ["@fontsource/ibm-plex-sans", "npm:5.0.20"],\
             ["@mui/icons-material", "virtual:649cf923b9cf48d66828148e86dca4b341d86578e894579741cdb15bd9072cd217e3c4ce22eee13f7783913e82a1592f96b78ad29779a78eb16f7ba47b38bbac#npm:5.16.4"],\
             ["@mui/material", "virtual:649cf923b9cf48d66828148e86dca4b341d86578e894579741cdb15bd9072cd217e3c4ce22eee13f7783913e82a1592f96b78ad29779a78eb16f7ba47b38bbac#npm:5.16.4"],\
             ["@mui/utils", "virtual:649cf923b9cf48d66828148e86dca4b341d86578e894579741cdb15bd9072cd217e3c4ce22eee13f7783913e82a1592f96b78ad29779a78eb16f7ba47b38bbac#npm:5.16.4"],\
