@@ -1,4 +1,4 @@
-import { defaultTheme, nanoLightTheme } from 'react-admin';
+import { defaultTheme } from 'react-admin';
 // EBI visual styles taken from https://stable.visual-framework.dev/
 export const appTheme = {
     ...defaultTheme,
