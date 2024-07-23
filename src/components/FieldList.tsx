@@ -2,7 +2,14 @@ import {Datagrid, ListContextProvider, TextField, useRecordContext} from "react-
 import React, {useMemo} from "react";
 import {FieldProps} from "../model/Field.tsx";
 import {SvgIconProps} from "@mui/material";
-import {CheckCircle, Error, ErrorOutline, RadioButtonChecked, RadioButtonUnchecked} from "@mui/icons-material";
+import {
+    CheckCircle,
+    Error,
+    ErrorOutline,
+    RadioButtonChecked,
+    RadioButtonUnchecked, Reorder, Spellcheck,
+    TextFields
+} from "@mui/icons-material";
 
 export const FieldList = () => {
     const record = useRecordContext();
@@ -19,12 +26,17 @@ export const FieldList = () => {
         }
     }
 
+    function fieldType(label: string) {
+        return characteristics.properties[label].items.properties.text.hasOwnProperty('enum') ? 'choice' : "text";
+    }
+
     function schemaToFieldList() {
         return Object.entries(properties)
             .map(([label, field]) => ({
                 id: label,
                 label,
-                mandatory: isMandatoryField(label)
+                mandatory: isMandatoryField(label),
+                type: fieldType(label)
 
             } as FieldProps));
     }
@@ -39,9 +51,10 @@ export const FieldList = () => {
     return (
         <ListContextProvider value={listContext}>
             <Datagrid>
-                <TextField source="label" label="Label"/>
+                <TextField source="label"/>
                 {/*<TextField source="name" label="Name" />*/}
-                <MandatoryIconField label="Mandatory" />
+                <MandatoryIconField source="mandatory" iconMapping={mandatoryIconMapping}/>
+                <MandatoryIconField source="type" iconMapping={fieldTypeIconMapping}/>
                 {/*<TextField source="description" label="Description" />*/}
                 {/*<TextField source="cardinality" label="Cardinality" />*/}
             </Datagrid>
@@ -49,15 +62,28 @@ export const FieldList = () => {
     );
 };
 
-const MandatoryIconField = (props: SvgIconProps) => {
-    debugger;
+const mandatoryIconMapping:IconMapping = {
+    mandatory: RadioButtonChecked,
+    optional: RadioButtonUnchecked,
+};
+const fieldTypeIconMapping:IconMapping = {
+    text: TextFields,
+    choice: Reorder,
+    pattern: Spellcheck
+};
+interface IconMapping {
+    [key: string]: React.ElementType<SvgIconProps>;
+}
+interface MandatoryIconFieldProps extends SvgIconProps {
+    iconMapping: IconMapping;
+    source: string;
+}
+const MandatoryIconField: React.FC<MandatoryIconFieldProps> = ({iconMapping, source, props: SvgIconProps}) => {
     const record = useRecordContext();
-
     if (!record) return null;
+    const fieldValue = record[source];
+    const IconComponent = iconMapping[fieldValue];
+    if (!IconComponent) return null;
 
-    return record.mandatory === 'mandatory' ? (
-        <RadioButtonChecked {...props} color="primary" />
-    ) : (
-        <RadioButtonUnchecked {...props} color="primary" />
-    );
+    return <IconComponent />;
 };
