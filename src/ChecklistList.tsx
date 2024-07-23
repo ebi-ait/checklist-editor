@@ -33,7 +33,7 @@ const schemaFilters = [
     <SearchInput source="q" alwaysOn/>,
 
 ];
-export const SchemaList = () => (
+export const ChecklistList = () => (
     <List actions={<SchemaListActions/>}
           filters={schemaFilters}>
         <DatagridConfigurable expand={SchemaPreviewPanel}>

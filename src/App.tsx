@@ -2,9 +2,9 @@ import React from 'react';
 import { QueryClient } from '@tanstack/react-query';
 
 import { Admin, Resource, ListGuesser } from 'react-admin';
-import dataProvider from './dataProvider';
-import {SchemaList} from "./SchemaList.tsx";
-import {SchemaShow} from "./SchemaShow.tsx";
+import schemaStoreDataProvider from './schemaStoreDataProvider.tsx';
+import {ChecklistList} from "./ChecklistList.tsx";
+import {ChecklistShow} from "./ChecklistShow.tsx";
 
 const App: React.FC = () => {
     const queryClient = new QueryClient({
@@ -15,9 +15,9 @@ const App: React.FC = () => {
         },
     });
     return (
-        <Admin dataProvider={dataProvider}
+        <Admin dataProvider={schemaStoreDataProvider}
                queryClient={queryClient}>
-            <Resource name="schemas" list={SchemaList} show={SchemaShow}/>
+            <Resource name="schemas" list={ChecklistList} show={ChecklistShow}/>
         </Admin>
     );
 };

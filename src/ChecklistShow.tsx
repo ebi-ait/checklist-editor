@@ -5,7 +5,7 @@ import React from "react";
 /**
  * Fetch a book from the API and display it
  */
-export const SchemaShow = () => {
+export const ChecklistShow = () => {
     return (
         <Show emptyWhileLoading>
             <SimpleShowLayout>

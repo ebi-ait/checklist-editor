@@ -3,7 +3,7 @@ import { DataProvider, fetchUtils } from 'react-admin';
 const apiUrl = '/api/biosamples/schema/store/api/v2/';
 const httpClient = fetchUtils.fetchJson;
 
-const dataProvider: DataProvider = {
+const schemaStoreDataProvider: DataProvider = {
     getList: (resource, params) => {
         const { filter = {}, pagination, sort } = params;
 
@@ -27,9 +27,7 @@ const dataProvider: DataProvider = {
         });
     },
     getOne: (resource, params) => {
-        // Adjust the URL to point to the right endpoint for a single item
         return httpClient(`${apiUrl}${resource}?id=${params.id}`).then(({ json }) => {
-            // Directly use the returned object for the single item
             const data = json; // Assuming json is the schema object itself
             return { data };
         });
@@ -93,4 +91,4 @@ const dataProvider: DataProvider = {
     },
 };
 
-export default dataProvider;
+export default schemaStoreDataProvider;
