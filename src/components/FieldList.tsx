@@ -1,15 +1,8 @@
 import {Datagrid, ListContextProvider, TextField, useRecordContext} from "react-admin";
 import React, {useMemo} from "react";
 import {FieldProps} from "../model/Field.tsx";
-import {SvgIconProps} from "@mui/material";
-import {
-    CheckCircle,
-    Error,
-    ErrorOutline,
-    RadioButtonChecked,
-    RadioButtonUnchecked, Reorder, Spellcheck,
-    TextFields
-} from "@mui/icons-material";
+import {Abc, RadioButtonChecked, RadioButtonUnchecked, Reorder, Spellcheck} from "@mui/icons-material";
+import {IconField, IconMapping} from "./IconField.tsx";
 
 export const FieldList = () => {
     const record = useRecordContext();
@@ -27,7 +20,14 @@ export const FieldList = () => {
     }
 
     function fieldType(label: string) {
-        return characteristics.properties[label].items.properties.text.hasOwnProperty('enum') ? 'choice' : "text";
+        const textAttribute = characteristics.properties[label].items.properties.text;
+        if (textAttribute.hasOwnProperty('enum')) {
+            return 'choice';
+        } else if (textAttribute.hasOwnProperty('pattern')) {
+            return 'pattern';
+        } else {
+        return "text";
+     }
     }
 
     function schemaToFieldList() {
@@ -53,8 +53,8 @@ export const FieldList = () => {
             <Datagrid>
                 <TextField source="label"/>
                 {/*<TextField source="name" label="Name" />*/}
-                <MandatoryIconField source="mandatory" iconMapping={mandatoryIconMapping}/>
-                <MandatoryIconField source="type" iconMapping={fieldTypeIconMapping}/>
+                <IconField source="mandatory" iconMapping={mandatoryIconMapping}/>
+                <IconField source="type" iconMapping={fieldTypeIconMapping}/>
                 {/*<TextField source="description" label="Description" />*/}
                 {/*<TextField source="cardinality" label="Cardinality" />*/}
             </Datagrid>
@@ -67,23 +67,7 @@ const mandatoryIconMapping:IconMapping = {
     optional: RadioButtonUnchecked,
 };
 const fieldTypeIconMapping:IconMapping = {
-    text: TextFields,
+    text: Abc,
     choice: Reorder,
     pattern: Spellcheck
-};
-interface IconMapping {
-    [key: string]: React.ElementType<SvgIconProps>;
-}
-interface MandatoryIconFieldProps extends SvgIconProps {
-    iconMapping: IconMapping;
-    source: string;
-}
-const MandatoryIconField: React.FC<MandatoryIconFieldProps> = ({iconMapping, source, props: SvgIconProps}) => {
-    const record = useRecordContext();
-    if (!record) return null;
-    const fieldValue = record[source];
-    const IconComponent = iconMapping[fieldValue];
-    if (!IconComponent) return null;
-
-    return <IconComponent />;
 };
