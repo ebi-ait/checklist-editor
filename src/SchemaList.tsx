@@ -1,20 +1,15 @@
-import React, {useMemo} from "react";
+import React from "react";
 import {
-    Datagrid,
     DatagridConfigurable,
     FilterButton,
-    Labeled,
     List,
-    ListContextProvider,
     RichTextField,
     SearchInput,
     SelectColumnsButton,
-    Show,
     SimpleShowLayout,
     TextField,
     TopToolbar,
     UrlField,
-    useRecordContext,
 } from "react-admin";
 
 
@@ -54,46 +49,3 @@ export const SchemaList = () => (
 );
 
 
-const FieldList = () => {
-    const record = useRecordContext();
-
-    const properties = record?.schema?.properties?.characteristics?.properties;
-    if (!properties) return null;
-    const fieldArray = useMemo(() =>
-        Object.entries(properties).map(([label, field]) => ({
-            id: label,
-            label,
-        })), [properties]);
-
-    const listContext = useMemo(() => ({
-        data: fieldArray,
-        ids: fieldArray.map(field => field.id),
-    }), [fieldArray]);
-    return (
-        <ListContextProvider value={listContext}>
-            <Datagrid>
-                <TextField source="label" label="Label"/>
-                {/*<TextField source="name" label="Name" />*/}
-                {/*<TextField source="description" label="Description" />*/}
-                {/*<TextField source="mandatory" label="Mandatory" />*/}
-                {/*<TextField source="cardinality" label="Cardinality" />*/}
-            </Datagrid>
-        </ListContextProvider>
-    );
-};
-
-/**
- * Fetch a book from the API and display it
- */
-export const SchemaShow = () => {
-    return (
-        <Show emptyWhileLoading>
-            <SimpleShowLayout>
-                <Labeled label="Title">
-                    <TextField source="title"/>
-                </Labeled>
-                <FieldList/>
-            </SimpleShowLayout>
-        </Show>
-    );
-};
