@@ -1,11 +1,11 @@
 import React from 'react';
-import { QueryClient } from '@tanstack/react-query';
+import {QueryClient} from '@tanstack/react-query';
 
-import { Admin, Resource, ListGuesser } from 'react-admin';
+import {Admin, Resource} from 'react-admin';
 import schemaStoreDataProvider from './schemaStoreDataProvider.tsx';
-import {ChecklistList} from "./ChecklistList.tsx";
-import {ChecklistShow} from "./ChecklistShow.tsx";
-
+import {ChecklistList} from "./components/ChecklistList.tsx";
+import {ChecklistShow} from "./components/ChecklistShow.tsx";
+import {appTheme} from "./theme.tsx";
 const App: React.FC = () => {
     const queryClient = new QueryClient({
         defaultOptions: {
@@ -16,8 +16,9 @@ const App: React.FC = () => {
     });
     return (
         <Admin dataProvider={schemaStoreDataProvider}
-               queryClient={queryClient}>
-            <Resource name="schemas" list={ChecklistList} show={ChecklistShow}/>
+               queryClient={queryClient}
+                theme={appTheme}>
+            <Resource name="checklists" list={ChecklistList} show={ChecklistShow}/>
         </Admin>
     );
 };
