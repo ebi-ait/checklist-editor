@@ -2,7 +2,7 @@ import React from 'react';
 import {QueryClient} from '@tanstack/react-query';
 
 import {Admin, Resource} from 'react-admin';
-import schemaStoreDataProvider from './schemaStoreDataProvider.tsx';
+import checklistDataProvider from './checklistDataProvider.tsx';
 import {ChecklistList} from "./components/ChecklistList.tsx";
 import {ChecklistShow} from "./components/ChecklistShow.tsx";
 import {appTheme} from "./theme.tsx";
@@ -15,7 +15,7 @@ const App: React.FC = () => {
         },
     });
     return (
-        <Admin dataProvider={schemaStoreDataProvider}
+        <Admin dataProvider={checklistDataProvider}
                queryClient={queryClient}
                 theme={appTheme}>
             <Resource name="checklists" list={ChecklistList} show={ChecklistShow}/>

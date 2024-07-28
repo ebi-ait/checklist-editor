@@ -11,15 +11,18 @@ export const FieldList = () => {
     const properties = characteristics?.properties;
     if (!properties) return null;
 
-    function isMandatoryField(label: string) {
+    // this is how mandatory fields are represented in the ENA Sample checklist schema
+    const isMandatoryField = (label: string) => {
         if (characteristics.allOf.flatMap(x => x.oneOf).map(x => x.required).flatMap(x => x).includes(label)) {
             return "mandatory";
         } else {
             return "optional";
         }
-    }
+    };
 
-    function fieldType(label: string) {
+    // this is how field types are represented  in the ENA Sample checklist schema
+    const fieldType = (label: string) => {
+
         const textAttribute = characteristics.properties[label].items.properties.text;
         if (Object.prototype.hasOwnProperty.call(textAttribute, 'enum')) {
             return 'choice';
@@ -28,18 +31,15 @@ export const FieldList = () => {
         } else {
         return "text";
      }
-    }
+    };
 
-    function schemaToFieldList() {
-        return Object.entries(properties)
-            .map(([label, field]) => ({
-                id: label,
-                label,
-                mandatory: isMandatoryField(label),
-                type: fieldType(label)
-
-            } as FieldProps));
-    }
+    const schemaToFieldList = () => Object.entries(properties)
+        .map(([label, field]) => ({
+            id: label,
+            label,
+            mandatory: isMandatoryField(label),
+            type: fieldType(label)
+        } as FieldProps));
 
     const fieldArray = useMemo(() =>
         schemaToFieldList(), [properties]);

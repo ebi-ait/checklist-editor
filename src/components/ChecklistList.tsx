@@ -39,7 +39,6 @@ export const ChecklistList = () => (
           filters={schemaFilters}
     >
         <DatagridConfigurable expand={SchemaPreviewPanel}>
-            {/*<TextField source="id" />*/}
             <TextField source="accession"/>
             <TextField source="name"/>
             <TextField source="version"/>
