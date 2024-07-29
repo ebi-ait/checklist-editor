@@ -2,7 +2,7 @@ import React from 'react';
 import {QueryClient} from '@tanstack/react-query';
 
 import {Admin, Resource} from 'react-admin';
-import checklistDataProvider from './checklistDataProvider.tsx';
+import checklistDataProvider from './schemaStoreDataProvider.tsx';
 import {ChecklistList} from "./components/ChecklistList.tsx";
 import {ChecklistShow} from "./components/ChecklistShow.tsx";
 import {appTheme} from "./theme.tsx";

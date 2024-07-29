@@ -60,7 +60,8 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["react-router-dom", "virtual:649cf923b9cf48d66828148e86dca4b341d86578e894579741cdb15bd9072cd217e3c4ce22eee13f7783913e82a1592f96b78ad29779a78eb16f7ba47b38bbac#npm:6.25.1"],\
             ["storybook", "npm:8.2.5"],\
             ["typescript", "patch:typescript@npm%3A5.5.3#~builtin<compat/typescript>::version=5.5.3&hash=5da071"],\
-            ["vite", "virtual:649cf923b9cf48d66828148e86dca4b341d86578e894579741cdb15bd9072cd217e3c4ce22eee13f7783913e82a1592f96b78ad29779a78eb16f7ba47b38bbac#npm:5.3.4"]\
+            ["vite", "virtual:649cf923b9cf48d66828148e86dca4b341d86578e894579741cdb15bd9072cd217e3c4ce22eee13f7783913e82a1592f96b78ad29779a78eb16f7ba47b38bbac#npm:5.3.4"],\
+            ["vite-plugin-checker", "virtual:649cf923b9cf48d66828148e86dca4b341d86578e894579741cdb15bd9072cd217e3c4ce22eee13f7783913e82a1592f96b78ad29779a78eb16f7ba47b38bbac#npm:0.7.2"]\
           ],\
           "linkType": "SOFT"\
         }]\
@@ -5733,6 +5734,16 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "linkType": "HARD"\
         }]\
       ]],\
+      ["ansi-escapes", [\
+        ["npm:4.3.2", {\
+          "packageLocation": "./.yarn/cache/ansi-escapes-npm-4.3.2-3ad173702f-93111c4218.zip/node_modules/ansi-escapes/",\
+          "packageDependencies": [\
+            ["ansi-escapes", "npm:4.3.2"],\
+            ["type-fest", "npm:0.21.3"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
       ["ansi-regex", [\
         ["npm:5.0.1", {\
           "packageLocation": "./.yarn/cache/ansi-regex-npm-5.0.1-c963a48615-2aa4bb54ca.zip/node_modules/ansi-regex/",\
@@ -6269,7 +6280,8 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["react-router-dom", "virtual:649cf923b9cf48d66828148e86dca4b341d86578e894579741cdb15bd9072cd217e3c4ce22eee13f7783913e82a1592f96b78ad29779a78eb16f7ba47b38bbac#npm:6.25.1"],\
             ["storybook", "npm:8.2.5"],\
             ["typescript", "patch:typescript@npm%3A5.5.3#~builtin<compat/typescript>::version=5.5.3&hash=5da071"],\
-            ["vite", "virtual:649cf923b9cf48d66828148e86dca4b341d86578e894579741cdb15bd9072cd217e3c4ce22eee13f7783913e82a1592f96b78ad29779a78eb16f7ba47b38bbac#npm:5.3.4"]\
+            ["vite", "virtual:649cf923b9cf48d66828148e86dca4b341d86578e894579741cdb15bd9072cd217e3c4ce22eee13f7783913e82a1592f96b78ad29779a78eb16f7ba47b38bbac#npm:5.3.4"],\
+            ["vite-plugin-checker", "virtual:649cf923b9cf48d66828148e86dca4b341d86578e894579741cdb15bd9072cd217e3c4ce22eee13f7783913e82a1592f96b78ad29779a78eb16f7ba47b38bbac#npm:0.7.2"]\
           ],\
           "linkType": "SOFT"\
         }]\
@@ -6433,6 +6445,13 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/cache/commander-npm-6.2.1-d5b635f237-d7090410c0.zip/node_modules/commander/",\
           "packageDependencies": [\
             ["commander", "npm:6.2.1"]\
+          ],\
+          "linkType": "HARD"\
+        }],\
+        ["npm:8.3.0", {\
+          "packageLocation": "./.yarn/cache/commander-npm-8.3.0-c0d18c66d5-0f82321821.zip/node_modules/commander/",\
+          "packageDependencies": [\
+            ["commander", "npm:8.3.0"]\
           ],\
           "linkType": "HARD"\
         }]\
@@ -11476,6 +11495,13 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           ],\
           "linkType": "HARD"\
         }],\
+        ["npm:0.21.3", {\
+          "packageLocation": "./.yarn/cache/type-fest-npm-0.21.3-5ff2a9c6fd-e6b32a3b38.zip/node_modules/type-fest/",\
+          "packageDependencies": [\
+            ["type-fest", "npm:0.21.3"]\
+          ],\
+          "linkType": "HARD"\
+        }],\
         ["npm:1.4.0", {\
           "packageLocation": "./.yarn/cache/type-fest-npm-1.4.0-7dd848962a-b011c33886.zip/node_modules/type-fest/",\
           "packageDependencies": [\
@@ -11798,6 +11824,147 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             "stylus",\
             "sugarss",\
             "terser"\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
+      ["vite-plugin-checker", [\
+        ["npm:0.7.2", {\
+          "packageLocation": "./.yarn/cache/vite-plugin-checker-npm-0.7.2-607f75de08-91e15bfa9d.zip/node_modules/vite-plugin-checker/",\
+          "packageDependencies": [\
+            ["vite-plugin-checker", "npm:0.7.2"]\
+          ],\
+          "linkType": "SOFT"\
+        }],\
+        ["virtual:649cf923b9cf48d66828148e86dca4b341d86578e894579741cdb15bd9072cd217e3c4ce22eee13f7783913e82a1592f96b78ad29779a78eb16f7ba47b38bbac#npm:0.7.2", {\
+          "packageLocation": "./.yarn/__virtual__/vite-plugin-checker-virtual-b83629751b/0/cache/vite-plugin-checker-npm-0.7.2-607f75de08-91e15bfa9d.zip/node_modules/vite-plugin-checker/",\
+          "packageDependencies": [\
+            ["vite-plugin-checker", "virtual:649cf923b9cf48d66828148e86dca4b341d86578e894579741cdb15bd9072cd217e3c4ce22eee13f7783913e82a1592f96b78ad29779a78eb16f7ba47b38bbac#npm:0.7.2"],\
+            ["@babel/code-frame", "npm:7.24.7"],\
+            ["@biomejs/biome", null],\
+            ["@types/biomejs__biome", null],\
+            ["@types/eslint", null],\
+            ["@types/meow", null],\
+            ["@types/optionator", null],\
+            ["@types/stylelint", null],\
+            ["@types/typescript", null],\
+            ["@types/vite", null],\
+            ["@types/vls", null],\
+            ["@types/vti", null],\
+            ["@types/vue-tsc", null],\
+            ["ansi-escapes", "npm:4.3.2"],\
+            ["chalk", "npm:4.1.2"],\
+            ["chokidar", "npm:3.6.0"],\
+            ["commander", "npm:8.3.0"],\
+            ["eslint", "npm:8.57.0"],\
+            ["fast-glob", "npm:3.3.2"],\
+            ["fs-extra", "npm:11.2.0"],\
+            ["meow", null],\
+            ["npm-run-path", "npm:4.0.1"],\
+            ["optionator", null],\
+            ["strip-ansi", "npm:6.0.1"],\
+            ["stylelint", null],\
+            ["tiny-invariant", "npm:1.3.3"],\
+            ["typescript", "patch:typescript@npm%3A5.5.3#~builtin<compat/typescript>::version=5.5.3&hash=5da071"],\
+            ["vite", "virtual:649cf923b9cf48d66828148e86dca4b341d86578e894579741cdb15bd9072cd217e3c4ce22eee13f7783913e82a1592f96b78ad29779a78eb16f7ba47b38bbac#npm:5.3.4"],\
+            ["vls", null],\
+            ["vscode-languageclient", "npm:7.0.0"],\
+            ["vscode-languageserver", "npm:7.0.0"],\
+            ["vscode-languageserver-textdocument", "npm:1.0.11"],\
+            ["vscode-uri", "npm:3.0.8"],\
+            ["vti", null],\
+            ["vue-tsc", null]\
+          ],\
+          "packagePeers": [\
+            "@biomejs/biome",\
+            "@types/biomejs__biome",\
+            "@types/eslint",\
+            "@types/meow",\
+            "@types/optionator",\
+            "@types/stylelint",\
+            "@types/typescript",\
+            "@types/vite",\
+            "@types/vls",\
+            "@types/vti",\
+            "@types/vue-tsc",\
+            "eslint",\
+            "meow",\
+            "optionator",\
+            "stylelint",\
+            "typescript",\
+            "vite",\
+            "vls",\
+            "vti",\
+            "vue-tsc"\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
+      ["vscode-jsonrpc", [\
+        ["npm:6.0.0", {\
+          "packageLocation": "./.yarn/cache/vscode-jsonrpc-npm-6.0.0-4e625ea1b8-3a67a56f28.zip/node_modules/vscode-jsonrpc/",\
+          "packageDependencies": [\
+            ["vscode-jsonrpc", "npm:6.0.0"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
+      ["vscode-languageclient", [\
+        ["npm:7.0.0", {\
+          "packageLocation": "./.yarn/cache/vscode-languageclient-npm-7.0.0-c177c3e495-fde7122e96.zip/node_modules/vscode-languageclient/",\
+          "packageDependencies": [\
+            ["vscode-languageclient", "npm:7.0.0"],\
+            ["minimatch", "npm:3.1.2"],\
+            ["semver", "npm:7.6.3"],\
+            ["vscode-languageserver-protocol", "npm:3.16.0"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
+      ["vscode-languageserver", [\
+        ["npm:7.0.0", {\
+          "packageLocation": "./.yarn/cache/vscode-languageserver-npm-7.0.0-1e7ab6363b-80cfbd5f8f.zip/node_modules/vscode-languageserver/",\
+          "packageDependencies": [\
+            ["vscode-languageserver", "npm:7.0.0"],\
+            ["vscode-languageserver-protocol", "npm:3.16.0"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
+      ["vscode-languageserver-protocol", [\
+        ["npm:3.16.0", {\
+          "packageLocation": "./.yarn/cache/vscode-languageserver-protocol-npm-3.16.0-7e2ca72c58-ac30cbe4b7.zip/node_modules/vscode-languageserver-protocol/",\
+          "packageDependencies": [\
+            ["vscode-languageserver-protocol", "npm:3.16.0"],\
+            ["vscode-jsonrpc", "npm:6.0.0"],\
+            ["vscode-languageserver-types", "npm:3.16.0"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
+      ["vscode-languageserver-textdocument", [\
+        ["npm:1.0.11", {\
+          "packageLocation": "./.yarn/cache/vscode-languageserver-textdocument-npm-1.0.11-6fc94d2b7b-ea7cdc9d4f.zip/node_modules/vscode-languageserver-textdocument/",\
+          "packageDependencies": [\
+            ["vscode-languageserver-textdocument", "npm:1.0.11"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
+      ["vscode-languageserver-types", [\
+        ["npm:3.16.0", {\
+          "packageLocation": "./.yarn/cache/vscode-languageserver-types-npm-3.16.0-bd03fd2d40-7a44fb10b9.zip/node_modules/vscode-languageserver-types/",\
+          "packageDependencies": [\
+            ["vscode-languageserver-types", "npm:3.16.0"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
+      ["vscode-uri", [\
+        ["npm:3.0.8", {\
+          "packageLocation": "./.yarn/cache/vscode-uri-npm-3.0.8-56f46b9d24-5142491268.zip/node_modules/vscode-uri/",\
+          "packageDependencies": [\
+            ["vscode-uri", "npm:3.0.8"]\
           ],\
           "linkType": "HARD"\
         }]\
