@@ -1,8 +1,34 @@
-import {Datagrid, Labeled, ReferenceManyField, Show, SimpleShowLayout, TextField} from "react-admin";
+import {
+    ArrayField, ChipField,
+    Datagrid,
+    Labeled,
+    ReferenceManyField,
+    Show,
+    SimpleShowLayout, SingleFieldList,
+    TextField,
+    useRecordContext
+} from "react-admin";
 import React from "react";
 import {IconField} from "./IconField.tsx";
 import {Abc, RadioButtonChecked, RadioButtonUnchecked, Reorder, Spellcheck} from "@mui/icons-material";
 
+const FieldPanel = () => {
+    const record=useRecordContext();
+    return (
+        <SimpleShowLayout>
+            {record.type === 'choice' && (
+                <ArrayField source="choices">
+                    <SingleFieldList linkType={false}>
+                        <ChipField source="choice" />
+                    </SingleFieldList>
+                </ArrayField>
+            )}
+            {record.type === 'pattern' && (
+                <TextField source="pattern"/>
+            )}
+        </SimpleShowLayout>
+    );
+}
 /**
  * Fetch a book from the API and display it
  */
@@ -16,7 +42,7 @@ export const ChecklistShow = () => {
                 <ReferenceManyField reference="fields"
                                     target="schema_id"
                 >
-                    <Datagrid>
+                    <Datagrid expand={FieldPanel}>
                         <TextField source="label"/>
                         <IconField source="mandatory" iconMapping={{
                             mandatory: RadioButtonChecked,
@@ -31,6 +57,5 @@ export const ChecklistShow = () => {
                 </ReferenceManyField>
             </SimpleShowLayout>
         </Show>
-    )
-        ;
+    );
 };

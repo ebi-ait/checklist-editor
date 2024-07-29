@@ -91,11 +91,11 @@ const fieldType = (checklist: ChecklistProps, label: string) => {
     const properties = characteristics?.properties;
     const textAttribute = properties[label].items.properties.text;
     if (Object.prototype.hasOwnProperty.call(textAttribute, 'enum')) {
-        return 'choice';
+        return {type: 'choice', choices: textAttribute.enum.map(s=>({choice:s}))};
     } else if (Object.prototype.hasOwnProperty.call(textAttribute, 'pattern')) {
-        return 'pattern';
+        return {type: 'pattern', pattern: textAttribute.pattern};
     } else {
-        return "text";
+        return {type: "text"};
     }
 };
 const schemaToFieldList = (checklist: ChecklistProps) => {
@@ -106,7 +106,7 @@ const schemaToFieldList = (checklist: ChecklistProps) => {
             id: label,
             label,
             mandatory: isMandatoryField(checklist, label),
-            type: fieldType(checklist, label)
+            ...fieldType(checklist, label)
         } as FieldProps));
 };
 

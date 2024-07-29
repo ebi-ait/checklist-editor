@@ -1,5 +1,6 @@
 import React from "react";
 import {
+    Datagrid,
     DatagridConfigurable,
     FilterButton,
     List,
@@ -38,14 +39,14 @@ export const ChecklistList = () => (
           actions={<SchemaListActions/>}
           filters={schemaFilters}
     >
-        <DatagridConfigurable expand={SchemaPreviewPanel}>
+        <Datagrid expand={SchemaPreviewPanel}>
             <TextField source="accession"/>
             <TextField source="name"/>
             <TextField source="version"/>
             <TextField source="title"/>
             {/*<TextField source="schema.$schema" />*/}
             {/*<TextField source="_links.self.href" />*/}
-        </DatagridConfigurable>
+        </Datagrid>
     </List>
 );
 
