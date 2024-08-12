@@ -18,6 +18,7 @@ interface ChecklistSchema {
 export interface ChecklistProps {
     id: string;
     name: string;
+    accession: string;
     version: string;
     title: string;
     description: string;

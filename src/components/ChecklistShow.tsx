@@ -40,7 +40,7 @@ export const ChecklistShow = () => {
                     <TextField source="title"/>
                 </Labeled>
                 <ReferenceManyField reference="fields"
-                                    target="schema_id"
+                                    target="schemaId"
                 >
                     <Datagrid expand={FieldPanel}>
                         <TextField source="label"/>

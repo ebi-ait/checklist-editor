@@ -1,30 +1,77 @@
-import {DataProvider, fetchUtils, GetListParams} from 'react-admin';
+import {DataProvider, fetchUtils} from 'react-admin';
+
 import config from './config'
 import {ChecklistProps} from "./model/Checklist.tsx";
 import {FieldProps} from "./model/Field.tsx";
 
-const apiUrl = config.SCHEMA_STORE_URL + '/api/v2/';
+function fixTrailingSlash(url: string) {
+    return url + (url.at(-1) != '/' ? '/' : '');
+}
+
+const apiUrl = fixTrailingSlash(config.SCHEMA_STORE_URL);
+console.log(`apiUrl: ${apiUrl}`);
 const httpClient = fetchUtils.fetchJson;
 
-const resourceMap:{[k:string]:string} = {
-    checklists: 'schemas',
+const resourceMap: { [k: string]: string } = {
+    checklists: 'mongoJsonSchemas',
 };
 
-function throwNotImplementedError(resource: string, functionName: string) {
-    const errMsg = `${functionName}(${resource}) not implemented`;
-    console.error(errMsg);
-    throw new Error(errMsg)
-}
-
-function filterBSDChecklists(data) {
-    return data.filter(checklist => !checklist.accession.startsWith('BSD'))
-}
-
-function getApiResource(resource: string) {
+function resolveApiResource(resource: string) {
     return resourceMap?.[resource] || resource;
 }
 
+const recordToId = (record: ChecklistProps) => record.id = `${record.name}:${record.version}`;
+
 const schemasDataProvider: DataProvider = {
+
+    getList: (resource, params) => {
+
+        const {filter = {}, pagination, sort} = params;
+        const query = new URLSearchParams({
+            // ...filter.q ? {text: filter.q} : {}, // Add the 'text' parameter if 'q' is provided
+            number: pagination.page - 1, // react-admin is 1 based, spring is 0 based
+            size: pagination.perPage,
+            sort: sort.field,
+            order: sort.order,
+        }).toString();
+        // Adjust the URL to point to the right endpoint for lists
+        const apiResource = resolveApiResource(resource);
+        const url = `${apiUrl}${apiResource}?${query}`;
+        return httpClient(url)
+            .then(({json}) => {
+                // Extract the embedded resources
+                let data = json._embedded?.[apiResource] || [];
+                data.map(recordToId)
+                return {
+                    data,
+                    total: json.page?.totalElements || data.length,
+                    pageInfo: {
+                        hasNextPage: json?._links?.next || false,
+                        hasPreviousPage: json?._links?.prev || false
+                    }
+                };
+            });
+    },
+    getOne: (resource, params) => {
+        return httpClient(`${apiUrl}${resolveApiResource(resource)}/${params.id}`)
+            .then(({json}) => {
+                const data = json; // Assuming json is the schema object itself
+                return {data};
+            });
+    },
+    getMany: (resource, params) => Promise.reject('not implemented'),
+    getManyReference: (resource, params) => Promise.reject('not implemented'),
+    create: (resource, params) => {
+        return Promise.reject('not implemented');
+    },
+    update: (resource, params) => Promise.reject('not implemented'),
+    updateMany: (resource, params) => Promise.reject('not implemented'),
+    deleteMany: (resource, params) => Promise.reject('not implemented'),
+};
+
+// This data provider handles fields
+const fieldsDataProvider: DataProvider = {
+
     getList: (resource, params) => {
         const {filter = {}, pagination, sort} = params;
 
@@ -36,112 +83,48 @@ const schemasDataProvider: DataProvider = {
             order: sort.order,
         }).toString();
         // Adjust the URL to point to the right endpoint for lists
-        const apiResource = getApiResource(resource);
-        const url = `${apiUrl}${apiResource}/search?${query}`;
-        return httpClient(url).then(({json}) => {
-            // Extract the embedded resources
-            let data = json._embedded?.[apiResource] || [];
-            return {
-                data,
-                total: json.page?.totalElements || data.length,
-                pageInfo: {
-                    hasNextPage: json?._links?.next || false,
-                    hasPreviousPage: json?._links?.prev || false
-                }
-            };
-        });
-    },
-    getOne: (resource, params) => {
-        return httpClient(`${apiUrl}${getApiResource(resource)}?id=${params.id}`).then(({json}) => {
-            const data = json; // Assuming json is the schema object itself
-            return {data};
-        });
-    },
-    getMany: (resource, params) => {
-        return Promise.reject('not implemented')
-    },
-    getManyReference: (resource, params) => {
-        return Promise.reject('not implemented')
-    },
-    create: (resource, params) => {
-         return Promise.reject('not implemented')
-    },
-    update: (resource, params) => {
-        return Promise.reject('not implemented')
-    },
-    updateMany: (resource, params) => {
-        return Promise.reject('not implemented')
-    },
-    deleteMany: (resource, params) => {
-        return Promise.reject('not implemented')
-    },
-};
-
-const isMandatoryField = (checklist: ChecklistProps, label: string) => {
-    const characteristics = checklist?.schema?.properties?.characteristics;
-    if (characteristics.allOf.flatMap(x => x.oneOf).map(x => x.required).flatMap(x => x).includes(label)) {
-        return "mandatory";
-    } else {
-        return "optional";
-    }
-};
-
-const fieldType = (checklist: ChecklistProps, label: string) => {
-    const characteristics = checklist?.schema?.properties?.characteristics;
-    const properties = characteristics?.properties;
-    const textAttribute = properties[label].items.properties.text;
-    if (Object.prototype.hasOwnProperty.call(textAttribute, 'enum')) {
-        return {type: 'choice', choices: textAttribute.enum.map(s=>({choice:s}))};
-    } else if (Object.prototype.hasOwnProperty.call(textAttribute, 'pattern')) {
-        return {type: 'pattern', pattern: textAttribute.pattern};
-    } else {
-        return {type: "text"};
-    }
-};
-const schemaToFieldList = (checklist: ChecklistProps) => {
-    const characteristics = checklist?.schema?.properties?.characteristics;
-    const properties = characteristics?.properties;
-    return Object.entries(properties)
-        .map(([label, field]) => ({
-            id: label,
-            label,
-            mandatory: isMandatoryField(checklist, label),
-            ...fieldType(checklist, label)
-        } as FieldProps));
-};
-
-
-// This data provider handles fields
-const fieldsDataProvider: DataProvider = {
-
-    getList: (resource, params) => {
-        const {filter = {}, pagination, sort} = params;
-        debugger;
-        return schemaStoreDataProvider.getList('checklists', params)
-            .then((response) => {
-                const fields = response.data
-                    .map(schema=> schemaToFieldList(schema))
-                    .flat();
+        const apiResource = resolveApiResource(resource);
+        const url = `${apiUrl}${apiResource}?${query}`;
+        return httpClient(url)
+            .then(({json}) => {
+                // Extract the embedded resources
+                let data = json._embedded?.[apiResource] || [];
                 return {
-                    data: fields,
-                    total: fields.length,
+                    data,
+                    total: json.page?.totalElements || data.length,
+                    pageInfo: {
+                        hasNextPage: json?._links?.next || false,
+                        hasPreviousPage: json?._links?.prev || false
+                    }
                 };
             });
     },
     getManyReference: (resource, params) => {
-        const {id} = params;
-        return schemaStoreDataProvider.getOne('checklists', {id})
-            .then((response) => {
-                const fields = schemaToFieldList( response.data)
+        const {id, target} = params;
+        const apiResource = resolveApiResource(resource);
+        const searchParams = new URLSearchParams()
+        searchParams.append(target,id);
+        const query = searchParams.toString();
+        const url = `${apiUrl}${apiResource}/search/findByUsedBySchemas?${query}`;
+        return httpClient(url)
+            .then(({json}) => {
+                // Extract the embedded resources
+                let data = json._embedded?.[apiResource] || [];
+                data = data.map((record:FieldProps)=>({id:record.name,...record}))
+                debugger;
                 return {
-                    data: fields,
-                    total: fields.length,
+                    data,
+                    total: json.page?.totalElements || data.length,
+                    pageInfo: {
+                        hasNextPage: json?._links?.next || false,
+                        hasPreviousPage: json?._links?.prev || false
+                    }
                 };
             });
     },
 }
 
-const dataProviderRegistry:{[k:string]:DataProvider} = {
+const dataProviderRegistry: { [k: string]: DataProvider } = {
     'checklists': schemasDataProvider,
     'fields': fieldsDataProvider
 };
