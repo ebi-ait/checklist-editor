@@ -111,7 +111,6 @@ const fieldsDataProvider: DataProvider = {
                 // Extract the embedded resources
                 let data = json._embedded?.[apiResource] || [];
                 data = data.map((record:FieldProps)=>({id:record.name,...record}))
-                debugger;
                 return {
                     data,
                     total: json.page?.totalElements || data.length,
