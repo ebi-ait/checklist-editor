@@ -15,6 +15,12 @@ interface ChecklistSchema {
     properties: Properties;
 }
 
+interface SchemaFieldAssociation {
+    "cardinality": "OPTIONAL"|"MANDATORY"|"RECOMMENDED"
+    "fieldId": string;
+    "multiplicity": "Single"|"List"
+}
+
 export interface ChecklistProps {
     id: string;
     name: string;
@@ -22,7 +28,7 @@ export interface ChecklistProps {
     version: string;
     title: string;
     description: string;
-    fields: FieldProps;
     schema: ChecklistSchema;
+    schemaFieldAssociations: SchemaFieldAssociation[];
 }
 

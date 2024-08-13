@@ -1,9 +1,9 @@
 import React from "react";
 import {
     Datagrid,
-    DatagridConfigurable,
+    DatagridConfigurable, EditButton,
     FilterButton,
-    List,
+    List, ReferenceArrayInput, ReferenceInput,
     RichTextField,
     SearchInput,
     SelectColumnsButton,
@@ -17,6 +17,7 @@ import {
 const SchemaPreviewPanel = () => {
     return (
         <SimpleShowLayout>
+            <TextField source="name"/>
             <RichTextField source="description"/>
             <UrlField source="_links.self.href"/>
         </SimpleShowLayout>
@@ -32,7 +33,6 @@ const SchemaListActions = () => (
 
 const schemaFilters = [
     <SearchInput source="q" alwaysOn/>,
-
 ];
 export const ChecklistList = () => (
     <List
@@ -40,12 +40,10 @@ export const ChecklistList = () => (
           filters={schemaFilters}
     >
         <Datagrid expand={SchemaPreviewPanel}>
-            <TextField source="accession"/>
-            <TextField source="name"/>
-            <TextField source="version"/>
             <TextField source="title"/>
-            {/*<TextField source="schema.$schema" />*/}
-            {/*<TextField source="_links.self.href" />*/}
+            <TextField source="accession"/>
+            <TextField source="version"/>
+            <EditButton />
         </Datagrid>
     </List>
 );
