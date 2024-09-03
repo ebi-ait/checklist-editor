@@ -1,15 +1,11 @@
 import {DataProvider, fetchUtils} from 'react-admin';
 
-import config from '../config.tsx'
 import {fieldsDataProvider} from "./fieldsDataProvider.tsx";
 import {schemasDataProvider} from "./schemasDataProvider.tsx";
 
 export function fixTrailingSlash(url: string) {
     return url + (url.at(-1) != '/' ? '/' : '');
 }
-
-const apiUrl = fixTrailingSlash(config.SCHEMA_STORE_URL);
-const httpClient = fetchUtils.fetchJson;
 
 const resourceMap: { [k: string]: string } = {
     checklists: 'mongoJsonSchemas',
@@ -23,9 +19,9 @@ const dataProviderRegistry: { [k: string]: DataProvider } = {
     'checklists': schemasDataProvider,
     'fields': fieldsDataProvider
 };
-const callDataProviderFunction = function (resource: string, list: string, params) {
+const callDataProviderFunction = function (resource: string, op: string, params: any) {
     if (Object.prototype.hasOwnProperty.call(dataProviderRegistry, resource)) {
-        return dataProviderRegistry[resource]?.[list](resource, params);
+        return dataProviderRegistry[resource]?.[op](resource, params);
     } else {
         return Promise.reject(`invalid resource for data provider: ${resource}`);
     }
@@ -39,5 +35,6 @@ const schemaStoreDataProvider: DataProvider = {
     update: (resource, params) => callDataProviderFunction(resource, 'update', params),
     updateMany: (resource, params) => callDataProviderFunction(resource, 'updateMany', params),
     deleteMany: (resource, params) => callDataProviderFunction(resource, 'deleteMany', params),
+    delete: (resource, params) => callDataProviderFunction(resource, 'delete', params),
 }
 export default schemaStoreDataProvider;

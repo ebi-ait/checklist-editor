@@ -2,18 +2,15 @@ import {
     ArrayField,
     ChipField,
     Datagrid,
-    EditButton,
-    Labeled,
     ReferenceField,
     Show,
     SimpleShowLayout,
     SingleFieldList,
     TextField,
     useRecordContext
-} from "react-admin";
-import React from "react";
+} from 'react-admin';
 import {IconField} from "./IconField.tsx";
-import {LooksOne, RadioButtonChecked, RadioButtonUnchecked, ViewHeadline} from "@mui/icons-material";
+import {LooksOne, RadioButtonChecked, RadioButtonUnchecked, ViewHeadline} from '@mui/icons-material';
 
 const FieldPanel = () => {
     const record = useRecordContext();
@@ -39,14 +36,9 @@ export const ChecklistShow = () => {
     return (
         <Show emptyWhileLoading>
             <SimpleShowLayout>
-                <Labeled>
                     <TextField source="title"/>
-                </Labeled>
-                <Labeled>
                     <TextField source="description"/>
-                </Labeled>
-                <Labeled>
-                    <ArrayField source="schemaFieldAssociations">
+                    <ArrayField source="schemaFieldAssociations" label="Fields">
                         <Datagrid>
                             <ReferenceField source="fieldId" reference="fields" link={false}>
                                 <TextField source="label"/>
@@ -62,26 +54,8 @@ export const ChecklistShow = () => {
                                 Single: LooksOne,
                                 List: ViewHeadline,
                             }}/>
-                            <EditButton/>
                         </Datagrid>
                     </ArrayField>
-                </Labeled>
-                {/*<ReferenceManyField reference="fields"*/}
-                {/*                    target="schemaId" >*/}
-                {/*    <Datagrid expand={FieldPanel}>*/}
-                {/*        <TextField source="label"/>*/}
-                {/*        <IconField source="mandatory" iconMapping={{*/}
-                {/*            mandatory: RadioButtonChecked,*/}
-                {/*            optional: RadioButtonUnchecked,*/}
-                {/*        }}/>*/}
-                {/*        <EditButton />*/}
-                {/*        <IconField source="type" iconMapping={{*/}
-                {/*            text: Abc,*/}
-                {/*            choice: Reorder,*/}
-                {/*            pattern: Spellcheck*/}
-                {/*        }}/>*/}
-                {/*    </Datagrid>*/}
-                {/*</ReferenceManyField>*/}
             </SimpleShowLayout>
         </Show>
     );

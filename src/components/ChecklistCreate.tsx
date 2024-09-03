@@ -1,17 +1,7 @@
-import {
-    ArrayInput,
-    Edit,
-    ReferenceArrayInput,
-    ReferenceInput,
-    SelectArrayInput,
-    SelectInput,
-    SimpleForm,
-    SimpleFormIterator,
-    TextInput
-} from "react-admin";
+import {ArrayInput, Create, ReferenceInput, SelectInput, SimpleForm, SimpleFormIterator, TextInput} from "react-admin";
 
-export const ChecklistEdit = () => (
-    <Edit>
+export const ChecklistCreate = props => (
+    <Create {...props}>
         <SimpleForm>
             <TextInput source="title"/>
             <TextInput source="description" multiline={true}/>
@@ -30,5 +20,5 @@ export const ChecklistEdit = () => (
                 </SimpleFormIterator>
             </ArrayInput>
         </SimpleForm>
-    </Edit>
+    </Create>
 );

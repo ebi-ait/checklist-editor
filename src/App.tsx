@@ -1,7 +1,8 @@
 import React from 'react';
 import {QueryClient} from '@tanstack/react-query';
 
-import {Admin, ListGuesser, Resource} from 'react-admin';
+import {Admin, Resource} from 'react-admin';
+import {FieldList} from "./components/FieldList.tsx";
 import checklistDataProvider from './dataprovider/schemaStoreDataProvider.tsx';
 import {ChecklistList} from "./components/ChecklistList.tsx";
 import {ChecklistShow} from "./components/ChecklistShow.tsx";
@@ -19,14 +20,16 @@ const App: React.FC = () => {
     return (
         <Admin dataProvider={checklistDataProvider}
                queryClient={queryClient}
-                theme={appTheme}>
+                theme={appTheme}
+        >
             <Resource name="checklists"
                       list={ChecklistList}
                       show={ChecklistShow}
                       edit={ChecklistEdit}
+
             />
             <Resource name="fields"
-                      list={ListGuesser}
+                      list={FieldList}
                       edit={FieldEdit}
             />
         </Admin>

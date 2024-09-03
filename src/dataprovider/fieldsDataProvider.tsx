@@ -1,8 +1,8 @@
 // This data provider handles fields
 import {DataProvider, fetchUtils} from "react-admin";
+import config from "../config.tsx";
 import {FieldProps} from "../model/Field.tsx";
 import {fixTrailingSlash, resolveApiResource} from "./schemaStoreDataProvider.tsx";
-import config from "../config.tsx";
 
 const apiUrl = fixTrailingSlash(config.SCHEMA_STORE_URL);
 const httpClient = fetchUtils.fetchJson;

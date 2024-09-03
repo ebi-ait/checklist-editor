@@ -1,4 +1,3 @@
-import {FieldProps} from './Field'
 
 interface Characteristics {
     properties: object;

@@ -55,7 +55,18 @@ export const schemasDataProvider: DataProvider = {
     },
     update: (resource, params) => {
         debugger;
-        return Promise.reject('schema update not implemented');
+        const apiResource = resolveApiResource(resource);
+        const url = `${apiUrl}${apiResource}`;
+        return httpClient(url, {
+            method: 'POST',
+            body: JSON.stringify(params.data),
+        })
+            .then(({json}) => {
+                debugger;
+                return ({
+                    data: {...params.data, id: json.id},
+                });
+            });
     },
     updateMany: (resource, params) => Promise.reject('schema updateMany not implemented'),
     deleteMany: (resource, params) => Promise.reject('schema delete not implemented'),

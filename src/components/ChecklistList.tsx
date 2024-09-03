@@ -1,9 +1,8 @@
-import React from "react";
 import {
     Datagrid,
-    DatagridConfigurable, EditButton,
+    EditButton,
     FilterButton,
-    List, ReferenceArrayInput, ReferenceInput,
+    List,
     RichTextField,
     SearchInput,
     SelectColumnsButton,
