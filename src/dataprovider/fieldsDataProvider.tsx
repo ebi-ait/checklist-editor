@@ -89,9 +89,9 @@ export const fieldsDataProvider: DataProvider = {
         });
     },
     update: async (resource, params) => {
-
+        const {id} = params;
         const apiResource = resolveApiResource(resource);
-        const url = `${apiUrl}${apiResource}`;
+        const url = `${apiUrl}${apiResource}/${id}`;
         const {json} = await httpClient(url, {
             method: 'PUT',
             body: JSON.stringify(params.data),
