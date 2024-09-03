@@ -2,6 +2,7 @@ import React from 'react';
 import {QueryClient} from '@tanstack/react-query';
 
 import {Admin, Resource} from 'react-admin';
+import {ChecklistCreate} from "./components/ChecklistCreate.tsx";
 import {FieldList} from "./components/FieldList.tsx";
 import checklistDataProvider from './dataprovider/schemaStoreDataProvider.tsx';
 import {ChecklistList} from "./components/ChecklistList.tsx";
@@ -26,6 +27,7 @@ const App: React.FC = () => {
                       list={ChecklistList}
                       show={ChecklistShow}
                       edit={ChecklistEdit}
+                      create={ChecklistCreate}
 
             />
             <Resource name="fields"

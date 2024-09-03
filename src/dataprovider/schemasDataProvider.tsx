@@ -1,7 +1,7 @@
 import {DataProvider, fetchUtils} from "react-admin";
-import {fixTrailingSlash, resolveApiResource} from "./schemaStoreDataProvider.tsx";
 import config from "../config.tsx";
 import {ChecklistProps} from "../model/Checklist.tsx";
+import {fixTrailingSlash, resolveApiResource} from "./schemaStoreDataProvider.tsx";
 
 const apiUrl = fixTrailingSlash(config.SCHEMA_STORE_URL);
 const httpClient = fetchUtils.fetchJson;
@@ -10,6 +10,8 @@ const recordToId = (record: ChecklistProps) => ({
     id: `${record.name}:${record.version}`,
     ...record
 });
+
+
 export const schemasDataProvider: DataProvider = {
 
     getList: (resource, params) => {
@@ -17,8 +19,8 @@ export const schemasDataProvider: DataProvider = {
         const {filter = {}, pagination, sort} = params;
         const query = new URLSearchParams({
             // ...filter.q ? {text: filter.q} : {}, // Add the 'text' parameter if 'q' is provided
-            number: pagination.page - 1, // react-admin is 1 based, spring is 0 based
-            size: pagination.perPage,
+            number: (pagination.page - 1)+'', // react-admin is 1 based, spring is 0 based
+            size: pagination.perPage+'',
             sort: sort.field,
             order: sort.order,
         }).toString();
@@ -50,23 +52,30 @@ export const schemasDataProvider: DataProvider = {
     },
     getMany: (resource, params) => Promise.reject('schema getMany not implemented'),
     getManyReference: (resource, params) => Promise.reject('schema getManyReference not implemented'),
-    create: (resource, params) => {
-        return Promise.reject('schema create not implemented');
-    },
-    update: (resource, params) => {
-        debugger;
+    create: async (resource, params) => {
         const apiResource = resolveApiResource(resource);
         const url = `${apiUrl}${apiResource}`;
-        return httpClient(url, {
+        const {json} = await httpClient(url, {
             method: 'POST',
             body: JSON.stringify(params.data),
-        })
-            .then(({json}) => {
-                debugger;
-                return ({
-                    data: {...params.data, id: json.id},
-                });
-            });
+        });
+        
+        return ({
+            data: {...params.data, id: json.id},
+        });
+    },
+    update: async (resource, params) => {
+        const apiResource = resolveApiResource(resource);
+        const url = `${apiUrl}${apiResource}`;
+        
+        const {json} = await httpClient(url, {
+            method: 'PUT',
+            body: JSON.stringify(params.data),
+        });
+        
+        return ({
+            data: {...params.data, id: json.id},
+        });
     },
     updateMany: (resource, params) => Promise.reject('schema updateMany not implemented'),
     deleteMany: (resource, params) => Promise.reject('schema delete not implemented'),

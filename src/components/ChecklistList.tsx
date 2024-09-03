@@ -1,8 +1,11 @@
 import {
+    Count,
+    CreateButton,
     Datagrid,
     EditButton,
-    FilterButton,
+    FilterButton, FunctionField,
     List,
+    ReferenceManyCount,
     RichTextField,
     SearchInput,
     SelectColumnsButton,
@@ -27,6 +30,7 @@ const SchemaListActions = () => (
     <TopToolbar>
         <FilterButton/>
         <SelectColumnsButton/>
+        <CreateButton/>
     </TopToolbar>
 );
 
@@ -42,6 +46,10 @@ export const ChecklistList = () => (
             <TextField source="title"/>
             <TextField source="accession"/>
             <TextField source="version"/>
+            <FunctionField
+                label="Field Count"
+                render={record => record.schemaFieldAssociations?.length ?? 0}
+            />
             <EditButton />
         </Datagrid>
     </List>

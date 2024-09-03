@@ -37,7 +37,7 @@ export const fieldsDataProvider: DataProvider = {
             });
     },
     getOne: (resource, params) => {
-        debugger;
+        
         return httpClient(`${apiUrl}${resolveApiResource(resource)}/${params.id}`)
             .then(({json}) => {
                 let data = json; // Assuming json is the schema object itself
@@ -46,7 +46,7 @@ export const fieldsDataProvider: DataProvider = {
             });
     },
     getManyReference: (resource, params) => {
-        debugger;
+        
         const {id, target} = params;
         const apiResource = resolveApiResource(resource);
         const searchParams = new URLSearchParams();
@@ -71,34 +71,34 @@ export const fieldsDataProvider: DataProvider = {
                 };
             });
     },
-    create: (resource, params) => {
-        debugger;
+    create: async (resource, params) => {
+        
         const apiResource = resolveApiResource(resource);
         const url = `${apiUrl}${apiResource}`;
-        return httpClient(url, {
+        const {json} = await httpClient(url, {
             method: 'POST',
             body: JSON.stringify(params.data),
-        })
-            .then(({json}) => ({
-                data: {...params.data, id: json.id},
-            }));
+        });
+        return ({
+            data: {...params.data, id: json.id},
+        });
     },
-    update: (resource, params) => {
-        debugger;
+    update: async (resource, params) => {
+        
         const apiResource = resolveApiResource(resource);
         const url = `${apiUrl}${apiResource}`;
-        return httpClient(url, {
-            method: 'POST',
+        const {json} = await httpClient(url, {
+            method: 'PUT',
             body: JSON.stringify(params.data),
-        })
-            .then(({json}) => ({
-                data: {...params.data, id: json.id},
-            }));
+        });
+        return ({
+            data: {...params.data, id: json.id},
+        });
     },
 
     getMany: (resource, params) => {
         const {ids} = params;
-        debugger;
+        
         const apiResource = resolveApiResource(resource);
         const searchParams = new URLSearchParams();
         // target is the name of the query string parameter
@@ -123,7 +123,7 @@ export const fieldsDataProvider: DataProvider = {
             });
     },
     updateMany: (resource, params) => {
-        debugger;
+        
         return Promise.reject('field updateMany not implemented');
     },
     deleteMany: (resource, params) => Promise.reject('field delete not implemented'),

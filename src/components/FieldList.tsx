@@ -1,5 +1,5 @@
 import {ChipField, Datagrid,
-    EditButton, List, ReferenceArrayField, SingleFieldList, TextField, useRecordContext} from 'react-admin';
+    EditButton, List, ReferenceArrayField, SingleFieldList, TextField} from 'react-admin';
 
 export const FieldList = () => {
     // const record = useRecordContext();

@@ -10,7 +10,7 @@ export default defineConfig(({command, mode}) => {
     if (!schemaStoreHost) {
         throw new Error('VITE_SCHEMA_STORE_HOST is not defined. Check your .env file');
     } else {
-        console.log(`VITE_SCHEMA_STORE_HOST: ${schemaStoreHost}`)
+        console.log(`using VITE_SCHEMA_STORE_HOST: ${schemaStoreHost}`)
     }
     return {
         plugins: [

@@ -14,7 +14,7 @@ export const ChecklistEdit = () => (
     <Edit>
         <SimpleForm>
             <TextInput source="title"/>
-            <TextInput source="description" multiline={true}/>
+            <TextInput source="description" multiline={true} rows={3}/>
             <ArrayInput source="schemaFieldAssociations" label="Fields">
                 <SimpleFormIterator inline>
                     <SelectInput source="cardinality" choices={[
