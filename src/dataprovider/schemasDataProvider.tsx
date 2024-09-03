@@ -18,7 +18,7 @@ export const schemasDataProvider: DataProvider = {
 
         const {filter = {}, pagination, sort} = params;
         const query = new URLSearchParams({
-            // ...filter.q ? {text: filter.q} : {}, // Add the 'text' parameter if 'q' is provided
+            ...filter.q ? {text: filter.q} : {}, // Add the 'text' parameter if 'q' is provided
             number: (pagination.page - 1)+'', // react-admin is 1 based, spring is 0 based
             size: pagination.perPage+'',
             sort: sort.field,
@@ -26,7 +26,11 @@ export const schemasDataProvider: DataProvider = {
         }).toString();
         // Adjust the URL to point to the right endpoint for lists
         const apiResource = resolveApiResource(resource);
-        const url = `${apiUrl}${apiResource}?${query}`;
+        let searchResource = '';
+        if(filter.q) {
+            searchResource = '/search/findAllByTextPartial'
+        }
+        const url = `${apiUrl}${apiResource}${searchResource}?${query}`;
         return httpClient(url)
             .then(({json}) => {
                 // Extract the embedded resources
@@ -59,7 +63,7 @@ export const schemasDataProvider: DataProvider = {
             method: 'POST',
             body: JSON.stringify(params.data),
         });
-        
+
         return ({
             data: {...params.data, id: json.id},
         });
@@ -67,12 +71,12 @@ export const schemasDataProvider: DataProvider = {
     update: async (resource, params) => {
         const apiResource = resolveApiResource(resource);
         const url = `${apiUrl}${apiResource}`;
-        
+
         const {json} = await httpClient(url, {
             method: 'PUT',
             body: JSON.stringify(params.data),
         });
-        
+
         return ({
             data: {...params.data, id: json.id},
         });
