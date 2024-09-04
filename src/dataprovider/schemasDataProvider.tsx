@@ -1,22 +1,22 @@
 import {DataProvider, fetchUtils} from "react-admin";
 import config from "../config.tsx";
 import {ChecklistProps} from "../model/Checklist.tsx";
+import {FieldProps} from "../model/Field.tsx";
 import {fixTrailingSlash, resolveApiResource} from "./schemaStoreDataProvider.tsx";
 
 const apiUrl = fixTrailingSlash(config.SCHEMA_STORE_URL);
 const httpClient = fetchUtils.fetchJson;
 
-const recordToId = (record: ChecklistProps) => ({
+const recordToId = (record: ChecklistProps, apiResource: string) => ({
     id: `${record.name}:${record.version}`,
     ...record
 });
 
-
 export const schemasDataProvider: DataProvider = {
 
     getList: (resource, params) => {
-
         const {filter = {}, pagination, sort} = params;
+
         const query = new URLSearchParams({
             ...filter.q ? {text: filter.q} : {}, // Add the 'text' parameter if 'q' is provided
             number: (pagination.page - 1)+'', // react-admin is 1 based, spring is 0 based
@@ -54,7 +54,31 @@ export const schemasDataProvider: DataProvider = {
                 return {data};
             });
     },
-    getMany: (resource, params) => Promise.reject('schema getMany not implemented'),
+    getMany: (resource, params) => {
+        const {ids} = params;
+
+        const apiResource = resolveApiResource(resource);
+        const searchParams = new URLSearchParams();
+        // target is the name of the query string parameter
+        // id is the value
+        // TODO: resolve search resource from target name
+        searchParams.append('ids', ids);
+        const query = searchParams.toString();
+        const url = `${apiUrl}${apiResource}/search/findByIdIn?${query}`;
+        return httpClient(url)
+            .then(({json}) => {
+                // Extract the embedded resources
+                let data = json._embedded?.[apiResource] || [];
+                data = data.map((record: FieldProps) => recordToId(record, apiResource))
+                return {
+                    data,
+                    total: json.page?.totalElements || data.length,
+                    pageInfo: {
+                        hasNextPage: json?._links?.next || false,
+                        hasPreviousPage: json?._links?.prev || false
+                    }
+                };
+            });    },
     getManyReference: (resource, params) => Promise.reject('schema getManyReference not implemented'),
     create: async (resource, params) => {
         const apiResource = resolveApiResource(resource);

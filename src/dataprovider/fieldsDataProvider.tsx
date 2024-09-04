@@ -6,6 +6,11 @@ import {fixTrailingSlash, resolveApiResource} from "./schemaStoreDataProvider.ts
 
 const apiUrl = fixTrailingSlash(config.SCHEMA_STORE_URL);
 const httpClient = fetchUtils.fetchJson;
+
+const addIdFromSelfLink = (record: FieldProps, apiResource: string) => ({
+    id: record._links.self.href.replace(new RegExp(`.*${apiUrl}${apiResource}/`), ''),
+    ...record
+});
 export const fieldsDataProvider: DataProvider = {
 
     getList: (resource, params) => {
@@ -49,6 +54,32 @@ export const fieldsDataProvider: DataProvider = {
                 return {data};
             });
     },
+    getMany: (resource, params) => {
+        const {ids} = params;
+
+        const apiResource = resolveApiResource(resource);
+        const searchParams = new URLSearchParams();
+        // target is the name of the query string parameter
+        // id is the value
+        // TODO: resolve search resource from target name
+        searchParams.append('ids', ids);
+        const query = searchParams.toString();
+        const url = `${apiUrl}${apiResource}/search/findByIdIn?${query}`;
+        return httpClient(url)
+            .then(({json}) => {
+                // Extract the embedded resources
+                let data = json._embedded?.[apiResource] || [];
+                data = data.map((record: FieldProps) => addIdFromSelfLink(record, apiResource))
+                return {
+                    data,
+                    total: json.page?.totalElements || data.length,
+                    pageInfo: {
+                        hasNextPage: json?._links?.next || false,
+                        hasPreviousPage: json?._links?.prev || false
+                    }
+                };
+            });
+    },
     getManyReference: (resource, params) => {
 
         const {id, target} = params;
@@ -88,6 +119,7 @@ export const fieldsDataProvider: DataProvider = {
             data: {...params.data, id: json.id},
         });
     },
+
     update: async (resource, params) => {
         const {id} = params;
         const apiResource = resolveApiResource(resource);
@@ -100,33 +132,6 @@ export const fieldsDataProvider: DataProvider = {
             data: {...params.data, id: json.id},
         });
     },
-
-    getMany: (resource, params) => {
-        const {ids} = params;
-
-        const apiResource = resolveApiResource(resource);
-        const searchParams = new URLSearchParams();
-        // target is the name of the query string parameter
-        // id is the value
-        // TODO: resolve search resource from target name
-        searchParams.append('ids', ids);
-        const query = searchParams.toString();
-        const url = `${apiUrl}${apiResource}/search/findByIdIn?${query}`;
-        return httpClient(url)
-            .then(({json}) => {
-                // Extract the embedded resources
-                let data = json._embedded?.[apiResource] || [];
-                data = data.map((record: FieldProps) => addIdFromSelfLink(record, apiResource))
-                return {
-                    data,
-                    total: json.page?.totalElements || data.length,
-                    pageInfo: {
-                        hasNextPage: json?._links?.next || false,
-                        hasPreviousPage: json?._links?.prev || false
-                    }
-                };
-            });
-    },
     updateMany: (resource, params) => {
 
         return Promise.reject('field updateMany not implemented');
@@ -134,9 +139,4 @@ export const fieldsDataProvider: DataProvider = {
     deleteMany: (resource, params) => Promise.reject('field delete not implemented'),
 }
 
-function addIdFromSelfLink(record: FieldProps, apiResource: string) {
-    return {
-        id: record._links.self.href.replace(new RegExp(`.*${apiUrl}${apiResource}/`), ''),
-        ...record
-    };
-}
+

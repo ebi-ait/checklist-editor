@@ -1,11 +1,20 @@
-import {ChipField, Datagrid,
-    EditButton, List, ReferenceArrayField, SingleFieldList, TextField} from 'react-admin';
+import {
+    ChipField, CreateButton, Datagrid,
+    EditButton, FilterButton, List, ReferenceArrayField, SelectColumnsButton, SingleFieldList, TextField, TopToolbar
+} from 'react-admin';
 
+const FieldListActions = () => (
+    <TopToolbar>
+        {/*<FilterButton/>*/}
+        <SelectColumnsButton/>
+        <CreateButton/>
+    </TopToolbar>
+);
 export const FieldList = () => {
     // const record = useRecordContext();
     // const type = record.type
     return (
-        <List>
+        <List actions={<FieldListActions/>}>
             <Datagrid>
                 <TextField source="id"/>
                 <TextField source="label"/>
