@@ -1,23 +1,31 @@
-import {CheckboxGroupInput, Edit, ReferenceArrayInput, SimpleForm, TextInput, useRecordContext} from "react-admin";
-import React from "react";
+import {Edit, SimpleForm, TextInput, useRecordContext} from "react-admin";
 
-export const FieldEdit = () => {
-    const record = useRecordContext();
-    const type = record.type
+// Custom input component based on 'type' attribute
+const CustomConditionalInput = () => {
+    const record = useRecordContext(); // Access the current record being edited
 
-    return (
+    if (!record) return null;
+
+    // Check the value of 'type' and return different input controls
+    switch (record.type) {
+        case 'choice':
+            return <TextInput source="choices"/>;
+        case 'pattern':
+            return <TextInput source="pattern"/>;
+        default:
+            return null; // Or provide a default input if necessary
+    }
+};
+
+
+export const FieldEdit = () =>
+    (
         <Edit>
             <SimpleForm>
                 <TextInput source="name"/>
                 <TextInput source="label"/>
                 <TextInput source="type"/>
-                {type === 'choice' && (
-                    <TextInput source="choices" />
-                )}
-                {type === 'pattern' && (
-                    <TextInput source="pattern"/>
-                )}
+                <CustomConditionalInput/>
             </SimpleForm>
         </Edit>
     );
-};

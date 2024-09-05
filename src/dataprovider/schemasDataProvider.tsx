@@ -81,6 +81,7 @@ export const schemasDataProvider: DataProvider = {
             });    },
     getManyReference: (resource, params) => Promise.reject('schema getManyReference not implemented'),
     create: async (resource, params) => {
+        debugger;
         const apiResource = resolveApiResource(resource);
         const url = `${apiUrl}${apiResource}`;
         const {json} = await httpClient(url, {
@@ -93,6 +94,7 @@ export const schemasDataProvider: DataProvider = {
         });
     },
     update: async (resource, params) => {
+        debugger;
         const {id} = params;
         const apiResource = resolveApiResource(resource);
         const url = `${apiUrl}${apiResource}/${id}`;
