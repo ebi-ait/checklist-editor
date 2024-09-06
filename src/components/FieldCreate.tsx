@@ -1,23 +1,24 @@
-import {
-    Create,
-    SimpleForm,
-    TextInput,
-    useRecordContext} from "react-admin";
+import {Create, RadioButtonGroupInput, SimpleForm, TextInput} from "react-admin";
+import {useWatch} from 'react-hook-form';
 
-export const FieldCreate = () => {
-    const record = useRecordContext();
-    const type = record.type
+export const FieldCreate = (props) => {
+    const selectedType = useWatch({name: 'type'});
 
     return (
-        <Create>
+        <Create {...props}>
             <SimpleForm>
                 <TextInput source="name"/>
                 <TextInput source="label"/>
-                <TextInput source="type"/>
-                {type === 'choice' && (
-                    <TextInput source="choices" />
+                <RadioButtonGroupInput source="type"
+                                       choices={[
+                                           {id: 'choice', name: 'Choice'},
+                                           {id: 'pattern', name: 'Pattern'},
+                                       ]}
+                />
+                {selectedType === 'choice' && (
+                    <TextInput source="choices"/>
                 )}
-                {type === 'pattern' && (
+                {selectedType === 'pattern' && (
                     <TextInput source="pattern"/>
                 )}
             </SimpleForm>

@@ -46,11 +46,11 @@ export const fieldsDataProvider: DataProvider = {
             });
     },
     getOne: (resource, params) => {
-
+        const apiResource = resolveApiResource(resource);
         return httpClient(`${apiUrl}${resolveApiResource(resource)}/${params.id}`)
             .then(({json}) => {
                 let data = json; // Assuming json is the schema object itself
-                data = addIdFromSelfLink(data);
+                data = addIdFromSelfLink(data, apiResource);
                 return {data};
             });
     },

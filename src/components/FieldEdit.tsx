@@ -1,17 +1,28 @@
-import {Edit, SimpleForm, TextInput, useRecordContext} from "react-admin";
+import {ArrayInput, Edit, RadioButtonGroupInput, SelectInput, SimpleForm, SimpleFormIterator, TextInput} from "react-admin";
+import {useWatch} from "react-hook-form";
+
+const toChoices = items => items.map(item => ({ id: item, name: item }));
 
 // Custom input component based on 'type' attribute
 const CustomConditionalInput = () => {
-    const record = useRecordContext(); // Access the current record being edited
+    const type = useWatch({name:'type'}); // Access the current record being edited
 
-    if (!record) return null;
 
     // Check the value of 'type' and return different input controls
-    switch (record.type) {
+    switch (type) {
+        case 'text':
+            return <TextInput source="text"/>;
         case 'choice':
-            return <TextInput source="choices"/>;
+            return <ArrayInput source="choices">
+                <SimpleFormIterator inline>
+                    <TextInput source="."  />
+                </SimpleFormIterator>
+            </ArrayInput>;
         case 'pattern':
-            return <TextInput source="pattern"/>;
+            return <>
+                <TextInput source="text"/>;
+                <TextInput source="pattern"/>
+            </>;
         default:
             return null; // Or provide a default input if necessary
     }
@@ -24,7 +35,13 @@ export const FieldEdit = () =>
             <SimpleForm>
                 <TextInput source="name"/>
                 <TextInput source="label"/>
-                <TextInput source="type"/>
+                <RadioButtonGroupInput source="type"
+                                       choices={[
+                                           {id: 'text', name: 'Text'},
+                                           {id: 'choice', name: 'Choice'},
+                                           {id: 'pattern', name: 'Pattern'},
+                                       ]}
+                />
                 <CustomConditionalInput/>
             </SimpleForm>
         </Edit>
