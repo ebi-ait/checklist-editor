@@ -3,24 +3,27 @@ import {useWatch} from "react-hook-form";
 
 const toChoices = items => items.map(item => ({ id: item, name: item }));
 
+function ChoiceField() {
+    return <ArrayInput source="choices">
+        <SimpleFormIterator inline>
+            <TextInput source="."/>
+        </SimpleFormIterator>
+    </ArrayInput>;
+}
+
 // Custom input component based on 'type' attribute
 const CustomConditionalInput = () => {
     const type = useWatch({name:'type'}); // Access the current record being edited
-
 
     // Check the value of 'type' and return different input controls
     switch (type) {
         case 'text':
             return <TextInput source="text"/>;
         case 'choice':
-            return <ArrayInput source="choices">
-                <SimpleFormIterator inline>
-                    <TextInput source="."  />
-                </SimpleFormIterator>
-            </ArrayInput>;
+            return <ChoiceField/>;
         case 'pattern':
             return <>
-                <TextInput source="text"/>;
+                <TextInput source="text"/>
                 <TextInput source="pattern"/>
             </>;
         default:
