@@ -1,14 +1,30 @@
 import {
     ArrayInput,
+    AutocompleteInput,
     Edit,
-    ReferenceArrayInput,
     ReferenceInput,
-    SelectArrayInput,
     SelectInput,
     SimpleForm,
     SimpleFormIterator,
-    TextInput
+    TextInput, useRecordContext
 } from "react-admin";
+import {FieldProps} from "../model/Field.tsx";
+import {Stack, Typography} from "@mui/material";
+
+const FieldRender = () => {
+    const record: FieldProps | undefined = useRecordContext();
+    if (!record) return null;
+    return (
+        <Stack direction="row" gap={1} alignItems="left">
+            <Stack>
+                    {record.label}
+                <Typography variant="caption" color="text.secondary">
+                {record.type}
+                </Typography>
+            </Stack>
+        </Stack>
+    );
+}
 
 export const ChecklistEdit = () => (
     <Edit>
@@ -26,7 +42,12 @@ export const ChecklistEdit = () => (
                         { id: 'Single', name: 'Single' },
                         { id: 'List', name: 'List' },
                     ]} />
-                    <ReferenceInput source="fieldId" reference="fields" />
+                    <ReferenceInput source="fieldId" reference="fields" >
+                        <AutocompleteInput
+                            optionText={<FieldRender/>}
+                            inputText={(record)=> `${record.label} (${record.type})`}
+                        />
+                    </ReferenceInput>
                 </SimpleFormIterator>
             </ArrayInput>
         </SimpleForm>

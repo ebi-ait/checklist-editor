@@ -34,13 +34,13 @@ const SchemaListActions = () => (
     </TopToolbar>
 );
 
-const schemaFilters = [
+const filters = [
     <SearchInput source="q" alwaysOn/>,
 ];
 export const ChecklistList = () => (
     <List
           actions={<SchemaListActions/>}
-          filters={schemaFilters}
+          filters={filters}
     >
         <Datagrid expand={SchemaPreviewPanel}>
             <TextField source="title"/>

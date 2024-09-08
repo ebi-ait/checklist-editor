@@ -1,15 +1,17 @@
-import React from 'react';
 import {QueryClient} from '@tanstack/react-query';
+import React from 'react';
 
 import {Admin, Resource} from 'react-admin';
 import {ChecklistCreate} from "./components/ChecklistCreate.tsx";
-import {FieldList} from "./components/FieldList.tsx";
-import checklistDataProvider from './dataprovider/schemaStoreDataProvider.tsx';
+import {ChecklistEdit} from "./components/ChecklistEdit.tsx";
 import {ChecklistList} from "./components/ChecklistList.tsx";
 import {ChecklistShow} from "./components/ChecklistShow.tsx";
-import {appTheme} from "./theme.tsx";
-import {ChecklistEdit} from "./components/ChecklistEdit.tsx";
+import {FieldCreate} from "./components/FieldCreate.tsx";
 import {FieldEdit} from "./components/FieldEdit.tsx";
+import {FieldList} from "./components/FieldList.tsx";
+import checklistDataProvider from './dataprovider/schemaStoreDataProvider.tsx';
+import {appTheme} from "./theme.tsx";
+
 const App: React.FC = () => {
     const queryClient = new QueryClient({
         defaultOptions: {
@@ -33,6 +35,7 @@ const App: React.FC = () => {
             <Resource name="fields"
                       list={FieldList}
                       edit={FieldEdit}
+                      create={FieldCreate}
             />
         </Admin>
     );

@@ -1,51 +1,60 @@
-import {ArrayInput, Edit, RadioButtonGroupInput, SelectInput, SimpleForm, SimpleFormIterator, TextInput} from "react-admin";
-import {useWatch} from "react-hook-form";
+import React from "react";
+import {
+    ArrayInput,
+    Edit,
+    FormDataConsumer,
+    RadioButtonGroupInput,
+    SimpleForm,
+    SimpleFormIterator,
+    TextInput
+} from "react-admin";
 
-const toChoices = items => items.map(item => ({ id: item, name: item }));
+// registry of field types and their specific controls
+const inputMap = {
+    'text': (rest) => null,
+    'choice': (rest) => <ChoiceField/>,
+    'pattern': (rest) => <TextInput source="pattern"/>,
+}
 
-function ChoiceField() {
-    return <ArrayInput source="choices">
+export const ChoiceField = () =>
+    <ArrayInput source="choices">
         <SimpleFormIterator inline>
             <TextInput source="."/>
         </SimpleFormIterator>
     </ArrayInput>;
+
+function toTitleCase(s: string) {
+    return s[0]?.toUpperCase() + (s.length > 1 ? s.substring(1) : '');
 }
 
-// Custom input component based on 'type' attribute
-const CustomConditionalInput = () => {
-    const type = useWatch({name:'type'}); // Access the current record being edited
+export const FieldForm = () =>
+    <SimpleForm>
+        <TextInput source="label"/>
+        <TextInput source="description"/>
+        <TextInput source="group"/>
+        <RadioButtonGroupInput source="type"
+                               choices={
+                                   Object.keys(inputMap)
+                                       .map(id => ({id, name: toTitleCase(id)}))
+                               }
+        />
+        <ConditionalInput/>
+    </SimpleForm>;
+// Custom input component based on an attribute
+export const ConditionalInput = ({selectorAttrName = 'type'}) =>
+    <FormDataConsumer>
+        {({formData, ...rest}) => {
+            // Get the value of the type field from formData
+            const inputType = formData[selectorAttrName];
 
-    // Check the value of 'type' and return different input controls
-    switch (type) {
-        case 'text':
-            return <TextInput source="text"/>;
-        case 'choice':
-            return <ChoiceField/>;
-        case 'pattern':
-            return <>
-                <TextInput source="text"/>
-                <TextInput source="pattern"/>
-            </>;
-        default:
-            return null; // Or provide a default input if necessary
-    }
-};
+            // Retrieve the component from the map based on the type field
+            const InputComponent = inputMap[inputType];
+            return InputComponent ? InputComponent(rest) : null;
+        }}
+    </FormDataConsumer>;
 
 
 export const FieldEdit = () =>
-    (
-        <Edit>
-            <SimpleForm>
-                <TextInput source="name"/>
-                <TextInput source="label"/>
-                <RadioButtonGroupInput source="type"
-                                       choices={[
-                                           {id: 'text', name: 'Text'},
-                                           {id: 'choice', name: 'Choice'},
-                                           {id: 'pattern', name: 'Pattern'},
-                                       ]}
-                />
-                <CustomConditionalInput/>
-            </SimpleForm>
-        </Edit>
-    );
+    <Edit>
+        <FieldForm/>
+    </Edit>;
