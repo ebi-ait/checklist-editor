@@ -1,0 +1,25 @@
+version: '3'
+services:
+  mongodb:
+    image: mongo:4.2.6
+    ports:
+      - 27017:27017
+  validator:
+    image: quay.io/ebi-ait/biovalidator:2.2.2
+    ports:
+      - 3020:3020
+  json-schema-store:
+    image: dockerhub.ebi.ac.uk/fairification/json-schema-store:feature-ck-71-fields-in-schema-store-08e19d7d
+    ports:
+      - 8085:8085
+    links:
+      - mongodb
+      - validator
+    environment:
+      - spring.data.mongodb.uri=mongodb://mongodb:27017/schemastore
+      - schemastore.validator.url=http://validator:3020/validate
+#networks:
+#  default:
+#    ipam:
+#      config:
+#        - subnet: 172.30.0.0/16
