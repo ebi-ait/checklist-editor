@@ -5,6 +5,7 @@ import {
     Datagrid,
     EditButton,
     FilterButton,
+    FunctionField,
     List,
     ReferenceArrayField,
     SearchInput,
@@ -26,12 +27,11 @@ const filters = [
     <SearchInput source="q" alwaysOn/>,
 ];
 
-export const FieldList = () => {
-    return (
+export const FieldList = () =>
+    (
         <List actions={<FieldListActions/>}
               filters={filters}>
             <Datagrid>
-                <TextField source="id"/>
                 <TextField source="label"/>
                 <TextField source="description"/>
                 <TextField source="group"/>
@@ -40,11 +40,16 @@ export const FieldList = () => {
                                      reference="checklists"
                                      source="usedBySchemas">
                     <SingleFieldList>
-                        <ChipField source="accession" />
+                        <FunctionField
+                            source="accession"
+                            render={record =>
+                                <ChipField record={record}
+                                           defaultValue={`${record.accession}:${record.version}`}
+                                />
+                            }/>
                     </SingleFieldList>
                 </ReferenceArrayField>
-                <EditButton />
+                <EditButton/>
             </Datagrid>
         </List>
     );
-};

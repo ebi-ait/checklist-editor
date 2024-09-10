@@ -27,7 +27,7 @@ const FieldRender = () => {
 }
 
 export const ChecklistEdit = () => (
-    <Edit>
+    <Edit >
         <SimpleForm>
             <TextInput source="title"/>
             <TextInput source="description" multiline={true} rows={3}/>
@@ -51,5 +51,5 @@ export const ChecklistEdit = () => (
                 </SimpleFormIterator>
             </ArrayInput>
         </SimpleForm>
-    </Edit>
+    </Edit >
 );

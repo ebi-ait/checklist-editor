@@ -7,16 +7,20 @@ export const ChecklistCreate = props => (
             <TextInput source="description" multiline={true}/>
             <ArrayInput source="schemaFieldAssociations" label="Fields">
                 <SimpleFormIterator inline>
-                    <SelectInput source="cardinality" choices={[
-                        { id: 'OPTIONAL', name: 'Optional' },
-                        { id: 'MANDATORY', name: 'Mandatory' },
-                        { id: 'RECOMMENDED', name: 'Recommended' },
-                    ]} />
-                    <SelectInput source="multiplicity" choices={[
-                        { id: 'Single', name: 'Single' },
-                        { id: 'List', name: 'List' },
-                    ]} />
-                    <ReferenceInput source="fieldId" reference="fields" />
+                    <SelectInput source="cardinality"
+                                 choices={[
+                                     {id: 'OPTIONAL', name: 'Optional'},
+                                     {id: 'MANDATORY', name: 'Mandatory'},
+                                     {id: 'RECOMMENDED', name: 'Recommended'},
+                                 ]}
+                                 defaultValue={'MANDATORY'}/>
+                    <SelectInput source="multiplicity"
+                                 choices={[
+                                     {id: 'Single', name: 'Single'},
+                                     {id: 'List', name: 'List'},
+                                 ]}
+                                 defaultValue={'Single'}/>
+                    <ReferenceInput source="fieldId" reference="fields"/>
                 </SimpleFormIterator>
             </ArrayInput>
         </SimpleForm>

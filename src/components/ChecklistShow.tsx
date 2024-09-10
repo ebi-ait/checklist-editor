@@ -34,7 +34,7 @@ const FieldPanel = () => {
  */
 export const ChecklistShow = () => {
     return (
-        <Show emptyWhileLoading>
+        <Show emptyWhileLoading >
             <SimpleShowLayout>
                     <TextField source="title"/>
                     <TextField source="description"/>
