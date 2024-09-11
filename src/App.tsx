@@ -12,7 +12,6 @@ import {FieldCreate} from "./components/FieldCreate.tsx";
 import {FieldEdit} from "./components/FieldEdit.tsx";
 import {FieldList} from "./components/FieldList.tsx";
 import checklistDataProvider from './dataprovider/schemaStoreDataProvider.tsx';
-import {MyLayout} from "./MyLayout.tsx";
 import {appTheme} from "./theme.tsx";
 
 const App: React.FC = () => {
@@ -25,7 +24,6 @@ const App: React.FC = () => {
     });
     return (
         <Admin dataProvider={checklistDataProvider}
-               layout={MyLayout}
                queryClient={queryClient}
                 theme={appTheme}
         >

@@ -18,4 +18,14 @@ export const appTheme = {
             'sans-serif',
         ].join(','),
     },
+    components: {
+        ...defaultTheme.components,
+        RaLayout: {
+            styleOverrides: {
+                root: {
+                    '& .RaLayout-appFrame': { width: '100vw' },
+                },
+            },
+        },
+    },
 };
