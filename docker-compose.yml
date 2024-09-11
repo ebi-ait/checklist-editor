@@ -9,6 +9,9 @@ services:
     ports:
       - 3020:3020
   json-schema-store:
+#    for building from a local  code repo
+#    build: .
+#    for using a published image
     image: dockerhub.ebi.ac.uk/fairification/json-schema-store:feature-ck-71-fields-in-schema-store-08e19d7d
     ports:
       - 8085:8085
