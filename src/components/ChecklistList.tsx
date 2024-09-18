@@ -1,18 +1,18 @@
 import {
-    Count,
     CreateButton,
     Datagrid,
+    DateField,
     EditButton,
     FilterButton, FunctionField,
     List,
-    ReferenceManyCount,
     RichTextField,
     SearchInput,
-    SelectColumnsButton,
+    SelectInput,
     SimpleShowLayout,
     TextField,
+    TextInput,
     TopToolbar,
-    UrlField,
+    UrlField, useRecordContext,
 } from "react-admin";
 
 
@@ -29,30 +29,41 @@ const SchemaPreviewPanel = () => {
 const SchemaListActions = () => (
     <TopToolbar>
         <FilterButton/>
-        <SelectColumnsButton/>
         <CreateButton/>
     </TopToolbar>
 );
 
 const filters = [
     <SearchInput source="q" alwaysOn/>,
+    <SelectInput source="editable"
+                 choices={[{id:true,name:'True'}, {id:false,name:'False'}]}/>
 ];
-export const ChecklistList = () => (
-    <List
-          actions={<SchemaListActions/>}
-          filters={filters}
-    >
-        <Datagrid expand={SchemaPreviewPanel}>
-            <TextField source="title"/>
-            <TextField source="accession"/>
-            <TextField source="version"/>
-            <FunctionField
-                label="Field Count"
-                render={record => record.schemaFieldAssociations?.length ?? 0}
-            />
-            <EditButton />
-        </Datagrid>
-    </List>
-);
+
+const ConditionalEditButton = () => {
+    const record = useRecordContext();
+    return record && record.editable ? <EditButton/> : null;
+};
+export const ChecklistList = () => {
+
+    return (
+        <List
+            actions={<SchemaListActions/>}
+            filters={filters}
+            filterDefaultValues={{ editable: true }}
+        >
+            <Datagrid expand={SchemaPreviewPanel}>
+                <TextField source="title"/>
+                <TextField source="accession"/>
+                <TextField source="version"/>
+                <DateField source="lastModifiedDate" showTime/>
+                <FunctionField
+                    label="Field Count"
+                    render={record => record.schemaFieldAssociations?.length ?? 0}
+                />
+                <ConditionalEditButton/>
+            </Datagrid>
+        </List>
+    );
+};
 
 
