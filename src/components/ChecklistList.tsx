@@ -1,3 +1,4 @@
+import {useEffect} from "react";
 import {
     CreateButton,
     Datagrid,
@@ -12,7 +13,7 @@ import {
     TextField,
     TextInput,
     TopToolbar,
-    UrlField, useRecordContext,
+    UrlField, useListContext, useRecordContext,
 } from "react-admin";
 
 
@@ -44,7 +45,6 @@ const ConditionalEditButton = () => {
     return record && record.editable ? <EditButton/> : null;
 };
 export const ChecklistList = () => {
-
     return (
         <List
             actions={<SchemaListActions/>}
