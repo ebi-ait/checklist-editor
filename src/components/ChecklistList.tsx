@@ -36,8 +36,10 @@ const SchemaListActions = () => (
 
 const filters = [
     <SearchInput source="q" alwaysOn/>,
-    <SelectInput source="editable"
-                 choices={[{id:true,name:'True'}, {id:false,name:'False'}]}/>
+    <SelectInput source="latest"
+                 choices={[{id:true,name:'True'}, {id:false,name:'False'}]}/>,
+    <SelectInput source="authority"
+                 choices={[{id:"ENA", name:"ENA"}, {id:"BIOSAMPLES",name:'BioSamples'}]}/>
 ];
 
 const ConditionalEditButton = () => {
@@ -49,12 +51,13 @@ export const ChecklistList = () => {
         <List
             actions={<SchemaListActions/>}
             filters={filters}
-            filterDefaultValues={{ editable: true }}
+            filterDefaultValues={{ latest: true }}
         >
             <Datagrid expand={SchemaPreviewPanel}>
                 <TextField source="title"/>
                 <TextField source="accession"/>
                 <TextField source="version"/>
+                <TextField source="authority"/>
                 <DateField source="lastModifiedDate" showTime/>
                 <FunctionField
                     label="Field Count"

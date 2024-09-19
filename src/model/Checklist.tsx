@@ -30,5 +30,7 @@ export interface ChecklistProps {
     schema: ChecklistSchema;
     schemaFieldAssociations: SchemaFieldAssociation[];
     lastModifiedDate: string;
+    editable: boolean;
+    latest: boolean;
 }
 

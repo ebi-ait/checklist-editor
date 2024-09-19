@@ -28,7 +28,6 @@ export const schemasDataProvider: DataProvider = {
             order: sort.order,
             ...filter
         }).toString();
-        debugger;
         let searchResource = '';
         if(Object.keys(filter).length>0) {
             if(filter.q) { // it's a text search
