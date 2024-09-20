@@ -6,11 +6,10 @@ variables:
   DOCKER_PULL_SECRET: docker-registry-secret
 
 cache:
-  cache:
-    key: ${CI_COMMIT_REF_SLUG}
-    paths:
-      - node_modules/
-      - dist/
+  key: ${CI_COMMIT_REF_SLUG}
+  paths:
+    - node_modules/
+    - dist/
 
 stages:
   - build
