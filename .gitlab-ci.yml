@@ -13,28 +13,14 @@ cache:
 
 stages:
   - build
-  - publish
+#  - publish
 #  - deploy
-
-build:
-  stage: build
-  variables:
-  script:
-    - npm install
-    - npm run build
-  cache:
-    paths:
-      - node_modules/
-      - dist/
-  artifacts:
-    paths:
-      - dist/
 
 build_docker_image:
   image: docker:latest
   services:
     - docker:dind
-  stage: publish
+  stage: build
   script:
     - echo "$CI_DEPLOY_PASSWORD" | docker login $CI_REGISTRY -u $CI_DEPLOY_USER --password-stdin
     - echo $DOCKER_IMAGE_NAME
