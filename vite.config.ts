@@ -7,10 +7,13 @@ export default defineConfig(({command, mode}) => {
     // Set the third parameter to '' to load all env regardless of the `VITE_` prefix.
     const env = loadEnv(mode, process.cwd(), '')
     const schemaStoreHost = env.VITE_SCHEMA_STORE_HOST;
-    if (!schemaStoreHost) {
-        throw new Error('VITE_SCHEMA_STORE_HOST is not defined. Check your .env file');
-    } else {
-        console.log(`using VITE_SCHEMA_STORE_HOST: ${schemaStoreHost}`)
+    console.log(`command: ${command}`);
+    if (command == 'serve') {
+        if (!schemaStoreHost) {
+            throw new Error('VITE_SCHEMA_STORE_HOST is not defined. Check your .env file');
+        } else {
+            console.log(`using VITE_SCHEMA_STORE_HOST: ${schemaStoreHost}`)
+        }
     }
     return {
         plugins: [
