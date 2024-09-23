@@ -13,6 +13,7 @@ import {FieldEdit} from "./components/FieldEdit.tsx";
 import {FieldList} from "./components/FieldList.tsx";
 import checklistDataProvider from './dataprovider/schemaStoreDataProvider.tsx';
 import {appTheme} from "./theme.tsx";
+import {darkTheme} from "./theme.tsx"
 
 const App: React.FC = () => {
     const queryClient = new QueryClient({
@@ -26,6 +27,7 @@ const App: React.FC = () => {
         <Admin dataProvider={checklistDataProvider}
                queryClient={queryClient}
                 theme={appTheme}
+               darkTheme={darkTheme}
         >
             <Resource name="checklists"
                       list={ChecklistList}

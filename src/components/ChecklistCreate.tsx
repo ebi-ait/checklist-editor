@@ -7,7 +7,7 @@ export const ChecklistCreate = props => (
             <TextInput source="description" multiline={true}/>
             <ArrayInput source="schemaFieldAssociations" label="Fields">
                 <SimpleFormIterator inline>
-                    <SelectInput source="cardinality"
+                    <SelectInput source="cardinality" label="Required"
                                  choices={[
                                      {id: 'OPTIONAL', name: 'Optional'},
                                      {id: 'MANDATORY', name: 'Mandatory'},

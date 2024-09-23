@@ -33,12 +33,12 @@ export const ChecklistEdit = () => (
             <TextInput source="description" multiline={true} rows={3}/>
             <ArrayInput source="schemaFieldAssociations" label="Fields">
                 <SimpleFormIterator inline>
-                    <SelectInput source="cardinality" choices={[
+                    <SelectInput source="cardinality" label = "Required" choices={[
                         { id: 'OPTIONAL', name: 'Optional' },
                         { id: 'MANDATORY', name: 'Mandatory' },
                         { id: 'RECOMMENDED', name: 'Recommended' },
                     ]} />
-                    <SelectInput source="multiplicity" choices={[
+                    <SelectInput source="multiplicity"  choices={[
                         { id: 'Single', name: 'Single' },
                         { id: 'List', name: 'List' },
                     ]} />

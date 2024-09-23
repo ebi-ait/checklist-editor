@@ -34,7 +34,7 @@ export const FieldList = () =>
             <Datagrid>
                 <TextField source="label"/>
                 <TextField source="description"/>
-                <TextField source="group"/>
+                <TextField source="group" label ="Field Group"/>
                 <TextField source="type"/>
                 <ReferenceArrayField label="Used by Checklists"
                                      reference="checklists"
