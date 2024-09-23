@@ -1,24 +1,21 @@
-import React from "react";
 import {
     ChipField,
     CreateButton,
-    Datagrid,
+    Datagrid, DateField,
     EditButton,
     FilterButton,
     FunctionField,
     List,
     ReferenceArrayField,
     SearchInput,
-    SelectColumnsButton,
     SingleFieldList,
-    TextField, TextInput,
+    TextField,
     TopToolbar
 } from 'react-admin';
 
 const FieldListActions = () => (
     <TopToolbar>
-        {/*<FilterButton/>*/}
-        <SelectColumnsButton/>
+        <FilterButton/>
         <CreateButton/>
     </TopToolbar>
 );
@@ -36,6 +33,8 @@ export const FieldList = () =>
                 <TextField source="description"/>
                 <TextField source="group" label ="Field Group"/>
                 <TextField source="type"/>
+                <DateField source="lastModifiedDate"/>
+
                 <ReferenceArrayField label="Used by Checklists"
                                      reference="checklists"
                                      source="usedBySchemas">

@@ -17,24 +17,31 @@ export const schemasDataProvider: DataProvider = {
     getList: (resource, params) => {
         const {filter = {}, pagination, sort} = params;
 
+        // Adjust the URL to point to the right endpoint for lists
+        let apiResource = resolveApiResource(resource);
+        const responseResourceName = apiResource
         const query = new URLSearchParams({
             ...filter.q ? {text: filter.q} : {}, // Add the 'text' parameter if 'q' is provided
             number: (pagination.page - 1)+'', // react-admin is 1 based, spring is 0 based
             size: pagination.perPage+'',
             sort: sort.field,
             order: sort.order,
+            ...filter
         }).toString();
-        // Adjust the URL to point to the right endpoint for lists
-        const apiResource = resolveApiResource(resource);
         let searchResource = '';
-        if(filter.q) {
-            searchResource = '/search/findAllByTextPartial'
+        if(Object.keys(filter).length>0) {
+            if(filter.q) { // it's a text search
+                searchResource = '/search/findAllByTextPartial'
+            } else { // it's a regular attribute search
+                searchResource = '/search/findByExample'
+                apiResource = 'schemas'
+            }
         }
         const url = `${apiUrl}${apiResource}${searchResource}?${query}`;
         return httpClient(url)
             .then(({json}) => {
                 // Extract the embedded resources
-                let data = json._embedded?.[apiResource] || [];
+                let data = json._embedded?.[responseResourceName] || [];
                 data = data.map(recordToId)
                 return {
                     data,

@@ -1,0 +1,44 @@
+variables:
+  DOCKER_DRIVER: overlay2
+  DOCKER_TLS_CERTDIR: ""
+  DOCKER_TAG: $CI_COMMIT_REF_SLUG-$CI_COMMIT_SHORT_SHA
+  DOCKER_IMAGE_NAME: $CI_REGISTRY_IMAGE:$DOCKER_TAG
+  DOCKER_PULL_SECRET: docker-registry-secret
+
+cache:
+  key: ${CI_COMMIT_REF_SLUG}
+  paths:
+    - node_modules/
+    - dist/
+
+stages:
+  - build
+#  - publish
+#  - deploy
+
+build_docker_image:
+  image: docker:latest
+  services:
+    - docker:dind
+  stage: build
+  script:
+    - docker login -u "$CI_REGISTRY_USER" -p "$CI_JOB_TOKEN" "$CI_REGISTRY"
+    - echo $DOCKER_IMAGE_NAME
+    - docker build -t $DOCKER_IMAGE_NAME .
+    - docker push $DOCKER_IMAGE_NAME
+  after_script:
+    - docker logout ${CI_REGISTRY}
+
+#deploy:
+#  stage: deploy
+#  image: dtzar/helm-kubectl:3.11.0
+#  script:
+#    - kubectl create namespace $KUBECTL_NAMESPACE || true
+#    - kubectl config set-context --current --namespace=${KUBECTL_NAMESPACE}
+#    - kubectl delete secret $DOCKER_PULL_SECRET || true
+#    - kubectl create secret docker-registry $DOCKER_PULL_SECRET --docker-server=$CI_REGISTRY --docker-username=$CI_DEPLOY_USER --docker-password=$CI_DEPLOY_PASSWORD
+#    - envsubst < deployment.yaml > kubernetes.yaml
+#    - kubectl apply -f kubernetes.yaml
+#    - kubectl rollout restart deployments json-schema-store
+#  when: manual
+

@@ -1,3 +1,5 @@
+import {Stack, Typography} from "@mui/material";
+import {useQueryClient} from "@tanstack/react-query";
 import {
     ArrayInput,
     AutocompleteInput,
@@ -6,10 +8,12 @@ import {
     SelectInput,
     SimpleForm,
     SimpleFormIterator,
-    TextInput, useRecordContext
+    TextInput,
+    useNotify,
+    useRecordContext,
+    useRedirect
 } from "react-admin";
 import {FieldProps} from "../model/Field.tsx";
-import {Stack, Typography} from "@mui/material";
 
 const FieldRender = () => {
     const record: FieldProps | undefined = useRecordContext();
@@ -17,39 +21,62 @@ const FieldRender = () => {
     return (
         <Stack direction="row" gap={1} alignItems="left">
             <Stack>
-                    {record.label}
+                {record.label}
                 <Typography variant="caption" color="text.secondary">
-                {record.type}
+                    {record.type}
                 </Typography>
             </Stack>
         </Stack>
     );
 }
 
-export const ChecklistEdit = () => (
-    <Edit >
-        <SimpleForm>
-            <TextInput source="title"/>
-            <TextInput source="description" multiline={true} rows={3}/>
-            <ArrayInput source="schemaFieldAssociations" label="Fields">
-                <SimpleFormIterator inline>
-                    <SelectInput source="cardinality" label = "Required" choices={[
-                        { id: 'OPTIONAL', name: 'Optional' },
-                        { id: 'MANDATORY', name: 'Mandatory' },
-                        { id: 'RECOMMENDED', name: 'Recommended' },
-                    ]} />
-                    <SelectInput source="multiplicity"  choices={[
-                        { id: 'Single', name: 'Single' },
-                        { id: 'List', name: 'List' },
-                    ]} />
-                    <ReferenceInput source="fieldId" reference="fields" >
-                        <AutocompleteInput
-                            optionText={<FieldRender/>}
-                            inputText={(record)=> `${record.label} (${record.type})`}
-                        />
-                    </ReferenceInput>
-                </SimpleFormIterator>
-            </ArrayInput>
-        </SimpleForm>
-    </Edit >
-);
+export const ChecklistForm = () => {
+    const record = useRecordContext();
+    return <SimpleForm>
+        <TextInput source="title"/>
+        <TextInput source="description" multiline={true} rows={3}/>
+        <ArrayInput source="schemaFieldAssociations" label="Fields">
+            <SimpleFormIterator inline>
+                <SelectInput source="cardinality" label = "Required"
+                             choices={[
+                                 {id: "OPTIONAL", name: "Optional"},
+                                 {id: "MANDATORY", name: "Mandatory"},
+                                 {id: "RECOMMENDED", name: "Recommended"},
+                             ]}
+                             defaultValue={"MANDATORY"}/>
+                <SelectInput source="multiplicity"
+                             choices={[
+                                 {id: "Single", name: "Single"},
+                                 {id: "List", name: "List"},
+                             ]}
+                             defaultValue={"Single"}/>
+                <ReferenceInput source="fieldId" reference="fields">
+                    <AutocompleteInput
+                        optionText={<FieldRender/>}
+                        inputText={(record) => `${record.label} (${record.type})`}
+                    />
+                </ReferenceInput>
+            </SimpleFormIterator>
+        </ArrayInput>
+    </SimpleForm>;
+};
+
+export const ChecklistEdit = () => {
+    const queryClient = useQueryClient(); // Access the QueryClient instance
+    const redirect = useRedirect();
+    const notify = useNotify();
+    const handleSuccess = (data) => {
+        debugger;
+        queryClient.invalidateQueries(['checklists']);
+        notify('Checklist updated successfully', {type: 'success'});
+        redirect('list', 'checklists');
+    };
+    return (
+        <Edit
+            mutationMode={"pessimistic"}
+            mutationOptions={{onSuccess: handleSuccess}}
+        >
+            <ChecklistForm/>
+        </Edit>
+    );
+};
