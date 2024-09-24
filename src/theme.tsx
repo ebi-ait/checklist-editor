@@ -14,6 +14,15 @@ import { RaThemeOptions } from 'ra-ui-materialui/src/theme/types.ts';
 const componentsOverrides = (theme: Theme) =>
     ({
     ...defaultTheme.components,
+        MuiTextField: {
+            defaultProps: {
+                variant: 'standard' as const,
+                margin: 'dense' as const,
+                fullWidth: true,
+            },
+
+        },
+
         RaMenuItemLink: {
             styleOverrides: {
                 root: {
@@ -86,8 +95,8 @@ const darkPalette = {
 const createAppTheme = (palette: RaThemeOptions['palette']) => {
     const themeOptions = {
         palette,
-        shape: { borderRadius: 20 },
-        sidebar: { width: 200 },
+        shape: { borderRadius: 10 },
+        sidebar: { width: 180 },
         // spacing: 9,
         typography: {fontFamily: [
             '-apple-system',
