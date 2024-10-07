@@ -8,7 +8,7 @@ const apiUrl = fixTrailingSlash(config.SCHEMA_STORE_URL);
 const httpClient = fetchUtils.fetchJson;
 
 const addIdFromSelfLink = (record: FieldProps, apiResource: string) => ({
-    id: record._links.self.href.replace(new RegExp(`.*${apiUrl}${apiResource}/`), ''),
+    id: `${record.name}:${record.version}`,
     ...record
 });
 export const fieldsDataProvider: DataProvider = {
@@ -18,10 +18,9 @@ export const fieldsDataProvider: DataProvider = {
 
         const query = new URLSearchParams({
             ...filter.q ? {text: filter.q} : {}, // Add the 'text' parameter if 'q' is provided
-            number: (pagination.page - 1)+''    , // react-admin is 1 based, spring is 0 based
+            page: (pagination.page - 1)+''    , // react-admin is 1 based, spring is 0 based
             size: pagination.perPage+'',
-            sort: sort.field,
-            order: sort.order,
+            sort: `${sort.field},${sort.order}`,
         }).toString();
         // Adjust the URL to point to the right endpoint for lists
         const apiResource = resolveApiResource(resource);
@@ -55,16 +54,18 @@ export const fieldsDataProvider: DataProvider = {
             });
     },
     getMany: (resource, params) => {
-        const {ids} = params;
-
+        const {ids, meta={}  } = params;
         const apiResource = resolveApiResource(resource);
         const searchParams = new URLSearchParams();
         // target is the name of the query string parameter
         // id is the value
         // TODO: resolve search resource from target name
         searchParams.append('ids', ids);
+        if(meta.hasOwnProperty('size')) {
+            searchParams.append('size', meta.size)
+        }
         const query = searchParams.toString();
-        const url = `${apiUrl}${apiResource}/search/findByIdIn?${query}`;
+        const url = `${apiUrl}${apiResource}/search/findAllByIdIn?${query}`;
         return httpClient(url)
             .then(({json}) => {
                 // Extract the embedded resources
@@ -81,7 +82,6 @@ export const fieldsDataProvider: DataProvider = {
             });
     },
     getManyReference: (resource, params) => {
-
         const {id, target} = params;
         const apiResource = resolveApiResource(resource);
         const searchParams = new URLSearchParams();

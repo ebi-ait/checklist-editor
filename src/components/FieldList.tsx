@@ -6,6 +6,7 @@ import {
     FilterButton,
     FunctionField,
     List,
+    Pagination,
     ReferenceArrayField,
     SearchInput,
     SingleFieldList,
@@ -31,13 +32,18 @@ export const FieldList = () =>
             <Datagrid>
                 <TextField source="label"/>
                 <TextField source="description"/>
+                <TextField source="version"/>
                 <TextField source="group" label ="Field Group"/>
                 <TextField source="type"/>
                 <DateField source="lastModifiedDate"/>
 
                 <ReferenceArrayField label="Used by Checklists"
                                      reference="checklists"
-                                     source="usedBySchemas">
+                                     source="usedBySchemas"
+                                     perPage={5}
+                                     pagination={<Pagination labelRowsPerPage={""}
+                                                             hidePrevButton hideNextButton
+                                                             size="small"/>}>
                     <SingleFieldList>
                         <FunctionField
                             source="accession"

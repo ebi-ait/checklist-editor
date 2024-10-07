@@ -7,7 +7,7 @@ import {
     ReferenceInput,
     SelectInput,
     SimpleForm,
-    SimpleFormIterator,
+    SimpleFormIterator, TextField,
     TextInput,
     useNotify,
     useRecordContext,
@@ -34,10 +34,16 @@ export const ChecklistForm = () => {
     const record = useRecordContext();
     return <SimpleForm>
         <TextInput source="title"/>
-        <TextInput source="description" multiline={true} rows={3}/>
+        <TextField source="accession" label="Accession"/>
+        <TextInput source="description" multiline={true} rows={2}/>
         <ArrayInput source="schemaFieldAssociations" label="Fields">
             <SimpleFormIterator inline>
-                <SelectInput source="cardinality" label = "Required"
+                <ReferenceInput source="fieldId" reference="fields" queryOptions={{ meta: { size: 300 } }}>
+                    <AutocompleteInput
+                        optionText={<FieldRender/>}
+                        inputText={(record) => `${record.label} (${record.type})`}/>
+                </ReferenceInput>
+                <SelectInput source="cardinality"
                              choices={[
                                  {id: "OPTIONAL", name: "Optional"},
                                  {id: "MANDATORY", name: "Mandatory"},
@@ -50,12 +56,6 @@ export const ChecklistForm = () => {
                                  {id: "List", name: "List"},
                              ]}
                              defaultValue={"Single"}/>
-                <ReferenceInput source="fieldId" reference="fields">
-                    <AutocompleteInput
-                        optionText={<FieldRender/>}
-                        inputText={(record) => `${record.label} (${record.type})`}
-                    />
-                </ReferenceInput>
             </SimpleFormIterator>
         </ArrayInput>
     </SimpleForm>;
@@ -66,7 +66,6 @@ export const ChecklistEdit = () => {
     const redirect = useRedirect();
     const notify = useNotify();
     const handleSuccess = (data) => {
-        debugger;
         queryClient.invalidateQueries(['checklists']);
         notify('Checklist updated successfully', {type: 'success'});
         redirect('list', 'checklists');

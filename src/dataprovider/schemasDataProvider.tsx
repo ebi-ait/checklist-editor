@@ -8,7 +8,7 @@ const apiUrl = fixTrailingSlash(config.SCHEMA_STORE_URL);
 const httpClient = fetchUtils.fetchJson;
 
 const recordToId = (record: ChecklistProps, apiResource: string) => ({
-    id: `${record.name}:${record.version}`,
+    id: `${record.accession}:${record.version}`,
     ...record
 });
 
@@ -22,10 +22,9 @@ export const schemasDataProvider: DataProvider = {
         const responseResourceName = apiResource
         const query = new URLSearchParams({
             ...filter.q ? {text: filter.q} : {}, // Add the 'text' parameter if 'q' is provided
-            number: (pagination.page - 1)+'', // react-admin is 1 based, spring is 0 based
+            page: (pagination.page - 1)+'', // react-admin is 1 based, spring is 0 based
             size: pagination.perPage+'',
-            sort: sort.field,
-            order: sort.order,
+            sort: `${sort.field},${sort.order}`,
             ...filter
         }).toString();
         let searchResource = '';
