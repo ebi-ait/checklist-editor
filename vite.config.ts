@@ -30,5 +30,6 @@ export default defineConfig(({command, mode}) => {
                 },
             },
         },
+        base: '/biosamples/checklist-editor'
     };
 })
