@@ -1,0 +1,22 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: checklist-editor-ingress
+  namespace: ${NAMESPACE}
+  labels:
+    app: checklist-editor-service
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /$2
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: ${HOST}
+      http:
+        paths:
+          - path: /biosamples/checklist-editor(/|$)(.*)
+            pathType: Prefix
+            backend:
+              service:
+                name: checklist-editor-service
+                port:
+                  number: 8080
