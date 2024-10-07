@@ -35,7 +35,7 @@ deploy_dev:
     HOST: wwwdev.ebi.ac.uk
   environment:
     name: dev
-    url: https://wwwdev.ebi.ac.uk/checklist-editor
+    url: https://wwwdev.ebi.ac.uk/biosamples/checklist-editor
   when: manual
   extends: .kube_deploy_script
 
@@ -45,7 +45,7 @@ deploy_prod:
     HOST: www.ebi.ac.uk
   environment:
     name: production
-    url: https://www.ebi.ac.uk/checklist-editor
+    url: https://www.ebi.ac.uk/biosamples/checklist-editor
   when: manual
   extends: .kube_deploy_script
 

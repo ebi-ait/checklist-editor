@@ -13,7 +13,7 @@ spec:
     - host: ${HOST}
       http:
         paths:
-          - path: /checklist-editor(/|$)(.*)
+          - path: /biosamples/checklist-editor(/|$)(.*)
             pathType: Prefix
             backend:
               service:
