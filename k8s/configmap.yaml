@@ -1,0 +1,36 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: checklist-editor-config
+data:
+  config.js: |
+    window.__CONFIG__ = {
+        SCHEMA_STORE_URL: "/biosamples/checklist-editor/api/v2",
+        CHECKLIST_EDITOR_BASE_URL: "/biosamples/checklist-editor"
+    };
+  nginx.conf: |
+    server {
+      listen       80;
+      server_name  localhost;
+      
+      access_log  /var/log/nginx/host.access.log  main;
+      error_log /var/log/nginx/host.access.log debug;
+      
+      location / {
+        root   /usr/share/nginx/html;
+        index  index.html index.htm;
+        try_files $uri $uri/ /index.html;
+      }
+      location /api {
+          proxy_pass "https://wwwdev.ebi.ac.uk/schema-store/api";
+      }
+      #error_page  404              /404.html;
+      
+      # redirect server error pages to the static page /50x.html
+      #
+      error_page   500 502 503 504  /50x.html;
+      location = /50x.html {
+          root   /usr/share/nginx/html;
+      }
+  
+    }

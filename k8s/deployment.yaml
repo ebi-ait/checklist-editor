@@ -22,6 +22,18 @@ spec:
           imagePullPolicy: Always
           ports:
             - containerPort: 80
+          volumeMounts:
+            - mountPath: /etc/nginx/conf.d/default.conf
+              name: checklist-editor-config-volume
+              subPath: nginx.conf
+            - mountPath: /usr/share/nginx/html/config.js
+              name: checklist-editor-config-volume
+              subPath: config.js
+      volumes:
+      - configMap:
+          defaultMode: 420
+          name: checklist-editor-config
+        name: checklist-editor-config-volume
 
 ---
 apiVersion: v1
