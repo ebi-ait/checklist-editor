@@ -11,36 +11,39 @@ import {ChecklistShow} from "./components/ChecklistShow.tsx";
 import {FieldCreate} from "./components/FieldCreate.tsx";
 import {FieldEdit} from "./components/FieldEdit.tsx";
 import {FieldList} from "./components/FieldList.tsx";
+import config from "./config.tsx";
 import checklistDataProvider from './dataprovider/schemaStoreDataProvider.tsx';
-import {appTheme} from "./theme.tsx";
-import {darkTheme} from "./theme.tsx"
+import {appTheme, darkTheme} from "./theme.tsx";
 
 const App: React.FC = () => {
     const queryClient = new QueryClient({
         defaultOptions: {
             queries: {
-                staleTime: 5 * 60 * 1000, // 5 minutes
+                cacheTime: 0, // Disable cache
+                // staleTime: 5 * 60 * 1000, // 5 minutes
             },
         },
     });
     return (
         <Admin dataProvider={checklistDataProvider}
                queryClient={queryClient}
-                theme={appTheme}
+               theme={appTheme}
                darkTheme={darkTheme}
+               // basename={config.CHECKLIST_EDITOR_BASE_URL}
+               disableTelemetry
         >
             <Resource name="checklists"
                       list={ChecklistList}
                       show={ChecklistShow}
                       edit={ChecklistEdit}
                       create={ChecklistCreate}
-                        icon={ChecklistIcon}
+                      icon={ChecklistIcon}
             />
             <Resource name="fields"
                       list={FieldList}
                       edit={FieldEdit}
                       create={FieldCreate}
-                        icon={ListIcon}
+                      icon={ListIcon}
             />
         </Admin>
     );
