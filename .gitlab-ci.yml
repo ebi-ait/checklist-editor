@@ -22,6 +22,8 @@ build_docker_image:
     - docker:dind
   stage: build
   script:
+    - set | grep "CI_DEP"
+    - set | grep "CI_REG"
     - docker login -u "CI_DEPLOY_USER" -p "CI_DEPLOY_PASSWORD" "$CI_REGISTRY"
     - echo $DOCKER_IMAGE_NAME
     - docker build -t $DOCKER_IMAGE_NAME .
