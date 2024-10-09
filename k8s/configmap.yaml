@@ -21,8 +21,10 @@ data:
         index  index.html index.htm;
         try_files $uri $uri/ /index.html;
       }
+    
+      # redirect /api requests to the json-schema-store
       location /api {
-          proxy_pass "https://wwwdev.ebi.ac.uk/schema-store/api";
+          proxy_pass "http://json-schema-store-service:8085/biosamples/schema-store/api";
       }
       #error_page  404              /404.html;
       
