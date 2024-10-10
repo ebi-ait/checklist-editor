@@ -46,6 +46,8 @@ deploy_dev:
 deploy_test:
   stage: deploy
   when: never
+  script:
+    - echo "not implemented"
 
 link-cluster-url:
   stage: deploy
