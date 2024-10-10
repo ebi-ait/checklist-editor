@@ -51,6 +51,7 @@ link-cluster-url:
     - docker:dind
   script:
     - . .env
+    - set | grep K8S
     - kubectl config set-context --current --namespace=${K8S_NAMESPACE}
     - kubectl config get-contexts
     - kubectl get service
