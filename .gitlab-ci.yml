@@ -26,6 +26,7 @@ build_docker_image:
     - docker:dind
   stage: build
   script:
+    - docker --version
     - docker login -u "$CI_DEPLOY_USER" -p "$CI_DEPLOY_PASSWORD" "$CI_REGISTRY"
     - echo $DOCKER_IMAGE_NAME
     - docker build -t $DOCKER_IMAGE_NAME .
@@ -50,6 +51,8 @@ link-cluster-url:
     - docker:dind
   script:
     - kubectl config set-context --current --namespace=${K8S_NAMESPACE}
+    - kubectl config get-contexts
+    - kubectl get service
     - K8S_NODE_PORT=$(kubectl get service -o=jsonpath='{.spec.ports[0].nodePort}' ${APP_NAME})
   environment:
     name: ${ENVIRONMENT_NAME}/last-cluster-deployment
@@ -75,4 +78,9 @@ link-cluster-url:
     - envsubst < k8s/configmap.yaml > k8s.$$/configmap.yaml
     - kubectl apply -f k8s.$$/
     - kubectl rollout restart deployments checklist-editor
+    - echo ENVIRONMENT_NAME=${ENVIRONMENT_NAME}
+    - echo ENVIRONMENT_NAME=${ENVIRONMENT_NAME}
+  artifacts:
+    paths:
+      -
 
