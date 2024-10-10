@@ -2,7 +2,7 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: checklist-editor-ingress
-  namespace: ${NAMESPACE}
+  namespace: ${K8S_NAMESPACE}
   labels:
     app: checklist-editor-service
   annotations:

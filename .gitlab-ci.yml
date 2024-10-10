@@ -43,6 +43,10 @@ deploy_dev:
   when: manual
   extends: .kube_deploy_script
 
+deploy_test:
+  stage: deploy
+  when: never
+
 link-cluster-url:
   stage: deploy
   image: dtzar/helm-kubectl
