@@ -46,16 +46,22 @@ deploy_dev:
 link-cluster-url:
   stage: deploy
   image: dtzar/helm-kubectl
+  services:
+    - docker:dind
   script:
     - kubectl config set-context --current --namespace=${K8S_NAMESPACE}
     - K8S_NODE_PORT=$(kubectl get service -o=jsonpath='{.spec.ports[0].nodePort}' ${APP_NAME})
   environment:
     name: ${ENVIRONMENT_NAME}/last-cluster-deployment
-
     url: ${K8S_CLUSTER_URL}:${K8S_NODE_PORT}/biosamples/schema-store/api/v2
+  needs:
+    - deploy_dev
+
 .kube_deploy_script:
   stage: deploy
   image: dtzar/helm-kubectl
+  services:
+    - docker:dind
   variables:
     K8S_NAMESPACE: ${K8S_NAMESPACE_PREFIX}-${ENVIRONMENT_NAME}
   script:
