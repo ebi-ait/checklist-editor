@@ -50,6 +50,7 @@ link-cluster-url:
   services:
     - docker:dind
   script:
+    - . .env
     - kubectl config set-context --current --namespace=${K8S_NAMESPACE}
     - kubectl config get-contexts
     - kubectl get service
@@ -78,9 +79,8 @@ link-cluster-url:
     - envsubst < k8s/configmap.yaml > k8s.$$/configmap.yaml
     - kubectl apply -f k8s.$$/
     - kubectl rollout restart deployments checklist-editor
-    - echo ENVIRONMENT_NAME=${ENVIRONMENT_NAME}
-    - echo ENVIRONMENT_NAME=${ENVIRONMENT_NAME}
+    - echo ENVIRONMENT_NAME=${ENVIRONMENT_NAME} > .env
   artifacts:
     paths:
-      -
+      - .env
 
