@@ -82,6 +82,7 @@ link-cluster-url:
     - kubectl apply -f k8s.$$/
     - kubectl rollout restart deployments checklist-editor
     - echo ENVIRONMENT_NAME=${ENVIRONMENT_NAME} > .env
+    - echo K8S_NAMESPACE=${K8S_NAMESPACE} > .env
   artifacts:
     paths:
       - .env
