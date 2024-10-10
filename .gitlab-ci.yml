@@ -4,6 +4,10 @@ variables:
   DOCKER_TAG: $CI_COMMIT_REF_SLUG-$CI_COMMIT_SHORT_SHA
   DOCKER_IMAGE_NAME: $CI_REGISTRY_IMAGE:$DOCKER_TAG
   DOCKER_PULL_SECRET: docker-registry-secret
+  K8S_NAMESPACE_PREFIX: biosamples
+  # take from variable or read from kubectl
+  K8S_CLUSTER_URL: http://hx-rke-wp-webadmin-17-worker-1.caas.ebi.ac.uk
+  APP_NAME: $CI_PROJECT_NAME
 
 cache:
   key: ${CI_COMMIT_REF_SLUG}
@@ -31,37 +35,31 @@ build_docker_image:
 
 deploy_dev:
   variables:
-    NAMESPACE: biosamples-dev
+    ENVIRONMENT_NAME: dev
+    HOST: wwwint.ebi.ac.uk
   environment:
     name: dev
-#    url: http://hx-rke-wp-webadmin-17-worker-1.caas.ebi.ac.uk:32655/biosamples/checklist-editor
+    url: https://wwwint.ebi.ac.uk/biosamples/biosamples/checklist-editor
   when: manual
   extends: .kube_deploy_script
 
-deploy_test:
-  variables:
-    NAMESPACE: biosamples-test
+link-cluster-url:
+  stage: deploy
+  image: dtzar/helm-kubectl
+  script:
+    - K8S_NODE_PORT=$(kubectl get service -o=jsonpath='{.spec.ports[0].nodePort}' ${APP_NAME})
   environment:
-    name: prod
-#    url: https://wwwdev.ebi.ac.uk/biosamples/checklist-editor
-  when: manual
-  extends: .kube_deploy_script
-
-deploy_prod:
-  variables:
-    NAMESPACE: checklist-editor-prod
-  environment:
-    name: prod
-#    url: https://www.ebi.ac.uk/biosamples/checklist-editor
-  when: manual
-  extends: .kube_deploy_script
+    name: ${ENVIRONMENT_NAME}/last-cluster-deployment
+    url: ${K8S_CLUSTER_URL}:${K8S_NODE_PORT}/biosamples/schema-store/api/v2
 
 .kube_deploy_script:
   stage: deploy
   image: dtzar/helm-kubectl
+  variables:
+    K8S_NAMESPACE: ${K8S_NAMESPACE_PREFIX}-${ENVIRONMENT_NAME}
   script:
-    - kubectl create namespace $NAMESPACE || true
-    - kubectl config set-context --current --namespace=${NAMESPACE}
+    - kubectl create namespace ${K8S_NAMESPACE} || true
+    - kubectl config set-context --current --namespace=${K8S_NAMESPACE}
     - kubectl delete secret $DOCKER_PULL_SECRET || true
     - kubectl create secret docker-registry $DOCKER_PULL_SECRET --docker-server=$CI_REGISTRY --docker-username=$CI_DEPLOY_USER --docker-password=$CI_DEPLOY_PASSWORD
     - envsubst < k8s/deployment.yaml > k8s/kubernetes.yaml
