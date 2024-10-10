@@ -40,7 +40,7 @@ deploy_dev:
     HOST: wwwint.ebi.ac.uk
   environment:
     name: dev
-    url: https://wwwint.ebi.ac.uk/biosamples/biosamples/checklist-editor
+    url: https://wwwint.ebi.ac.uk/biosamples/checklist-editor
   when: manual
   extends: .kube_deploy_script
 
