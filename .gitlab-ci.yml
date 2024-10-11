@@ -44,6 +44,16 @@ deploy_dev:
   when: manual
   extends: .kube_deploy_script
 
+deploy_test:
+  variables:
+    ENVIRONMENT_NAME: test
+    HOST: wwwint.ebi.ac.uk
+  environment:
+    name: test
+    url: https://wwwdev.ebi.ac.uk/biosamples/checklist-editor
+  when: manual
+  extends: .kube_deploy_script
+
 link-cluster-url:
   stage: deploy
   image: dtzar/helm-kubectl
