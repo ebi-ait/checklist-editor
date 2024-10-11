@@ -24,7 +24,7 @@ data:
     
       # redirect /api requests to the json-schema-store
       location /api {
-          proxy_pass "http://json-schema-store-service:8085/biosamples/schema-store/api";
+          proxy_pass "http://json-schema-store:8085/biosamples/schema-store/api";
       }
       #error_page  404              /404.html;
       
