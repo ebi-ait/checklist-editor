@@ -2,9 +2,8 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: checklist-editor-ingress
-  namespace: ${K8S_NAMESPACE}
   labels:
-    app: checklist-editor-service
+    app: checklist-editor
   annotations:
     nginx.ingress.kubernetes.io/rewrite-target: /$2
 spec:
