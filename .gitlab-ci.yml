@@ -47,7 +47,7 @@ deploy_dev:
 deploy_test:
   variables:
     ENVIRONMENT_NAME: test
-    HOST: wwwint.ebi.ac.uk
+    HOST: wwwdev.ebi.ac.uk
   environment:
     name: test
     url: https://wwwdev.ebi.ac.uk/biosamples/checklist-editor
