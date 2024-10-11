@@ -34,16 +34,6 @@ build_docker_image:
   after_script:
     - docker logout ${CI_REGISTRY}
 
-deploy_dev:
-  variables:
-    ENVIRONMENT_NAME: dev
-    HOST: wwwint.ebi.ac.uk
-  environment:
-    name: dev
-    url: https://wwwint.ebi.ac.uk/biosamples/checklist-editor
-  when: manual
-  extends: .kube_deploy_script
-
 deploy_test:
   variables:
     ENVIRONMENT_NAME: test
