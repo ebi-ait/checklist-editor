@@ -60,7 +60,7 @@ link-cluster-url:
     name: ${ENVIRONMENT_NAME}/last-cluster-deployment
     url: ${K8S_CLUSTER_URL}:${K8S_NODE_PORT}/biosamples/schema-store/api/v2
   needs:
-    - deploy_dev
+    - deploy_test
 
 .kube_deploy_script:
   stage: deploy
