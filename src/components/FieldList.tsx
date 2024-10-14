@@ -8,7 +8,7 @@ import {
     List,
     Pagination,
     ReferenceArrayField,
-    SearchInput,
+    SearchInput, SelectInput,
     SingleFieldList,
     TextField,
     TopToolbar
@@ -23,12 +23,14 @@ const FieldListActions = () => (
 
 const filters = [
     <SearchInput source="q" alwaysOn/>,
+    <SelectInput source="latest" choices={[{id:true,name:'True'}, {id:false,name:'False'}]}/>,
 ];
 
 export const FieldList = () =>
     (
         <List actions={<FieldListActions/>}
-              filters={filters}>
+              filters={filters}
+              filterDefaultValues={{latest: true}}>
             <Datagrid>
                 <TextField source="label"/>
                 <TextField source="description"/>

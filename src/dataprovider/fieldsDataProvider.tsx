@@ -21,12 +21,15 @@ export const fieldsDataProvider: DataProvider = {
             page: (pagination.page - 1)+''    , // react-admin is 1 based, spring is 0 based
             size: pagination.perPage+'',
             sort: `${sort.field},${sort.order}`,
+            ...filter
         }).toString();
         // Adjust the URL to point to the right endpoint for lists
         const apiResource = resolveApiResource(resource);
         let searchResource = '';
-        if(filter.q) {
+        if (filter.q) {
             searchResource = '/search/findAllByTextPartial'
+        } else {
+            searchResource = '/search/findByExample'
         }
         const url = `${apiUrl}${apiResource}${searchResource}?${query}`;
         return httpClient(url)
