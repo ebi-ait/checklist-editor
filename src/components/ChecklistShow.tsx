@@ -46,7 +46,7 @@ export const ChecklistShow = () => {
                             <ReferenceField label="Type" source="fieldId" reference="fields" link={false}>
                                 <TextField source="type"/>
                             </ReferenceField>
-                            <IconField source="cardinality" label="Required" iconMapping={{
+                            <IconField source="requirementType" label="Required" iconMapping={{
                                 MANDATORY: RadioButtonChecked,
                                 OPTIONAL: RadioButtonUnchecked,
                             }}/>

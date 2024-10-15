@@ -15,7 +15,7 @@ interface ChecklistSchema {
 }
 
 interface SchemaFieldAssociation {
-    "cardinality": "OPTIONAL"|"MANDATORY"|"RECOMMENDED"
+    "requirementType": "OPTIONAL"|"MANDATORY"|"RECOMMENDED"
     "fieldId": string;
     "multiplicity": "Single"|"List"
 }
