@@ -10,7 +10,13 @@ import {
     useRecordContext
 } from 'react-admin';
 import {IconField} from "./IconField.tsx";
-import {LooksOne, RadioButtonChecked, RadioButtonUnchecked, ViewHeadline} from '@mui/icons-material';
+import {
+    LooksOne,
+    PriorityHigh,
+    RadioButtonUnchecked,
+    Recommend,
+    ViewHeadline
+} from '@mui/icons-material';
 
 const FieldPanel = () => {
     const record = useRecordContext();
@@ -29,9 +35,7 @@ const FieldPanel = () => {
         </SimpleShowLayout>
     );
 }
-/**
- * Fetch a book from the API and display it
- */
+
 export const ChecklistShow = () => {
     return (
         <Show emptyWhileLoading >
@@ -47,8 +51,9 @@ export const ChecklistShow = () => {
                                 <TextField source="type"/>
                             </ReferenceField>
                             <IconField source="cardinality" label="Required" iconMapping={{
-                                MANDATORY: RadioButtonChecked,
+                                MANDATORY: PriorityHigh,
                                 OPTIONAL: RadioButtonUnchecked,
+                                RECOMMENDED: Recommend,
                             }}/>
                             <IconField source="multiplicity" iconMapping={{
                                 Single: LooksOne,
