@@ -50,6 +50,9 @@ export const ChecklistShow = () => {
                             <ReferenceField label="Type" source="fieldId" reference="fields" link={false} queryOptions={{ meta: { size: 300 } }}>
                                 <TextField source="type"/>
                             </ReferenceField>
+                            <ReferenceField label="Group" source="fieldId" reference="fields" link={false} queryOptions={{ meta: { size: 300 } }}>
+                                <TextField source="group"/>
+                            </ReferenceField>
                             <IconField source="cardinality" label="Required" iconMapping={{
                                 MANDATORY: PriorityHigh,
                                 OPTIONAL: RadioButtonUnchecked,
