@@ -11,9 +11,10 @@ import {
 
 // registry of field types and their specific controls
 const inputMap = {
-    'text': (rest) => null,
-    'choice': (rest) => <ChoiceField/>,
-    'pattern': (rest) => <TextInput source="pattern"/>,
+    'text': () => null,
+    'choice': () => <ChoiceField/>,
+    'pattern': () => <TextInput source="pattern"/>,
+    'taxon': () => null,
 }
 
 export const ChoiceField = () =>

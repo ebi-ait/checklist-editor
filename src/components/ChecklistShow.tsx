@@ -44,10 +44,10 @@ export const ChecklistShow = () => {
                     <TextField source="description"/>
                     <ArrayField source="schemaFieldAssociations" label="Fields">
                         <Datagrid>
-                            <ReferenceField source="fieldId" reference="fields" link={false}>
+                            <ReferenceField source="fieldId" reference="fields" link={false} queryOptions={{ meta: { size: 300 } }}>
                                 <TextField source="label"/>
                             </ReferenceField>
-                            <ReferenceField label="Type" source="fieldId" reference="fields" link={false}>
+                            <ReferenceField label="Type" source="fieldId" reference="fields" link={false} queryOptions={{ meta: { size: 300 } }}>
                                 <TextField source="type"/>
                             </ReferenceField>
                             <IconField source="cardinality" label="Required" iconMapping={{

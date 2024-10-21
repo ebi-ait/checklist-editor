@@ -38,7 +38,9 @@ export const ChecklistForm = () => {
         <TextInput source="description" multiline={true} rows={2}/>
         <ArrayInput source="schemaFieldAssociations" label="Fields">
             <SimpleFormIterator inline>
-                <ReferenceInput source="fieldId" reference="fields" queryOptions={{ meta: { size: 300 } }}>
+                <ReferenceInput source="fieldId"
+                                reference="fields"
+                                queryOptions={{ meta: { size: 300 } }}>
                     <AutocompleteInput
                         optionText={<FieldRender/>}
                         inputText={(record) => `${record.label} (${record.type})`}/>
