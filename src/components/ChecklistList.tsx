@@ -58,6 +58,7 @@ export const ChecklistList = () => {
                 <TextField source="accession"/>
                 <TextField source="version"/>
                 <TextField source="authority"/>
+                <TextField source="group"/>
                 <DateField source="lastModifiedDate" showTime/>
                 <FunctionField
                     label="Field Count"

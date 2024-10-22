@@ -3,7 +3,7 @@ import {useQueryClient} from "@tanstack/react-query";
 import {
     ArrayInput,
     AutocompleteInput,
-    Edit, FunctionField,
+    Edit,
     ReferenceInput,
     SelectInput,
     SimpleForm,
@@ -34,6 +34,9 @@ export const ChecklistForm = () => {
     return <SimpleForm>
         <TextInput source="title"/>
         <TextField source="accession" label="Accession"/>
+        <TextField source="version" />
+        <TextField source="authority" />
+        <TextInput source="group" />
         <TextInput source="description" multiline={true} rows={2}/>
         <ArrayInput source="schemaFieldAssociations" label="Fields">
             <SimpleFormIterator inline>

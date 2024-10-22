@@ -1,5 +1,5 @@
-import {IconButton, SvgIconProps} from "@mui/material";
 import React from "react";
+import {SvgIconProps} from "@mui/material";
 import {useRecordContext} from "react-admin";
 
 export interface IconMapping {
@@ -18,10 +18,5 @@ export const IconField: React.FC<IconFieldProps> = ({iconMapping, source}) => {
     const IconComponent = iconMapping[fieldValue];
     if (!IconComponent) return null;
 
-    return (
-        <IconButton aria-label={{fieldValue}}>
-            <IconComponent/>
-        </IconButton>
-    );
-}
-
+    return <IconComponent titleAccess={fieldValue}/>;
+};

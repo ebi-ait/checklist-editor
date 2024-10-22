@@ -42,6 +42,9 @@ export const ChecklistShow = () => {
             <SimpleShowLayout>
                     <TextField source="title"/>
                     <TextField source="description"/>
+                    <TextField source="version"/>
+                    <TextField source="authority"/>
+                    <TextField source="group"/>
                     <ArrayField source="schemaFieldAssociations" label="Fields">
                         <Datagrid>
                             <ReferenceField source="fieldId" reference="fields" link={false} queryOptions={{ meta: { size: 300 } }}>

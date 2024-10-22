@@ -1,3 +1,4 @@
+import {Abc, PriorityHigh, EmergencyRecording, Recommend, PestControlRodent, ListAlt, Share} from "@mui/icons-material";
 import {
     ChipField,
     CreateButton,
@@ -7,12 +8,13 @@ import {
     FunctionField,
     List,
     Pagination,
-    ReferenceArrayField,
-    SearchInput,
+    ReferenceArrayField, ReferenceManyCount, RichTextField,
+    SearchInput, SimpleShowLayout,
     SingleFieldList,
     TextField,
     TopToolbar
 } from 'react-admin';
+import {IconField} from "./IconField.tsx";
 
 const FieldListActions = () => (
     <TopToolbar>
@@ -25,35 +27,47 @@ const filters = [
     <SearchInput source="q" alwaysOn/>,
 ];
 
+const PreviewPanel = () => {
+    return (
+        <SimpleShowLayout>
+            <RichTextField source="description"/>
+            <DateField source="lastModifiedDate"/>
+            <ReferenceArrayField label="Used by Checklists"
+                                 reference="checklists"
+                                 source="usedBySchemas"
+                                 perPage={5}
+                                 pagination={<Pagination labelRowsPerPage={""}
+                                                         hidePrevButton hideNextButton
+                                                         size="small"/>}>
+                <SingleFieldList>
+                    <FunctionField
+                        source="accession"
+                        render={record =>
+                            <ChipField record={record}
+                                       defaultValue={`${record.accession}:${record.version}`}
+                            />
+                        }/>
+                </SingleFieldList>
+            </ReferenceArrayField>
+        </SimpleShowLayout>
+    )
+}
+
 export const FieldList = () =>
     (
         <List actions={<FieldListActions/>}
               filters={filters}>
-            <Datagrid>
+            <Datagrid expand={PreviewPanel}>
+                <IconField source="type" label="Type" iconMapping={{
+                    string: Abc,
+                    pattern: EmergencyRecording,
+                    choice: ListAlt,
+                    taxon: PestControlRodent,
+                    ontology: Share,
+                }}/>
                 <TextField source="label"/>
-                <TextField source="description"/>
-                <TextField source="version"/>
                 <TextField source="group" label ="Field Group"/>
-                <TextField source="type"/>
-                <DateField source="lastModifiedDate"/>
-
-                <ReferenceArrayField label="Used by Checklists"
-                                     reference="checklists"
-                                     source="usedBySchemas"
-                                     perPage={5}
-                                     pagination={<Pagination labelRowsPerPage={""}
-                                                             hidePrevButton hideNextButton
-                                                             size="small"/>}>
-                    <SingleFieldList>
-                        <FunctionField
-                            source="accession"
-                            render={record =>
-                                <ChipField record={record}
-                                           defaultValue={`${record.accession}:${record.version}`}
-                                />
-                            }/>
-                    </SingleFieldList>
-                </ReferenceArrayField>
+                <TextField source="version"/>
                 <EditButton/>
             </Datagrid>
         </List>
