@@ -5,7 +5,7 @@ export interface FieldProps {
     label: string;
     description?: string;
     mandatory: 'mandatory' | 'optional' | 'recommended';
-    requirementType: 'single' | 'multiple';
+    multiplicity: 'single' | 'multiple';
     type: 'text' | 'pattern' | 'choice';
     usedBySchemas: string[];
 }
