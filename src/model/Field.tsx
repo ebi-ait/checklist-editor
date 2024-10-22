@@ -8,5 +8,6 @@ export interface FieldProps {
     cardinality: 'single' | 'multiple';
     type: 'text' | 'pattern' | 'choice' | 'taxon' | 'ontology';
     usedBySchemas: string[];
+    latest: boolean;
     group:string;
 }

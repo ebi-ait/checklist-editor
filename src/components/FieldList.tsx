@@ -10,6 +10,8 @@ import {
     Pagination,
     ReferenceArrayField, ReferenceManyCount, RichTextField,
     SearchInput, SimpleShowLayout,
+    ReferenceArrayField,
+    SearchInput, SelectInput,
     SingleFieldList,
     TextField,
     TopToolbar
@@ -25,6 +27,7 @@ const FieldListActions = () => (
 
 const filters = [
     <SearchInput source="q" alwaysOn/>,
+    <SelectInput source="latest" choices={[{id:true,name:'True'}, {id:false,name:'False'}]}/>,
 ];
 
 const PreviewPanel = () => {
@@ -32,6 +35,7 @@ const PreviewPanel = () => {
         <SimpleShowLayout>
             <RichTextField source="description"/>
             <DateField source="lastModifiedDate"/>
+
             <ReferenceArrayField label="Used by Checklists"
                                  reference="checklists"
                                  source="usedBySchemas"
@@ -56,7 +60,8 @@ const PreviewPanel = () => {
 export const FieldList = () =>
     (
         <List actions={<FieldListActions/>}
-              filters={filters}>
+              filters={filters}
+              filterDefaultValues={{latest: true}}>
             <Datagrid expand={PreviewPanel}>
                 <IconField source="type" label="Type" iconMapping={{
                     string: Abc,
