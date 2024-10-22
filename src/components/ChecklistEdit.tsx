@@ -3,7 +3,7 @@ import {useQueryClient} from "@tanstack/react-query";
 import {
     ArrayInput,
     AutocompleteInput,
-    Edit,
+    Edit, FunctionField,
     ReferenceInput,
     SelectInput,
     SimpleForm,
@@ -23,7 +23,7 @@ const FieldRender = () => {
             <Stack>
                 {record.label}
                 <Typography variant="caption" color="text.secondary">
-                    {record.type}
+                    {record.type}, {record.group}
                 </Typography>
             </Stack>
         </Stack>
@@ -31,14 +31,15 @@ const FieldRender = () => {
 }
 
 export const ChecklistForm = () => {
-    const record = useRecordContext();
     return <SimpleForm>
         <TextInput source="title"/>
         <TextField source="accession" label="Accession"/>
         <TextInput source="description" multiline={true} rows={2}/>
         <ArrayInput source="schemaFieldAssociations" label="Fields">
             <SimpleFormIterator inline>
-                <ReferenceInput source="fieldId" reference="fields" queryOptions={{ meta: { size: 300 } }}>
+                <ReferenceInput source="fieldId"
+                                reference="fields"
+                                queryOptions={{ meta: { size: 300 } }}>
                     <AutocompleteInput
                         optionText={<FieldRender/>}
                         inputText={(record) => `${record.label} (${record.type})`}/>

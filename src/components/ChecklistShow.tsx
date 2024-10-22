@@ -10,7 +10,13 @@ import {
     useRecordContext
 } from 'react-admin';
 import {IconField} from "./IconField.tsx";
-import {LooksOne, RadioButtonChecked, RadioButtonUnchecked, ViewHeadline} from '@mui/icons-material';
+import {
+    LooksOne,
+    PriorityHigh,
+    RadioButtonUnchecked,
+    Recommend,
+    ViewHeadline
+} from '@mui/icons-material';
 
 const FieldPanel = () => {
     const record = useRecordContext();
@@ -29,9 +35,7 @@ const FieldPanel = () => {
         </SimpleShowLayout>
     );
 }
-/**
- * Fetch a book from the API and display it
- */
+
 export const ChecklistShow = () => {
     return (
         <Show emptyWhileLoading >
@@ -40,15 +44,19 @@ export const ChecklistShow = () => {
                     <TextField source="description"/>
                     <ArrayField source="schemaFieldAssociations" label="Fields">
                         <Datagrid>
-                            <ReferenceField source="fieldId" reference="fields" link={false}>
+                            <ReferenceField source="fieldId" reference="fields" link={false} queryOptions={{ meta: { size: 300 } }}>
                                 <TextField source="label"/>
                             </ReferenceField>
-                            <ReferenceField label="Type" source="fieldId" reference="fields" link={false}>
+                            <ReferenceField label="Type" source="fieldId" reference="fields" link={false} queryOptions={{ meta: { size: 300 } }}>
                                 <TextField source="type"/>
                             </ReferenceField>
+                            <ReferenceField label="Group" source="fieldId" reference="fields" link={false} queryOptions={{ meta: { size: 300 } }}>
+                                <TextField source="group"/>
+                            </ReferenceField>
                             <IconField source="cardinality" label="Required" iconMapping={{
-                                MANDATORY: RadioButtonChecked,
+                                MANDATORY: PriorityHigh,
                                 OPTIONAL: RadioButtonUnchecked,
+                                RECOMMENDED: Recommend,
                             }}/>
                             <IconField source="multiplicity" iconMapping={{
                                 Single: LooksOne,

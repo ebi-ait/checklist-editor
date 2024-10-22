@@ -6,7 +6,8 @@ export interface FieldProps {
     description?: string;
     mandatory: 'mandatory' | 'optional' | 'recommended';
     cardinality: 'single' | 'multiple';
-    type: 'text' | 'pattern' | 'choice';
+    type: 'text' | 'pattern' | 'choice' | 'taxon' | 'ontology';
     usedBySchemas: string[];
     latest: boolean;
+    group:string;
 }
