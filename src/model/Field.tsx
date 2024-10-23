@@ -9,5 +9,5 @@ export interface FieldProps {
     type: 'text' | 'pattern' | 'choice' | 'taxon' | 'ontology';
     usedBySchemas: string[];
     latest: boolean;
-    group:string;
+    group: string;
 }

@@ -7,7 +7,7 @@ import {fixTrailingSlash, resolveApiResource} from "./schemaStoreDataProvider.ts
 const apiUrl = fixTrailingSlash(config.SCHEMA_STORE_URL);
 const httpClient = fetchUtils.fetchJson;
 
-const addIdFromSelfLink = (record: FieldProps, apiResource: string) => ({
+const recordToId = (record: FieldProps) => ({
     id: `${record.name}:${record.version}`,
     ...record
 });
@@ -16,6 +16,9 @@ export const fieldsDataProvider: DataProvider = {
     getList: (resource, params) => {
         const {filter = {}, pagination, sort} = params;
 
+        // Adjust the URL to point to the right endpoint for lists
+        let apiResource = resolveApiResource(resource);
+        const responseResourceName = apiResource
         const query = new URLSearchParams({
             ...filter.q ? {text: filter.q} : {}, // Add the 'text' parameter if 'q' is provided
             page: (pagination.page - 1)+''    , // react-admin is 1 based, spring is 0 based
@@ -24,19 +27,20 @@ export const fieldsDataProvider: DataProvider = {
             ...filter
         }).toString();
         // Adjust the URL to point to the right endpoint for lists
-        const apiResource = resolveApiResource(resource);
         let searchResource = '';
-        if (filter.q) {
-            searchResource = '/search/findAllByTextPartial'
-        } else {
-            searchResource = '/search/findByExample'
+        if(Object.keys(filter).length>0) {
+            if(filter.q) { // it's a text search
+                searchResource = '/search/findAllByTextPartial'
+            } else { // it's a regular attribute search
+                searchResource = '/search/findByExample'
+            }
         }
         const url = `${apiUrl}${apiResource}${searchResource}?${query}`;
         return httpClient(url)
             .then(({json}) => {
                 // Extract the embedded resources
-                let data = json._embedded?.[apiResource] || [];
-                data = data.map(record => addIdFromSelfLink(record, apiResource));
+                let data = json._embedded?.[responseResourceName] || [];
+                data = data.map(recordToId);
                 return {
                     data,
                     total: json.page?.totalElements || data.length,
@@ -52,7 +56,7 @@ export const fieldsDataProvider: DataProvider = {
         return httpClient(`${apiUrl}${resolveApiResource(resource)}/${params.id}`)
             .then(({json}) => {
                 let data = json; // Assuming json is the schema object itself
-                data = addIdFromSelfLink(data, apiResource);
+                data = recordToId(data);
                 return {data};
             });
     },
@@ -73,7 +77,7 @@ export const fieldsDataProvider: DataProvider = {
             .then(({json}) => {
                 // Extract the embedded resources
                 let data = json._embedded?.[apiResource] || [];
-                data = data.map((record: FieldProps) => addIdFromSelfLink(record, apiResource))
+                data = data.map(recordToId)
                 return {
                     data,
                     total: json.page?.totalElements || data.length,
@@ -99,7 +103,7 @@ export const fieldsDataProvider: DataProvider = {
             .then(({json}) => {
                 // Extract the embedded resources
                 let data = json._embedded?.[apiResource] || [];
-                data = data.map((record: FieldProps) => addIdFromSelfLink(record, apiResource))
+                data = data.map(recordToId)
                 return {
                     data,
                     total: json.page?.totalElements || data.length,
@@ -135,11 +139,6 @@ export const fieldsDataProvider: DataProvider = {
             data: {...params.data, id: json.id},
         });
     },
-    updateMany: (resource, params) => {
-
-        return Promise.reject('field updateMany not implemented');
-    },
-    deleteMany: (resource, params) => Promise.reject('field delete not implemented'),
-}
-
-
+    updateMany: (resource, params) => Promise.reject(`${resource} updateMany not implemented`),
+    deleteMany: (resource, params) => Promise.reject(`${resource} delete not implemented`),
+};
