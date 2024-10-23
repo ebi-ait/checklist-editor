@@ -14,6 +14,7 @@ const inputMap = {
     'text': () => null,
     'choice': () => <ChoiceField/>,
     'pattern': () => <TextInput source="pattern"/>,
+    'ontology': () => <TextInput source="ontology"/>,
     'taxon': () => null,
 }
 

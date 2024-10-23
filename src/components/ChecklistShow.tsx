@@ -32,6 +32,9 @@ const FieldPanel = () => {
             {record.type === 'pattern' && (
                 <TextField source="pattern"/>
             )}
+            {record.type === 'ontology' && (
+                <TextField source="ontology"/>
+            )}
         </SimpleShowLayout>
     );
 }
@@ -56,7 +59,7 @@ export const ChecklistShow = () => {
                             <ReferenceField label="Group" source="fieldId" reference="fields" link={false} queryOptions={{ meta: { size: 300 } }}>
                                 <TextField source="group"/>
                             </ReferenceField>
-                            <IconField source="cardinality" label="Required" iconMapping={{
+                            <IconField source="requirementType" label="Required" iconMapping={{
                                 MANDATORY: PriorityHigh,
                                 OPTIONAL: RadioButtonUnchecked,
                                 RECOMMENDED: Recommend,
