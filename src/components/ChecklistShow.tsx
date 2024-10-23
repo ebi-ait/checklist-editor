@@ -26,6 +26,9 @@ const FieldPanel = () => {
             {record.type === 'pattern' && (
                 <TextField source="pattern"/>
             )}
+            {record.type === 'ontology' && (
+                <TextField source="ontology"/>
+            )}
         </SimpleShowLayout>
     );
 }
