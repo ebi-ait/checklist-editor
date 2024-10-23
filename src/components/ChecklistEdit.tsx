@@ -47,7 +47,7 @@ export const ChecklistForm = () => {
                         optionText={<FieldRender/>}
                         inputText={(record) => `${record.label} (${record.type})`}/>
                 </ReferenceInput>
-                <SelectInput source="cardinality"
+                <SelectInput source="requirementType"
                              choices={[
                                  {id: "OPTIONAL", name: "Optional"},
                                  {id: "MANDATORY", name: "Mandatory"},
