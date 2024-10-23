@@ -11,12 +11,12 @@ interface IconFieldProps extends SvgIconProps {
     source: string;
 }
 
-export const IconField: React.FC<IconFieldProps> = ({iconMapping, source, props: SvgIconProps}) => {
+export const IconField: React.FC<IconFieldProps> = ({iconMapping, source}) => {
     const record = useRecordContext();
     if (!record) return null;
     const fieldValue = record[source];
     const IconComponent = iconMapping[fieldValue];
     if (!IconComponent) return null;
 
-    return <IconComponent/>;
+    return <IconComponent titleAccess={fieldValue}/>;
 };

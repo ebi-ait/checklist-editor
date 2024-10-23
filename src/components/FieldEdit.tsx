@@ -15,6 +15,7 @@ const inputMap = {
     'choice': (rest) => <ChoiceField/>,
     'pattern': (rest) => <TextInput source="pattern"/>,
     'ontology': (rest) => <TextInput source="ontology"/>
+    'taxon': () => null,
 }
 
 export const ChoiceField = () =>
