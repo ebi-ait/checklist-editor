@@ -1,31 +1,19 @@
-import {useEffect} from "react";
 import {
     CreateButton,
     Datagrid,
     DateField,
     EditButton,
-    FilterButton, FunctionField,
+    FilterButton,
+    FunctionField,
     List,
-    RichTextField,
     SearchInput,
     SelectInput,
-    SimpleShowLayout,
     TextField,
-    TextInput,
     TopToolbar,
-    UrlField, useListContext, useRecordContext,
+    useRecordContext,
 } from "react-admin";
+import {ChecklistPreviewPanel} from "./ChecklistPreviewPanel.tsx";
 
-
-const SchemaPreviewPanel = () => {
-    return (
-        <SimpleShowLayout>
-            <TextField source="name"/>
-            <RichTextField source="description"/>
-            <UrlField source="_links.self.href"/>
-        </SimpleShowLayout>
-    );
-};
 
 const SchemaListActions = () => (
     <TopToolbar>
@@ -51,9 +39,9 @@ export const ChecklistList = () => {
         <List
             actions={<SchemaListActions/>}
             filters={filters}
-            filterDefaultValues={{ latest: true }}
+            filterDefaultValues={{latest:true}}
         >
-            <Datagrid expand={SchemaPreviewPanel}>
+            <Datagrid expand={ChecklistPreviewPanel}>
                 <TextField source="title"/>
                 <TextField source="accession"/>
                 <TextField source="version"/>

@@ -7,7 +7,7 @@ import {fixTrailingSlash, resolveApiResource} from "./schemaStoreDataProvider.ts
 const apiUrl = fixTrailingSlash(config.SCHEMA_STORE_URL);
 const httpClient = fetchUtils.fetchJson;
 
-const recordToId = (record: ChecklistProps, apiResource: string) => ({
+const recordToId = (record: ChecklistProps) => ({
     id: `${record.accession}:${record.version}`,
     ...record
 });
@@ -61,21 +61,23 @@ export const schemasDataProvider: DataProvider = {
             });
     },
     getMany: (resource, params) => {
-        const {ids} = params;
-
+        const {ids, meta={}  } = params;
         const apiResource = resolveApiResource(resource);
         const searchParams = new URLSearchParams();
         // target is the name of the query string parameter
         // id is the value
         // TODO: resolve search resource from target name
         searchParams.append('ids', ids);
+        if(meta.hasOwnProperty('size')) {
+            searchParams.append('size', meta.size)
+        }
         const query = searchParams.toString();
         const url = `${apiUrl}${apiResource}/search/findByIdIn?${query}`;
         return httpClient(url)
             .then(({json}) => {
                 // Extract the embedded resources
                 let data = json._embedded?.[apiResource] || [];
-                data = data.map((record: FieldProps) => recordToId(record, apiResource))
+                data = data.map(recordToId)
                 return {
                     data,
                     total: json.page?.totalElements || data.length,
@@ -99,8 +101,10 @@ export const schemasDataProvider: DataProvider = {
         });
     },
     update: async (resource, params) => {
-        const {id} = params, apiResource = resolveApiResource(resource),
-            url = `${apiUrl}${apiResource}/${id}`, {json} = await httpClient(url, {
+        const {id} = params;
+        const apiResource = resolveApiResource(resource);
+        const url = `${apiUrl}${apiResource}/${id}`;
+        const {json} = await httpClient(url, {
                 method: 'PUT',
                 body: JSON.stringify(params.data),
             });
@@ -109,6 +113,6 @@ export const schemasDataProvider: DataProvider = {
             data: {...params.data, id: json.id},
         });
     },
-    updateMany: (resource, params) => Promise.reject('schema updateMany not implemented'),
-    deleteMany: (resource, params) => Promise.reject('schema delete not implemented'),
+    updateMany: (resource, params) => Promise.reject(`${resource} updateMany not implemented`),
+    deleteMany: (resource, params) => Promise.reject(`${resource} delete not implemented`),
 };
