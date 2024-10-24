@@ -43,7 +43,7 @@ const FieldPanel = () => {
 const ChecklistShowActions = () => (
     <TopToolbar>
         <EditButton />
-        {/*<DuplicateButton />*/}
+        <DuplicateButton />
         <Button color="primary" onClick={duplicateChecklist}>Duplicate</Button>
     </TopToolbar>
 );

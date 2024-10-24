@@ -1,12 +1,13 @@
-import { Button, useNotify, useRedirect, useRecordContext, useMutation } from "react-admin";
-import ContentCopyIcon from '@mui/icons-material/ContentCopy'; // Icon for the button
-import { useCallback } from 'react';
+import {Button, useCreate, useNotify, useRecordContext, useRedirect} from "react-admin";
+import {useCallback} from "react";
+import {useMutation} from "@tanstack/react-query";
+
 
 const DuplicateButton = () => {
     const notify = useNotify();
     const redirect = useRedirect();
     const record = useRecordContext();  // Gets the current record
-    const [duplicate, { isLoading }] = useMutation();  // Mutation hook to handle API call
+    const [duplicate, { isLoading }] = useCreate();  // Mutation hook to handle API call
 
     const handleClick = useCallback(() => {
         if (!record) return;  // Make sure the record exists
@@ -27,7 +28,7 @@ const DuplicateButton = () => {
             {
                 onSuccess: ({ data }) => {
                     notify('Record duplicated successfully', { type: 'info' });
-                    redirect('edit', 'yourResource', data.id);  // Redirect to the edit page for the new record
+                    redirect('edit', 'checklists', data.id);  // Redirect to the edit page for the new record
                 },
                 onError: (error) => {
                     notify(`Error: ${error.message}`, { type: 'warning' });
@@ -36,8 +37,16 @@ const DuplicateButton = () => {
         );
     }, [duplicate, record, notify, redirect]);
 
-    return ("hello"
-    );
+    return ("Duplicate Button"
+        //todo why button not working below
+//         <Button
+//             label="Duplicate"
+//     onClick={handleClick}
+//     disabled={isLoading || !record}
+// >
+//     <ContentCopyIcon />  {/* Button icon */}
+//     </Button>
+);
 };
 
 export default DuplicateButton;
