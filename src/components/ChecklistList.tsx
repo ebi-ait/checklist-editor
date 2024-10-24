@@ -1,4 +1,5 @@
 import {
+    CloneButton,
     CreateButton,
     Datagrid,
     DateField,
@@ -53,6 +54,7 @@ export const ChecklistList = () => {
                     render={record => record.schemaFieldAssociations?.length ?? 0}
                 />
                 <ConditionalEditButton/>
+                <CloneButton />
             </Datagrid>
         </List>
     );

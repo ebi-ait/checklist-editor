@@ -1,12 +1,12 @@
 import {
-    ArrayField,
+    ArrayField, Button,
     ChipField,
-    Datagrid,
+    Datagrid, EditButton,
     ReferenceField,
     Show,
     SimpleShowLayout,
     SingleFieldList,
-    TextField,
+    TextField, TopToolbar,
     useRecordContext
 } from 'react-admin';
 import {IconField} from "./IconField.tsx";
@@ -17,6 +17,7 @@ import {
     Recommend,
     ViewHeadline
 } from '@mui/icons-material';
+import DuplicateButton from "./DuplicateButton.ts";
 
 const FieldPanel = () => {
     const record = useRecordContext();
@@ -39,9 +40,19 @@ const FieldPanel = () => {
     );
 }
 
+const ChecklistShowActions = () => (
+    <TopToolbar>
+        <EditButton />
+        {/*<DuplicateButton />*/}
+        <Button color="primary" onClick={duplicateChecklist}>Duplicate</Button>
+    </TopToolbar>
+);
+
+const duplicateChecklist = () => {alert("hello")};
+
 export const ChecklistShow = () => {
     return (
-        <Show emptyWhileLoading >
+        <Show emptyWhileLoading actions={<ChecklistShowActions />}>
             <SimpleShowLayout>
                     <TextField source="title"/>
                     <TextField source="description"/>
