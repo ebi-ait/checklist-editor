@@ -27,7 +27,7 @@ build_docker_image:
   stage: build
   script:
     - docker --version
-    - set | grep CI_DEPLOY
+    - echo "CI_DEPLOY_USER $CI_DEPLOY_USER"
     - docker login -u "$CI_DEPLOY_USER" -p "$CI_DEPLOY_PASSWORD" "$CI_REGISTRY"
     - echo $DOCKER_IMAGE_NAME
     - docker build -t $DOCKER_IMAGE_NAME .
@@ -45,24 +45,6 @@ deploy_dev:
   only:
     - dev
   extends: .kube_deploy_script
-
-link-cluster-url:
-  stage: deploy
-  image: dtzar/helm-kubectl
-  services:
-    - docker:dind
-  script:
-    - . .env
-    - set | grep K8S
-    - kubectl config set-context --current --namespace=${K8S_NAMESPACE}
-    - kubectl config get-contexts
-    - kubectl get service
-    - K8S_NODE_PORT=$(kubectl get service -o=jsonpath='{.spec.ports[0].nodePort}' ${APP_NAME})
-  environment:
-    name: ${ENVIRONMENT_NAME}/last-cluster-deployment
-    url: ${K8S_CLUSTER_URL}:${K8S_NODE_PORT}/biosamples/checklist-editor
-  needs:
-    - deploy_dev
 
 .kube_deploy_script:
   stage: deploy
