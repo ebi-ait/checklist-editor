@@ -39,9 +39,17 @@ const FieldPanel = () => {
     );
 }
 
-export const ChecklistShow = () => {
+export const ChecklistShow = () => (
+    <Show emptyWhileLoading>
+        <ChecklistShowContent />
+    </Show>
+);
+
+const ChecklistShowContent = () => {
+    const record = useRecordContext();
+    if (!record) return null;
+
     return (
-        <Show emptyWhileLoading >
             <SimpleShowLayout>
                     <TextField source="title"/>
                     <TextField source="description"/>
@@ -50,13 +58,16 @@ export const ChecklistShow = () => {
                     <TextField source="group"/>
                     <ArrayField source="schemaFieldAssociations" label="Fields">
                         <Datagrid>
-                            <ReferenceField source="fieldId" reference="fields" link={false} queryOptions={{ meta: { size: 300 } }}>
+                            <ReferenceField source="fieldId" reference="fields" link={false}
+                                            queryOptions={{ meta: { size: 300, parentId: record.id } }}>
                                 <TextField source="label"/>
                             </ReferenceField>
-                            <ReferenceField label="Type" source="fieldId" reference="fields" link={false} queryOptions={{ meta: { size: 300 } }}>
+                            <ReferenceField label="Type" source="fieldId" reference="fields" link={false}
+                                            queryOptions={{ meta: { size: 300, parentId: record.id } }}>
                                 <TextField source="type"/>
                             </ReferenceField>
-                            <ReferenceField label="Group" source="fieldId" reference="fields" link={false} queryOptions={{ meta: { size: 300 } }}>
+                            <ReferenceField label="Group" source="fieldId" reference="fields" link={false}
+                                            queryOptions={{ meta: { size: 300, parentId: record.id } }}>
                                 <TextField source="group"/>
                             </ReferenceField>
                             <IconField source="requirementType" label="Required" iconMapping={{
@@ -71,6 +82,5 @@ export const ChecklistShow = () => {
                         </Datagrid>
                     </ArrayField>
             </SimpleShowLayout>
-        </Show>
     );
 };

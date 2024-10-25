@@ -69,12 +69,19 @@ export const fieldsDataProvider: DataProvider = {
         // target is the name of the query string parameter
         // id is the value
         // TODO: resolve search resource from target name
-        searchParams.append('ids', ids);
+        let searchResource = '';
+        if(Object.prototype.hasOwnProperty.call(meta, 'parentId')) {
+            searchParams.append('schemaId', meta.parentId);
+            searchResource = '/search/findByUsedBySchemas'
+        } else {
+            searchParams.append('ids', ids);
+            searchResource = '/search/findAllByIdIn'
+        }
         if(Object.prototype.hasOwnProperty.call(meta, 'size')) {
             searchParams.append('size', meta.size)
         }
         const query = searchParams.toString();
-        const url = `${apiUrl}${apiResource}/search/findAllByIdIn?${query}`;
+        const url = `${apiUrl}${apiResource}${searchResource}?${query}`;
         return httpClient(url)
             .then(({json}) => {
                 // Extract the embedded resources
