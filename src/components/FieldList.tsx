@@ -8,7 +8,8 @@ import {
     SearchInput,
     SelectInput,
     TextField,
-    TopToolbar, useRecordContext
+    TopToolbar,
+    useRecordContext
 } from 'react-admin';
 import {FieldPreviewPanel} from "./FieldPreviewPanel.tsx";
 import {IconField} from "./IconField.tsx";
@@ -23,7 +24,16 @@ const FieldListActions = () => (
 const filters = [
     <SearchInput source="q" alwaysOn/>,
     <SelectInput source="latest"
-                 choices={[{id:true,name:'True'}, {id:false,name:'False'}]}/>,
+                 choices={[{id: true, name: 'True'}, {id: false, name: 'False'}]}/>,
+    <SelectInput source="type"
+                 choices={[
+                     {id: 'text', name: 'Text'},
+                     {id: 'choice', name: 'Choice'},
+                     {id: 'pattern', name: 'Pattern'},
+                     {id: 'taxon', name: 'Taxon'},
+                     {id: 'ontology', name: 'Ontology'},
+                 ]}/>,
+
 ];
 const ConditionalEditButton = () => {
     const record = useRecordContext();
@@ -35,7 +45,15 @@ export const FieldList = () =>
         <List
             actions={<FieldListActions/>}
             filters={filters}
-            filterDefaultValues={{latest:true}}
+            filterDefaultValues={{latest: true}}
+            queryOptions={{
+                meta: {
+                    sort: [
+                        {field: 'group', order: 'ASC'},
+                        {field: 'label', order: 'ASC'}
+                    ]
+                }
+            }}
         >
             <Datagrid expand={FieldPreviewPanel}>
                 <IconField source="type" label="Type" iconMapping={{
@@ -46,7 +64,7 @@ export const FieldList = () =>
                     ontology: Share,
                 }}/>
                 <TextField source="label"/>
-                <TextField source="group" label ="Field Group"/>
+                <TextField source="group" label="Field Group"/>
                 <TextField source="version"/>
                 <ConditionalEditButton/>
             </Datagrid>
