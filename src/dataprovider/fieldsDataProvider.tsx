@@ -1,5 +1,5 @@
 // This data provider handles fields
-import {DataProvider, fetchUtils} from "react-admin";
+import {DataProvider, fetchUtils, SortPayload} from "react-admin";
 import config from "../config.tsx";
 import {FieldProps} from "../model/Field.tsx";
 import {fixTrailingSlash, resolveApiResource} from "./schemaStoreDataProvider.tsx";
@@ -14,18 +14,20 @@ const recordToId = (record: FieldProps) => ({
 export const fieldsDataProvider: DataProvider = {
 
     getList: (resource, params) => {
-        const {filter = {}, pagination, sort} = params;
+        const {filter = {}, pagination, sort, meta} = params;
 
         // Adjust the URL to point to the right endpoint for lists
-        let apiResource = resolveApiResource(resource);
+        const apiResource = resolveApiResource(resource);
         const responseResourceName = apiResource
-        const query = new URLSearchParams({
+        const query = {
             ...filter.q ? {text: filter.q} : {}, // Add the 'text' parameter if 'q' is provided
             page: (pagination.page - 1)+''    , // react-admin is 1 based, spring is 0 based
             size: pagination.perPage+'',
-            sort: `${sort.field},${sort.order}`,
+            sort: (meta.sort ?? [sort]).map((s:SortPayload)=>`${s.field},${s.order}`),
             ...filter
-        }).toString();
+        };
+
+        const queryString = new URLSearchParams(query).toString();
         // Adjust the URL to point to the right endpoint for lists
         let searchResource = '';
         if(Object.keys(filter).length>0) {
@@ -35,7 +37,7 @@ export const fieldsDataProvider: DataProvider = {
                 searchResource = '/search/findByExample'
             }
         }
-        const url = `${apiUrl}${apiResource}${searchResource}?${query}`;
+        const url = `${apiUrl}${apiResource}${searchResource}?${queryString}`;
         return httpClient(url)
             .then(({json}) => {
                 // Extract the embedded resources
@@ -53,7 +55,7 @@ export const fieldsDataProvider: DataProvider = {
     },
     getOne: (resource, params) => {
         const apiResource = resolveApiResource(resource);
-        return httpClient(`${apiUrl}${resolveApiResource(resource)}/${params.id}`)
+        return httpClient(`${apiUrl}${apiResource}/${params.id}`)
             .then(({json}) => {
                 let data = json; // Assuming json is the schema object itself
                 data = recordToId(data);
@@ -67,12 +69,19 @@ export const fieldsDataProvider: DataProvider = {
         // target is the name of the query string parameter
         // id is the value
         // TODO: resolve search resource from target name
-        searchParams.append('ids', ids);
-        if(meta.hasOwnProperty('size')) {
+        let searchResource = '';
+        if(Object.prototype.hasOwnProperty.call(meta, 'parentId')) {
+            searchParams.append('schemaId', meta.parentId);
+            searchResource = '/search/findByUsedBySchemas'
+        } else {
+            searchParams.append('ids', ids);
+            searchResource = '/search/findAllByIdIn'
+        }
+        if(Object.prototype.hasOwnProperty.call(meta, 'size')) {
             searchParams.append('size', meta.size)
         }
         const query = searchParams.toString();
-        const url = `${apiUrl}${apiResource}/search/findAllByIdIn?${query}`;
+        const url = `${apiUrl}${apiResource}${searchResource}?${query}`;
         return httpClient(url)
             .then(({json}) => {
                 // Extract the embedded resources

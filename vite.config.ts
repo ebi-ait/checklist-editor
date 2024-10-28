@@ -26,7 +26,6 @@ export default defineConfig(({command, mode}) => {
                     target: schemaStoreHost,
                     changeOrigin: true,
                     secure: false,
-                    // rewrite: (path:string) => path.replace(/^\/api\/v2/, ''),
                 },
             },
         },

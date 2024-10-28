@@ -11,7 +11,6 @@ import {ChecklistShow} from "./components/ChecklistShow.tsx";
 import {FieldCreate} from "./components/FieldCreate.tsx";
 import {FieldEdit} from "./components/FieldEdit.tsx";
 import {FieldList} from "./components/FieldList.tsx";
-import config from "./config.tsx";
 import checklistDataProvider from './dataprovider/schemaStoreDataProvider.tsx';
 import {appTheme, darkTheme} from "./theme.tsx";
 
@@ -29,7 +28,6 @@ const App: React.FC = () => {
                queryClient={queryClient}
                theme={appTheme}
                darkTheme={darkTheme}
-               // basename={config.CHECKLIST_EDITOR_BASE_URL}
                disableTelemetry
         >
             <Resource name="checklists"

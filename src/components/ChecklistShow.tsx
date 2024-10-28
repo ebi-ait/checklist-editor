@@ -1,12 +1,12 @@
 import {
-    ArrayField, Button,
+    ArrayField,
     ChipField,
-    Datagrid, EditButton,
+    Datagrid,
     ReferenceField,
     Show,
     SimpleShowLayout,
     SingleFieldList,
-    TextField, TopToolbar,
+    TextField,
     useRecordContext
 } from 'react-admin';
 import {IconField} from "./IconField.tsx";
@@ -39,15 +39,17 @@ const FieldPanel = () => {
     );
 }
 
-const ChecklistShowActions = () => (
-    <TopToolbar>
-        <EditButton />
-    </TopToolbar>
+export const ChecklistShow = () => (
+    <Show emptyWhileLoading>
+        <ChecklistShowContent />
+    </Show>
 );
 
-export const ChecklistShow = () => {
+const ChecklistShowContent = () => {
+    const record = useRecordContext();
+    if (!record) return null;
+
     return (
-        <Show emptyWhileLoading actions={<ChecklistShowActions />}>
             <SimpleShowLayout>
                     <TextField source="title"/>
                     <TextField source="description"/>
@@ -56,13 +58,16 @@ export const ChecklistShow = () => {
                     <TextField source="group"/>
                     <ArrayField source="schemaFieldAssociations" label="Fields">
                         <Datagrid>
-                            <ReferenceField source="fieldId" reference="fields" link={false} queryOptions={{ meta: { size: 300 } }}>
+                            <ReferenceField source="fieldId" reference="fields" link={false}
+                                            queryOptions={{ meta: { size: 300, parentId: record.id } }}>
                                 <TextField source="label"/>
                             </ReferenceField>
-                            <ReferenceField label="Type" source="fieldId" reference="fields" link={false} queryOptions={{ meta: { size: 300 } }}>
+                            <ReferenceField label="Type" source="fieldId" reference="fields" link={false}
+                                            queryOptions={{ meta: { size: 300, parentId: record.id } }}>
                                 <TextField source="type"/>
                             </ReferenceField>
-                            <ReferenceField label="Group" source="fieldId" reference="fields" link={false} queryOptions={{ meta: { size: 300 } }}>
+                            <ReferenceField label="Group" source="fieldId" reference="fields" link={false}
+                                            queryOptions={{ meta: { size: 300, parentId: record.id } }}>
                                 <TextField source="group"/>
                             </ReferenceField>
                             <IconField source="requirementType" label="Required" iconMapping={{
@@ -77,6 +82,5 @@ export const ChecklistShow = () => {
                         </Datagrid>
                     </ArrayField>
             </SimpleShowLayout>
-        </Show>
     );
 };
