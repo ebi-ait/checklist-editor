@@ -54,7 +54,7 @@ export const ChecklistList = () => {
                     render={record => record.schemaFieldAssociations?.length ?? 0}
                 />
                 <ConditionalEditButton/>
-                <CloneButton />
+                <CloneButton/>
             </Datagrid>
         </List>
     );
