@@ -17,7 +17,6 @@ import {
     Recommend,
     ViewHeadline
 } from '@mui/icons-material';
-import DuplicateButton from "./DuplicateButton.ts";
 
 const FieldPanel = () => {
     const record = useRecordContext();
@@ -43,12 +42,8 @@ const FieldPanel = () => {
 const ChecklistShowActions = () => (
     <TopToolbar>
         <EditButton />
-        <DuplicateButton />
-        <Button color="primary" onClick={duplicateChecklist}>Duplicate</Button>
     </TopToolbar>
 );
-
-const duplicateChecklist = () => {alert("hello")};
 
 export const ChecklistShow = () => {
     return (

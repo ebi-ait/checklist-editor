@@ -31,6 +31,19 @@ const FieldRender = () => {
 }
 
 export const ChecklistForm = () => {
+    const record = useRecordContext();
+    if (record && !record.id) { // have the record and 'record.id' is not present => we are cloning a record
+        // todo discuss
+        // 1. Why this method is executing twice
+        // 2. Why backend is throwing id not present exception if id == null. This is also happening in create checklist
+        if (record.accession) {
+            record.title = `${record.title} DUPLICATE`;
+        }
+        record.accession = null;
+        record.version = null;
+        record.id = "";
+    }
+
     return <SimpleForm>
         <TextInput source="title"/>
         <TextField source="accession" label="Accession"/>
