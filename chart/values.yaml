@@ -56,7 +56,7 @@ ingress:
     # kubernetes.io/tls-acme: "true"
 #    nginx.ingress.kubernetes.io/rewrite-target: /$2
   hosts:
-      - host: ""
+      - host: "set in values-<env>.yaml"
         paths:
         - path: /biosamples/checklist-editor(/|$)(.*)
           pathType: Prefix

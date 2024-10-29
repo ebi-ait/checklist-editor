@@ -35,7 +35,6 @@ build_docker_image:
 deploy_dev:
   variables:
     ENVIRONMENT_NAME: dev
-    HOST: wwwint.ebi.ac.uk
   environment:
     name: dev
     url: https://wwwint.ebi.ac.uk/biosamples/checklist-editor
