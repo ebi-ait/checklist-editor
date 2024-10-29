@@ -53,8 +53,8 @@ deploy_dev:
     - kubectl create namespace ${K8S_NAMESPACE} || true
     - kubectl config set-context --current --namespace=${K8S_NAMESPACE}
     - kubectl delete secret $DOCKER_PULL_SECRET || true
-    - kubectl create secret docker-registry $DOCKER_PULL_SECRET --docker-server=$CI_REGISTRY --docker-username=$CI_DEPLOY_USER --docker-password=$CI_DEPLOY_PASSWORD
-    - helm upgrade checklist-editor ./chart --set image.repository=$CI_REGISTRY_IMAGE --set image.tag=$DOCKER_TAG
+    - kubectl create secret docker-registry $DOCKER_PULL_SECRET --docker-server=$CI_REGISTRY --docker-username=$CI_REGISTRY_USER --docker-password=$CI_REGISTRY_PASSWORD
+    - helm upgrade --install $APP_NAME ./chart --set image.repository=$CI_REGISTRY_IMAGE --set image.tag=$DOCKER_TAG --set "imagePullSecrets[0].name=$DOCKER_PULL_SECRET" --values values-${ENVIRONMENT_NAME}.yaml
     - kubectl rollout restart deployment ${APP_NAME}
     - kubectl rollout status deployment ${APP_NAME} --timeout=90s
 

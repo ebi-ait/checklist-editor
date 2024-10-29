@@ -1,3 +1,2 @@
 ingress:
-  hosts:
-    - host: wwwint.ebi.ac.uk
+  host: wwwint.ebi.ac.uk

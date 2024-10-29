@@ -55,11 +55,8 @@ ingress:
     # kubernetes.io/ingress.class: nginx
     # kubernetes.io/tls-acme: "true"
 #    nginx.ingress.kubernetes.io/rewrite-target: /$2
-  hosts:
-      - host: "set in values-<env>.yaml"
-        paths:
-        - path: /biosamples/checklist-editor(/|$)(.*)
-          pathType: Prefix
+  path: /biosamples/checklist-editor(/|$)(.*)
+  pathType: Prefix
   tls: []
   #  - secretName: chart-example-tls
   #    hosts:
