@@ -1,23 +1,32 @@
 import React from "react";
 import {
     ArrayInput,
-    Edit,
+    Edit, email,
     FormDataConsumer,
-    RadioButtonGroupInput,
+    RadioButtonGroupInput, required,
     SimpleForm,
     SimpleFormIterator,
-    TextInput
+    TextInput, Validator
 } from "react-admin";
 
 // registry of field types and their specific controls
 const inputMap = {
     'text': () => null,
     'choice': () => <ChoiceField/>,
-    'pattern': () => <TextInput source="pattern"/>,
+    'pattern': () => <TextInput source="pattern"
+                                validate={validateRegex}/>,
     'ontology': () => <TextInput source="ontology"/>,
     'taxon': () => null,
 }
 
+const validateRegex:Validator = (value: string) => {
+    try {
+        new RegExp(value);  // Try to create a RegExp
+        return undefined;      // No error: it's a valid regex
+    } catch (e) {
+        return "Value should be a valid regular expression.";     // Error: it's not a valid regex
+    }
+}
 export const ChoiceField = () =>
     <ArrayInput source="choices">
         <SimpleFormIterator inline>
@@ -30,11 +39,12 @@ function toTitleCase(s: string) {
 }
 
 export const FieldForm = () =>
-    <SimpleForm>
-        <TextInput source="label"/>
-        <TextInput source="description"/>
+    <SimpleForm mode="onChange" reValidateMode="onChange">
+        <TextInput source="label" validate={required()}/>
+        <TextInput source="description" multiline={true} validate={required()}/>
         <TextInput source="group"/>
         <RadioButtonGroupInput source="type"
+                               validate={required()}
                                choices={
                                    Object.keys(inputMap)
                                        .map(id => ({id, name: toTitleCase(id)}))
