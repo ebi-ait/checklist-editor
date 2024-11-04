@@ -1,13 +1,16 @@
 import React from "react";
 import {
     ArrayInput,
-    Edit, email,
+    Edit,
     FormDataConsumer,
-    RadioButtonGroupInput, required,
+    RadioButtonGroupInput,
+    required,
     SimpleForm,
     SimpleFormIterator,
-    TextInput, Validator
+    TextInput,
+    Validator
 } from "react-admin";
+import {SelectAttrbiuteInput} from "./SelectAttrbiuteInput.tsx";
 
 // registry of field types and their specific controls
 const inputMap = {
@@ -38,11 +41,12 @@ function toTitleCase(s: string) {
     return s[0]?.toUpperCase() + (s.length > 1 ? s.substring(1) : '');
 }
 
+
 export const FieldForm = () =>
     <SimpleForm mode="onChange" reValidateMode="onChange">
         <TextInput source="label" validate={required()}/>
         <TextInput source="description" multiline={true} validate={required()}/>
-        <TextInput source="group"/>
+        <SelectAttrbiuteInput source="group"/>
         <RadioButtonGroupInput source="type"
                                validate={required()}
                                choices={

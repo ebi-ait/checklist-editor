@@ -36,5 +36,6 @@ const schemaStoreDataProvider: DataProvider = {
     updateMany: (resource, params) => callDataProviderFunction(resource, 'updateMany', params),
     deleteMany: (resource, params) => callDataProviderFunction(resource, 'deleteMany', params),
     delete: (resource, params) => callDataProviderFunction(resource, 'delete', params),
+    getAttributeValues: (resource, params) => callDataProviderFunction(resource, 'getAttributeValues', params),
 }
 export default schemaStoreDataProvider;

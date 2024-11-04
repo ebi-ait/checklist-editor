@@ -52,12 +52,13 @@ const ChecklistShowContent = () => {
     return (
             <SimpleShowLayout>
                     <TextField source="title"/>
-                    <TextField source="description"/>
+                    <TextField source="accession"/>
                     <TextField source="version"/>
+                    <TextField source="description"/>
                     <TextField source="authority"/>
                     <TextField source="group"/>
                     <ArrayField source="schemaFieldAssociations" label="Fields">
-                        <Datagrid>
+                        <Datagrid rowClick={false}>
                             <ReferenceField source="fieldId" reference="fields" link={false}
                                             queryOptions={{ meta: { size: 300, parentId: record.id } }}>
                                 <TextField source="label"/>

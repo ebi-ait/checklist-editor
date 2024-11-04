@@ -1,5 +1,6 @@
 import {Stack, Typography} from "@mui/material";
 import {useQueryClient} from "@tanstack/react-query";
+import React from "react";
 import {
     ArrayInput,
     AutocompleteInput,
@@ -14,6 +15,7 @@ import {
     useRedirect
 } from "react-admin";
 import {FieldProps} from "../model/Field.tsx";
+import {SelectAttrbiuteInput} from "./SelectAttrbiuteInput.tsx";
 
 const FieldRender = () => {
     const record: FieldProps | undefined = useRecordContext();
@@ -34,9 +36,9 @@ export const ChecklistForm = () => {
     return <SimpleForm>
         <TextInput source="title"/>
         <TextField source="accession" label="Accession"/>
-        <TextField source="version" />
-        <TextField source="authority" />
-        <TextInput source="group" />
+        <TextField source="version" label="Version"/>
+        <TextField source="authority" label={"Authority"}/>
+        <SelectAttrbiuteInput source="group"/>
         <TextInput source="description" multiline={true} rows={2}/>
         <ArrayInput source="schemaFieldAssociations" label="Fields">
             <SimpleFormIterator inline>

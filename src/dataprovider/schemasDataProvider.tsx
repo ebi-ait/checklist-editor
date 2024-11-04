@@ -11,6 +11,7 @@ const recordToId = (record: ChecklistProps) => ({
     id: `${record.accession}:${record.version}`,
     ...record
 });
+const idFromAttribute = (attribute: string) => (record) => ({id: record[attribute], ...record})
 
 export const schemasDataProvider: DataProvider = {
 
@@ -115,4 +116,28 @@ export const schemasDataProvider: DataProvider = {
     },
     updateMany: (resource, params) => Promise.reject(`${resource} updateMany not implemented`),
     deleteMany: (resource, params) => Promise.reject(`${resource} delete not implemented`),
+    getAttributeValues: (resource: string, attributeName: string) => {
+        const apiResource = 'schemas';
+        const responseResourceName= apiResource;
+        const query = {
+            attributeName
+        };
+        const queryString = new URLSearchParams(query).toString();
+        const searchResource: string = '/search/findAttributeValues';
+        const url = `${apiUrl}${apiResource}${searchResource}?${queryString}`;
+        return httpClient(url)
+            .then(({json}) => {
+                let data = json._embedded?.[responseResourceName] || Array.isArray(json) ? json : [];
+                data = data.map(idFromAttribute('attributeName'));
+                return {
+                    data,
+                    total: json.page?.totalElements || data.length,
+                    pageInfo: {
+                        hasNextPage: json?._links?.next || false,
+                        hasPreviousPage: json?._links?.prev || false
+                    }
+                };
+            });
+    }
+
 };
