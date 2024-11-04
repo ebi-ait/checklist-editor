@@ -21,6 +21,7 @@ stages:
 
 build_docker_image:
   image: docker:27
+  tags: ["dind"]
   services:
     - docker:27-dind
   stage: build
@@ -45,8 +46,9 @@ deploy_dev:
 .kube_deploy_script:
   stage: deploy
   image: dtzar/helm-kubectl
+  tags: ["dind"]
   services:
-    - docker:dind
+    - docker:27-dind
   variables:
     K8S_NAMESPACE: ${K8S_NAMESPACE_PREFIX}-${ENVIRONMENT_NAME}
   script:
