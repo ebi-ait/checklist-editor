@@ -1,4 +1,5 @@
 import {Abc, EmergencyRecording, ListAlt, PestControlRodent, Share} from "@mui/icons-material";
+import React from "react";
 import {
     CreateButton,
     Datagrid,
@@ -13,6 +14,7 @@ import {
 } from 'react-admin';
 import {FieldPreviewPanel} from "./FieldPreviewPanel.tsx";
 import {IconField} from "./IconField.tsx";
+import {SelectAttrbiuteInput} from "./SelectAttrbiuteInput.tsx";
 
 const FieldListActions = () => (
     <TopToolbar>
@@ -25,14 +27,8 @@ const filters = [
     <SearchInput source="q" alwaysOn/>,
     <SelectInput source="latest"
                  choices={[{id: true, name: 'True'}, {id: false, name: 'False'}]}/>,
-    <SelectInput source="type"
-                 choices={[
-                     {id: 'text', name: 'Text'},
-                     {id: 'choice', name: 'Choice'},
-                     {id: 'pattern', name: 'Pattern'},
-                     {id: 'taxon', name: 'Taxon'},
-                     {id: 'ontology', name: 'Ontology'},
-                 ]}/>,
+    <SelectAttrbiuteInput source="type"/>,
+    <SelectAttrbiuteInput source="group"/>
 
 ];
 const ConditionalEditButton = () => {

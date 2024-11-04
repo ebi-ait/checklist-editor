@@ -1,3 +1,4 @@
+import React from "react";
 import {
     CreateButton,
     Datagrid,
@@ -13,6 +14,7 @@ import {
     useRecordContext,
 } from "react-admin";
 import {ChecklistPreviewPanel} from "./ChecklistPreviewPanel.tsx";
+import {SelectAttrbiuteInput} from "./SelectAttrbiuteInput.tsx";
 
 
 const SchemaListActions = () => (
@@ -27,7 +29,8 @@ const filters = [
     <SelectInput source="latest"
                  choices={[{id:true,name:'True'}, {id:false,name:'False'}]}/>,
     <SelectInput source="authority"
-                 choices={[{id:"ENA", name:"ENA"}, {id:"BIOSAMPLES",name:'BioSamples'}]}/>
+                 choices={[{id:"ENA", name:"ENA"}, {id:"BIOSAMPLES",name:'BioSamples'}]}/>,
+    <SelectAttrbiuteInput source="group"/>
 ];
 
 const ConditionalEditButton = () => {
