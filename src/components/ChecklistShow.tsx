@@ -1,3 +1,4 @@
+import {PriorityHigh, Recommend,} from '@mui/icons-material';
 import {
     ArrayField,
     ChipField,
@@ -9,14 +10,9 @@ import {
     TextField,
     useRecordContext
 } from 'react-admin';
+import {GrMultiple} from "react-icons/gr";
+import {FieldTypeIcon} from "./FieldTypeIcon.tsx";
 import {IconField} from "./IconField.tsx";
-import {
-    LooksOne,
-    PriorityHigh,
-    RadioButtonUnchecked,
-    Recommend,
-    ViewHeadline
-} from '@mui/icons-material';
 
 const FieldPanel = () => {
     const record = useRecordContext();
@@ -65,7 +61,7 @@ const ChecklistShowContent = () => {
                             </ReferenceField>
                             <ReferenceField label="Type" source="fieldId" reference="fields" link={false}
                                             queryOptions={{ meta: { size: 300, parentId: record.id } }}>
-                                <TextField source="type"/>
+                                <FieldTypeIcon/>
                             </ReferenceField>
                             <ReferenceField label="Group" source="fieldId" reference="fields" link={false}
                                             queryOptions={{ meta: { size: 300, parentId: record.id } }}>
@@ -73,12 +69,12 @@ const ChecklistShowContent = () => {
                             </ReferenceField>
                             <IconField source="requirementType" label="Required" iconMapping={{
                                 MANDATORY: PriorityHigh,
-                                OPTIONAL: RadioButtonUnchecked,
+                                OPTIONAL: null,
                                 RECOMMENDED: Recommend,
                             }}/>
                             <IconField source="multiplicity" iconMapping={{
-                                Single: LooksOne,
-                                List: ViewHeadline,
+                                Single: null,
+                                List: GrMultiple,
                             }}/>
                         </Datagrid>
                     </ArrayField>

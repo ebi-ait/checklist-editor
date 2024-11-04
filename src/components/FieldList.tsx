@@ -1,5 +1,3 @@
-import {Abc, EmergencyRecording, ListAlt, PestControlRodent, Share} from "@mui/icons-material";
-import React from "react";
 import {
     CreateButton,
     Datagrid,
@@ -12,8 +10,8 @@ import {
     TopToolbar,
     useRecordContext
 } from 'react-admin';
+import {FieldTypeIcon} from "./FieldTypeIcon.tsx";
 import {FieldPreviewPanel} from "./FieldPreviewPanel.tsx";
-import {IconField} from "./IconField.tsx";
 import {SelectAttrbiuteInput} from "./SelectAttrbiuteInput.tsx";
 
 const FieldListActions = () => (
@@ -52,13 +50,7 @@ export const FieldList = () =>
             }}
         >
             <Datagrid expand={FieldPreviewPanel}>
-                <IconField source="type" label="Type" iconMapping={{
-                    text: Abc,
-                    pattern: EmergencyRecording,
-                    choice: ListAlt,
-                    taxon: PestControlRodent,
-                    ontology: Share,
-                }}/>
+                <FieldTypeIcon/>
                 <TextField source="label"/>
                 <TextField source="group" label="Field Group"/>
                 <TextField source="version"/>
