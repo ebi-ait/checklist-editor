@@ -10,9 +10,15 @@ import {
     TextField,
     useRecordContext
 } from 'react-admin';
-import {GrMultiple} from "react-icons/gr";
 import {FieldTypeIcon} from "./FieldTypeIcon.tsx";
 import {IconField} from "./IconField.tsx";
+import {
+    LooksOne,
+    PriorityHigh,
+    RadioButtonUnchecked,
+    Recommend,
+    ViewHeadline
+} from '@mui/icons-material';
 
 const FieldPanel = () => {
     const record = useRecordContext();
@@ -74,7 +80,7 @@ const ChecklistShowContent = () => {
                             }}/>
                             <IconField source="multiplicity" iconMapping={{
                                 Single: null,
-                                List: GrMultiple,
+                                List: ViewHeadline,
                             }}/>
                         </Datagrid>
                     </ArrayField>
