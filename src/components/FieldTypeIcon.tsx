@@ -1,6 +1,5 @@
-import {Abc, PestControlRodent} from "@mui/icons-material";
-import {IoMdList} from "react-icons/io";
-import {VscRegex, VscTypeHierarchySub} from "react-icons/vsc";
+import {Abc, PestControlRodent, AccountTree, EmergencyRecording} from "@mui/icons-material";
+import ListIcon from "@mui/icons-material/List";
 import {IconField} from "./IconField.tsx";
 
 export const FieldTypeIcon = () =>
@@ -8,8 +7,8 @@ export const FieldTypeIcon = () =>
                label="Type"
                iconMapping={{
                    text: Abc,
-                   pattern: VscRegex,
-                   choice: IoMdList,
+                   pattern: EmergencyRecording,
+                   choice: ListIcon,
                    taxon: PestControlRodent,
-                   ontology: VscTypeHierarchySub,
+                   ontology: AccountTree,
                }}/>;
