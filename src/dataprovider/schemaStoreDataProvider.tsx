@@ -1,6 +1,7 @@
 import {DataProvider, fetchUtils} from 'react-admin';
 
 import {fieldsDataProvider} from "./fieldsDataProvider.tsx";
+import {ontologyDataProvider} from "./ontologyDataProvider.tsx";
 import {schemasDataProvider} from "./schemasDataProvider.tsx";
 
 export function fixTrailingSlash(url: string) {
@@ -17,7 +18,8 @@ export function resolveApiResource(resource: string) {
 
 const dataProviderRegistry: { [k: string]: DataProvider } = {
     'checklists': schemasDataProvider,
-    'fields': fieldsDataProvider
+    'fields': fieldsDataProvider,
+    'ontologies': ontologyDataProvider,
 };
 const callDataProviderFunction = function (resource: string, op: string, params: any) {
     if (Object.prototype.hasOwnProperty.call(dataProviderRegistry, resource)) {

@@ -3,7 +3,7 @@ import {
     ArrayInput,
     Edit,
     FormDataConsumer,
-    RadioButtonGroupInput,
+    RadioButtonGroupInput, ReferenceInput,
     required,
     SimpleForm,
     SimpleFormIterator,
@@ -18,7 +18,7 @@ const inputMap = {
     'choice': () => <ChoiceField/>,
     'pattern': () => <TextInput source="pattern"
                                 validate={validateRegex}/>,
-    'ontology': () => <TextInput source="ontology"/>,
+    'ontology': () => <ReferenceInput source="ontology" reference="ontologies" />,
     'taxon': () => null,
 }
 

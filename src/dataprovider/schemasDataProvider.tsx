@@ -1,7 +1,6 @@
 import {DataProvider, fetchUtils} from "react-admin";
 import config from "../config.tsx";
 import {ChecklistProps} from "../model/Checklist.tsx";
-import {FieldProps} from "../model/Field.tsx";
 import {fixTrailingSlash, resolveApiResource} from "./schemaStoreDataProvider.tsx";
 
 const apiUrl = fixTrailingSlash(config.SCHEMA_STORE_URL);
@@ -23,14 +22,14 @@ export const schemasDataProvider: DataProvider = {
         const responseResourceName = apiResource
         const query = new URLSearchParams({
             ...filter.q ? {text: filter.q} : {}, // Add the 'text' parameter if 'q' is provided
-            page: (pagination.page - 1)+'', // react-admin is 1 based, spring is 0 based
-            size: pagination.perPage+'',
+            page: (pagination.page - 1) + '', // react-admin is 1 based, spring is 0 based
+            size: pagination.perPage + '',
             sort: `${sort.field},${sort.order}`,
             ...filter
         }).toString();
         let searchResource = '';
-        if(Object.keys(filter).length>0) {
-            if(filter.q) { // it's a text search
+        if (Object.keys(filter).length > 0) {
+            if (filter.q) { // it's a text search
                 searchResource = '/search/findAllByTextPartial'
             } else { // it's a regular attribute search
                 searchResource = '/search/findByExample'
@@ -62,14 +61,14 @@ export const schemasDataProvider: DataProvider = {
             });
     },
     getMany: (resource, params) => {
-        const {ids, meta={}  } = params;
+        const {ids, meta = {}} = params;
         const apiResource = resolveApiResource(resource);
         const searchParams = new URLSearchParams();
         // target is the name of the query string parameter
         // id is the value
         // TODO: resolve search resource from target name
         searchParams.append('ids', ids);
-        if(meta.hasOwnProperty('size')) {
+        if (meta.hasOwnProperty('size')) {
             searchParams.append('size', meta.size)
         }
         const query = searchParams.toString();
@@ -87,7 +86,8 @@ export const schemasDataProvider: DataProvider = {
                         hasPreviousPage: json?._links?.prev || false
                     }
                 };
-            });    },
+            });
+    },
     getManyReference: (resource, params) => Promise.reject('schema getManyReference not implemented'),
     create: async (resource, params) => {
         const apiResource = resolveApiResource(resource);
@@ -106,9 +106,9 @@ export const schemasDataProvider: DataProvider = {
         const apiResource = resolveApiResource(resource);
         const url = `${apiUrl}${apiResource}/${id}`;
         const {json} = await httpClient(url, {
-                method: 'PUT',
-                body: JSON.stringify(params.data),
-            });
+            method: 'PUT',
+            body: JSON.stringify(params.data),
+        });
 
         return ({
             data: {...params.data, id: json.id},
@@ -118,7 +118,7 @@ export const schemasDataProvider: DataProvider = {
     deleteMany: (resource, params) => Promise.reject(`${resource} delete not implemented`),
     getAttributeValues: (resource: string, attributeName: string) => {
         const apiResource = 'schemas';
-        const responseResourceName= apiResource;
+        const responseResourceName = apiResource;
         const query = {
             attributeName
         };
