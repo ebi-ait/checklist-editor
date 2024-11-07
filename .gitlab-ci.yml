@@ -62,6 +62,7 @@ deploy_prod:
     name: prod
     url: https://www.ebi.ac.uk/biosamples/checklist-editor
   only:
+    - dev
     - main
   when: manual
   extends: .kube_deploy_script
