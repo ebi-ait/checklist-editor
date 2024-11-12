@@ -1,9 +1,10 @@
 import {jwtDecode} from 'jwt-decode';
 import {fetchUtils} from 'react-admin';
 const httpClient = fetchUtils.fetchJson;
+import config from "../config.tsx";
 
 
-const url = '/auth';
+const url = config.CHECKLIST_EDITOR_BASE_URL+'/auth';
 const authProvider = {
     login: async ({ username, password }) => {
 
