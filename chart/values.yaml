@@ -7,6 +7,7 @@ checklistEditor:
   # url for json schema store. Can be cluster internal. Should be used for cluster internal comms
   schemaStoreUrl: http://json-schema-store:8080/biosamples/schema-store
   baseUrl: /biosamples/checklist-editor
+  webinUrl: https://wwwdev.ebi.ac.uk/ena/submit/webin
 
 # k8s configuration below here
 replicaCount: 1

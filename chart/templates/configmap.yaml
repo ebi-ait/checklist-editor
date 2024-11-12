@@ -9,7 +9,7 @@ data:
     window.__CONFIG__ = {
         SCHEMA_STORE_URL: "{{.Values.checklistEditor.baseUrl}}/api/v2",
         OLS_URL: "https://www.ebi.ac.uk/ols4/api",
-        CHECKLIST_EDITOR_BASE_URL: "{{.Values.checklistEditor.baseUrl}}"
+        CHECKLIST_EDITOR_BASE_URL: "{{.Values.checklistEditor.baseUrl}}",
     };
   nginx.conf: |
     server {
@@ -22,6 +22,11 @@ data:
       # redirect /api requests to the json-schema-store
       location {{.Values.checklistEditor.baseUrl}}/api {
           proxy_pass "{{ .Values.checklistEditor.schemaStoreUrl}}/api";
+      }
+
+      # redirect /auth requests to the webin
+      location {{.Values.checklistEditor.baseUrl}}/auth {
+          proxy_pass "{{ .Values.checklistEditor.webinUrl}}/auth";
       }
 
       location {{.Values.checklistEditor.baseUrl}} {

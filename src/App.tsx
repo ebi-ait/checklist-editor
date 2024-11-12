@@ -4,6 +4,7 @@ import {QueryClient} from '@tanstack/react-query';
 import React from 'react';
 
 import {Admin, Resource} from 'react-admin';
+import webinAuthProvider from "./authprovider/webinAuthProvider.tsx";
 import {ChecklistCreate} from "./components/ChecklistCreate.tsx";
 import {ChecklistEdit} from "./components/ChecklistEdit.tsx";
 import {ChecklistList} from "./components/ChecklistList.tsx";
@@ -25,6 +26,7 @@ const App: React.FC = () => {
     });
     return (
         <Admin dataProvider={checklistDataProvider}
+               authProvider={webinAuthProvider}
                queryClient={queryClient}
                theme={appTheme}
                darkTheme={darkTheme}
