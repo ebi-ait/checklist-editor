@@ -1,27 +1,32 @@
 import {jwtDecode} from 'jwt-decode';
 import {fetchUtils} from 'react-admin';
-const httpClient = fetchUtils.fetchJson;
 import config from "../config.tsx";
 
-
-const url = config.CHECKLIST_EDITOR_BASE_URL+'/auth';
+const httpClient = fetchUtils.fetchJson;
+const apiUrl = `${config.AUTH_API_URL}`;
 const authProvider = {
     login: async ({ username, password }) => {
-
-        const request = new Request(url+'/token', {
+        const webinLoginPayload = { username: username, password: password, authRealms: ["ENA"]};
+        // const request = new Request(apiUrl+'/token', {
+        //     method: 'POST',
+        //     headers: new Headers({ 'Content-Type': 'application/json' }),
+        //     body: JSON.stringify(webinLoginPayload),
+        //
+        // });
+        //
+        // const response = await fetchUtils.fetchJson(request);
+        //
+        // if (response.status < 200 || response.status >= 300) {
+        //     throw new Error(response.body);
+        // }
+        // const jwt_token = response.body;
+        const response = await httpClient(apiUrl+'/token', {
             method: 'POST',
             headers: new Headers({ 'Content-Type': 'application/json' }),
-            body: JSON.stringify({ username: username, password: password, authRealms: ["ENA"]}),
-
-        });
-
-        const response = await fetchUtils.fetchJson(request);
-
-        if (response.status < 200 || response.status >= 300) {
-            throw new Error(response.body);
-        }
-
-        localStorage.setItem('jwt_token', response.body);  // Store the token in localStorage
+            body: JSON.stringify(webinLoginPayload),
+        })
+        const jwt_token = response.body;
+        localStorage.setItem('jwt_token', jwt_token);  // Store the token in localStorage
 
 
         return Promise.resolve();

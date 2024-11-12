@@ -27,13 +27,14 @@ export default defineConfig(({command, mode}) => {
                     changeOrigin: true,
                     secure: false,
                 },
+
                 '/auth': {
                     target: 'https://wwwdev.ebi.ac.uk/ena/submit/webin',
                     changeOrigin: true,
                     secure: false,
                     configure: (proxy) => {
                         // Intercept the proxy request to log details
-                        proxy.on('proxyReq', (proxyReq, req, res) => {
+                        proxy.on('proxyReq', (proxyReq, req) => {
                             console.log(`Proxying request to: ${proxyReq.getHeader('host')}${proxyReq.path}`);
                             console.log(`Original URL: ${req.url}`);
                             if (!proxyReq.getHeader('Content-Type')) {
@@ -41,7 +42,7 @@ export default defineConfig(({command, mode}) => {
                             }
                             console.log(`Proxying request with Content-Type: ${proxyReq.getHeader('Content-Type')}`);
                         });
-                        proxy.on('proxyRes', (proxyRes, req, res) => {
+                        proxy.on('proxyRes', (proxyRes) => {
                             console.log(`Response received from target with status: ${proxyRes.statusCode}`);
                         });
                     }

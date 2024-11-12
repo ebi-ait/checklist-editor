@@ -9,7 +9,7 @@ data:
     window.__CONFIG__ = {
         SCHEMA_STORE_URL: "{{.Values.checklistEditor.baseUrl}}/api/v2",
         OLS_URL: "https://www.ebi.ac.uk/ols4/api",
-        CHECKLIST_EDITOR_BASE_URL: "{{.Values.checklistEditor.baseUrl}}",
+        AUTH_API_URL: "{{.Values.checklistEditor.baseUrl}}/auth"
     };
   nginx.conf: |
     server {
