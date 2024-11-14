@@ -1,21 +1,30 @@
 import {PriorityHigh, Recommend, ViewHeadline,} from '@mui/icons-material';
 import {
     ArrayField,
-    Datagrid,
+    Datagrid, EditButton,
     ReferenceField,
     Show,
     SimpleShowLayout,
-    TextField,
+    TextField, TopToolbar,
     useRecordContext
 } from 'react-admin';
 import {FieldTypeIcon} from "./FieldTypeIcon.tsx";
 import {IconField} from "./IconField.tsx";
 
 export const ChecklistShow = () => (
-    <Show emptyWhileLoading>
+    <Show emptyWhileLoading actions={<PostShowActions />} >
         <ChecklistShowContent />
     </Show>
 );
+
+const PostShowActions = () => {
+    const record = useRecordContext();
+    return (
+        <TopToolbar>
+            { record && record.editable &&  <EditButton /> }
+        </TopToolbar>
+    );
+}
 
 const ChecklistShowContent = () => {
     const record = useRecordContext();
