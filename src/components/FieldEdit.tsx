@@ -56,8 +56,8 @@ export const FieldForm = () =>
         />
         <ConditionalInput/>
         <ArrayInput source="units" label="Units">
-            <SimpleFormIterator fullWidth={false} inline>
-                <TextInput fullWidth={false}/>
+            <SimpleFormIterator>
+                <TextInput/>
             </ SimpleFormIterator>
         </ArrayInput>
     </SimpleForm>;
