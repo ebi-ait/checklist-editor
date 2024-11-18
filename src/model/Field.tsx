@@ -1,6 +1,6 @@
 export interface FieldProps {
     id?: string;
-            version: string;
+    version: string;
     label: string;
     description?: string;
     mandatory: 'mandatory' | 'optional' | 'recommended';
@@ -9,4 +9,5 @@ export interface FieldProps {
     usedBySchemas: string[];
     latest: boolean;
     group: string;
+    units: string[];
 }

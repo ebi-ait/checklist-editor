@@ -55,6 +55,11 @@ export const FieldForm = () =>
                                }
         />
         <ConditionalInput/>
+        <ArrayInput source="units" label="Units">
+            <SimpleFormIterator fullWidth={false} inline>
+                <TextInput fullWidth={false}/>
+            </ SimpleFormIterator>
+        </ArrayInput>
     </SimpleForm>;
 // Custom input component based on an attribute
 export const ConditionalInput = ({selectorAttrName = 'type'}) =>
