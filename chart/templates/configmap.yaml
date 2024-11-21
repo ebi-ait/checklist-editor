@@ -5,8 +5,6 @@ metadata:
   labels:
     {{- include "chart.labels" . | nindent 4 }}
 data:
-  HX_PROXY: "http://hx-wwwcache.ebi.ac.uk:3128"
-  no_proxy: "localhost,.cluster.local"
   config.js: |
     window.__CONFIG__ = {
         SCHEMA_STORE_URL: "{{.Values.checklistEditor.baseUrl}}/api/v2",
