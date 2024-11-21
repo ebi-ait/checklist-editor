@@ -29,6 +29,32 @@ spec:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
       containers:
         - name: {{ .Chart.Name }}
+          env:
+            - name: HTTP_PROXY
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ include "chart.fullname" . }}-config
+                  key: HTTP_PROXY
+            - name: HTTPS_PROXY
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ include "chart.fullname" . }}-config
+                  key: HTTPS_PROXY
+            - name: http_proxy
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ include "chart.fullname" . }}-config
+                  key: http_proxy
+            - name: https_proxy
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ include "chart.fullname" . }}-config
+                  key: https_proxy
+            - name: no_proxy
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ include "chart.fullname" . }}-config
+                  key: no_proxy
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
