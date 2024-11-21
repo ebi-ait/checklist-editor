@@ -34,22 +34,22 @@ spec:
               valueFrom:
                 configMapKeyRef:
                   name: {{ include "chart.fullname" . }}-config
-                  key: HTTP_PROXY
+                  key: HX_PROXY
             - name: HTTPS_PROXY
               valueFrom:
                 configMapKeyRef:
                   name: {{ include "chart.fullname" . }}-config
-                  key: HTTPS_PROXY
+                  key: HX_PROXY
             - name: http_proxy
               valueFrom:
                 configMapKeyRef:
                   name: {{ include "chart.fullname" . }}-config
-                  key: http_proxy
+                  key: HX_PROXY
             - name: https_proxy
               valueFrom:
                 configMapKeyRef:
                   name: {{ include "chart.fullname" . }}-config
-                  key: https_proxy
+                  key: HX_PROXY
             - name: no_proxy
               valueFrom:
                 configMapKeyRef:

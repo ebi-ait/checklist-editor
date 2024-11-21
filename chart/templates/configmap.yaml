@@ -5,10 +5,7 @@ metadata:
   labels:
     {{- include "chart.labels" . | nindent 4 }}
 data:
-  HTTP_PROXY: "http://hx-wwwcache.ebi.ac.uk:3128"
-  HTTPS_PROXY: "http://hx-wwwcache.ebi.ac.uk:3128"
-  http_proxy: "http://hx-wwwcache.ebi.ac.uk:3128"
-  https_proxy: "http://hx-wwwcache.ebi.ac.uk:3128"
+  HX_PROXY: "http://hx-wwwcache.ebi.ac.uk:3128"
   no_proxy: "localhost,.cluster.local"
   config.js: |
     window.__CONFIG__ = {
