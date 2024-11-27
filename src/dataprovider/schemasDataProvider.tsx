@@ -21,7 +21,6 @@ export const schemasDataProvider: DataProvider = {
         let apiResource = resolveApiResource(resource);
         const responseResourceName = apiResource
         const query = new URLSearchParams({
-            ...filter.q ? {text: filter.q} : {}, // Add the 'text' parameter if 'q' is provided
             page: (pagination.page - 1) + '', // react-admin is 1 based, spring is 0 based
             size: pagination.perPage + '',
             sort: `${sort.field},${sort.order}`,
@@ -29,12 +28,8 @@ export const schemasDataProvider: DataProvider = {
         }).toString();
         let searchResource = '';
         if (Object.keys(filter).length > 0) {
-            if (filter.q) { // it's a text search
-                searchResource = '/search/findAllByTextPartial'
-            } else { // it's a regular attribute search
-                searchResource = '/search/findByExample'
-                apiResource = 'schemas'
-            }
+            searchResource = '/search/findByExample'
+            apiResource = 'schemas'
         }
         const url = `${apiUrl}${apiResource}${searchResource}?${query}`;
         return httpClient(url)
