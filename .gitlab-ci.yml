@@ -39,8 +39,7 @@ deploy_dev:
   environment:
     name: dev
     url: https://wwwint.ebi.ac.uk/biosamples/checklist-editor
-  only:
-    - dev
+  when: manual
   extends: .kube_deploy_script
 
 deploy_test:

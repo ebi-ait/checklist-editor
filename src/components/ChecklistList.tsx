@@ -25,7 +25,7 @@ const SchemaListActions = () => (
 );
 
 const filters = [
-    <SearchInput source="q" alwaysOn/>,
+    <SearchInput source="searchable" alwaysOn/>,
     <SelectInput source="latest"
                  choices={[{id:true,name:'True'}, {id:false,name:'False'}]}/>,
     <SelectInput source="authority"
