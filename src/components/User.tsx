@@ -54,7 +54,7 @@ export const UserEdit = () => (
 );
 
 export const UserShow = () => (
-    <Show>
+    <Show queryOptions={{meta: {searchResource: 'findByUsername'}}}>
         <SimpleShowLayout>
             <TextField source="username" />
             <TextField source="firstName" />
@@ -72,10 +72,6 @@ export const UserShow = () => (
             <DateField source="createdDate" />
             <TextField source="lastModifiedBy" />
             <DateField source="lastModifiedDate" />
-            <EditButton/>
-            <CanAccess action="create">
-                <CloneButton/>
-            </CanAccess>
         </SimpleShowLayout>
     </Show>
 );

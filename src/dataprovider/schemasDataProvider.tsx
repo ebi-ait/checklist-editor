@@ -43,7 +43,18 @@ export const schemasDataProvider: DataProvider = (recordIdProvider) => ({
             });
     },
     getOne : (resource:string, params) => {
-        return httpClient(`${apiUrl}${resolveApiResource(resource)}/${params.id}`)
+        const {id, meta = {}} = params;
+        let searchResource = '';
+        const searchParams = new URLSearchParams();
+
+        if (Object.prototype.hasOwnProperty.call(meta, 'searchResource')) {
+            searchParams.append('username', id);
+            searchResource = `/search/${meta.searchResource}`
+        } else {
+            searchResource = `/${id}`;
+        }
+        const query = searchParams.toString();
+        return httpClient(`${apiUrl}${resolveApiResource(resource)}${searchResource}?${query}`)
             .then(({json}) => {
                 let record = json; // Assuming json is the schema object itself
                 record = recordIdProvider(record);
@@ -79,7 +90,7 @@ export const schemasDataProvider: DataProvider = (recordIdProvider) => ({
                 };
             });
     },
-    getManyReference : (resource, params) => Promise.reject(`${resource} getManyReference not implemented`),
+    getManyReference : (resource) => Promise.reject(`${resource} getManyReference not implemented`),
     create:  async (resource, params) => {
         const apiResource = resolveApiResource(resource);
         const url = `${apiUrl}${apiResource}`;
@@ -105,8 +116,8 @@ export const schemasDataProvider: DataProvider = (recordIdProvider) => ({
             data: {...params.data, id: json.id},
         });
     },
-    updateMany: (resource, params) => Promise.reject(`${resource} updateMany not implemented`),
-    deleteMany: (resource, params) => Promise.reject(`${resource} delete not implemented`),
+    updateMany: (resource) => Promise.reject(`${resource} updateMany not implemented`),
+    deleteMany: (resource) => Promise.reject(`${resource} delete not implemented`),
     getAttributeValues: (resource: string, attributeName: string) => {
         const apiResource = 'schemas';
         const responseResourceName = apiResource;
