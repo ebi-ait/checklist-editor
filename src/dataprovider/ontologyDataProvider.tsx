@@ -19,22 +19,18 @@ export const ontologyDataProvider: DataProvider = {
     getList: (resource, params) => {
         const {filter = {}, pagination, sort, meta} = params;
 
-        // Adjust the URL to point to the right endpoint for lists
-        const apiResource = resolveApiResource(resource);
+        let ontologySearchText:string = filter?.q ?? '';
+        if (!ontologySearchText.includes('*')) {
+            ontologySearchText+='*';
+        }
         const query = {
             type:'ontology',
-            q:'*',
+            q: ontologySearchText,
+            queryFields:'ontology_name'
             // TODO: how to pass page info to ols api?
         };
 
         const queryString = new URLSearchParams(query).toString();
-        if (Object.keys(filter).length > 0) {
-            if (filter.q) { // it's a text search
-                searchResource = '/search/findAllByTextPartial'
-            } else { // it's a regular attribute search
-                searchResource = '/search/findByExample'
-            }
-        }
         const url = `${apiUrl}search?${queryString}`;
         return httpClient(url)
             .then(({json}) => {
