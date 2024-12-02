@@ -8,7 +8,8 @@ import {
     ReferenceInput,
     SelectInput,
     SimpleForm,
-    SimpleFormIterator, TextField,
+    SimpleFormIterator,
+    TextField,
     TextInput,
     useNotify,
     useRecordContext,
@@ -57,7 +58,7 @@ export const ChecklistForm = () => {
             <SimpleFormIterator inline>
                 <ReferenceInput source="fieldId"
                                 reference="fields"
-                                queryOptions={{ meta: { size: 300 } }}>
+                                queryOptions={{meta: {size: 300}}}>
                     <AutocompleteInput
                         optionText={<FieldRender/>}
                         inputText={(record) => `${record.label} (${record.type})`}/>

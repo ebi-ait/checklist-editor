@@ -1,20 +1,15 @@
-import {DataProvider, fetchUtils} from "react-admin";
+import {DataProvider} from "react-admin";
 import config from "../config.tsx";
-import {ChecklistProps} from "../model/Checklist.tsx";
+import {httpClient} from "./authClient.tsx";
 import {fixTrailingSlash, resolveApiResource} from "./schemaStoreDataProvider.tsx";
 
 const apiUrl = fixTrailingSlash(config.SCHEMA_STORE_URL);
-const httpClient = fetchUtils.fetchJson;
 
-const recordToId = (record: ChecklistProps) => ({
-    id: `${record.accession}:${record.version}`,
-    ...record
-});
 const idFromAttribute = (attribute: string) => (record) => ({id: record[attribute], ...record})
 
-export const schemasDataProvider: DataProvider = {
+export const schemasDataProvider: DataProvider = (recordIdProvider) => ({
 
-    getList: (resource, params) => {
+    getList: (resource:string, params) => {
         const {filter = {}, pagination, sort} = params;
 
         // Adjust the URL to point to the right endpoint for lists
@@ -36,7 +31,7 @@ export const schemasDataProvider: DataProvider = {
             .then(({json}) => {
                 // Extract the embedded resources
                 let data = json._embedded?.[responseResourceName] || [];
-                data = data.map(recordToId)
+                data = data.map(recordIdProvider);
                 return {
                     data,
                     total: json.page?.totalElements || data.length,
@@ -47,15 +42,16 @@ export const schemasDataProvider: DataProvider = {
                 };
             });
     },
-    getOne: (resource, params) => {
+    getOne : (resource:string, params) => {
         return httpClient(`${apiUrl}${resolveApiResource(resource)}/${params.id}`)
             .then(({json}) => {
-                let data = json; // Assuming json is the schema object itself
-                data = recordToId(data);
-                return {data};
+                let record = json; // Assuming json is the schema object itself
+                record = recordIdProvider(record);
+                return {data: record};
             });
     },
-    getMany: (resource, params) => {
+
+    getMany : (resource:string, params) => {
         const {ids, meta = {}} = params;
         const apiResource = resolveApiResource(resource);
         const searchParams = new URLSearchParams();
@@ -72,7 +68,7 @@ export const schemasDataProvider: DataProvider = {
             .then(({json}) => {
                 // Extract the embedded resources
                 let data = json._embedded?.[apiResource] || [];
-                data = data.map(recordToId)
+                data = data.map(recordIdProvider)
                 return {
                     data,
                     total: json.page?.totalElements || data.length,
@@ -83,8 +79,8 @@ export const schemasDataProvider: DataProvider = {
                 };
             });
     },
-    getManyReference: (resource, params) => Promise.reject('schema getManyReference not implemented'),
-    create: async (resource, params) => {
+    getManyReference : (resource, params) => Promise.reject(`${resource} getManyReference not implemented`),
+    create:  async (resource, params) => {
         const apiResource = resolveApiResource(resource);
         const url = `${apiUrl}${apiResource}`;
         const {json} = await httpClient(url, {
@@ -133,6 +129,6 @@ export const schemasDataProvider: DataProvider = {
                     }
                 };
             });
-    }
 
-};
+    }
+});

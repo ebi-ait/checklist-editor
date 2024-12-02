@@ -1,4 +1,6 @@
+import React from "react";
 import {
+    CanAccess,
     CloneButton,
     CreateButton,
     Datagrid,
@@ -24,6 +26,7 @@ const SchemaListActions = () => (
     </TopToolbar>
 );
 
+
 const filters = [
     <SearchInput source="searchable" alwaysOn/>,
     <SelectInput source="latest"
@@ -32,11 +35,12 @@ const filters = [
                  choices={[{id:"ENA", name:"ENA"}, {id:"BIOSAMPLES",name:'BioSamples'}]}/>,
     <SelectAttrbiuteInput source="group"/>
 ];
-
 const ConditionalEditButton = () => {
     const record = useRecordContext();
     return record && record.editable ? <EditButton/> : null;
 };
+
+
 export const ChecklistList = () => {
     return (
         <List
@@ -56,10 +60,10 @@ export const ChecklistList = () => {
                     render={record => record.schemaFieldAssociations?.length ?? 0}
                 />
                 <ConditionalEditButton/>
-                <CloneButton/>
+                <CanAccess action="create">
+                    <CloneButton/>
+                </CanAccess>
             </Datagrid>
         </List>
     );
 };
-
-

@@ -1,4 +1,5 @@
-import {DataProvider, fetchUtils} from 'react-admin';
+import {DataProvider} from 'react-admin';
+import {ChecklistProps} from "../model/Checklist.tsx";
 
 import {fieldsDataProvider} from "./fieldsDataProvider.tsx";
 import {ontologyDataProvider} from "./ontologyDataProvider.tsx";
@@ -10,17 +11,30 @@ export function fixTrailingSlash(url: string) {
 
 const resourceMap: { [k: string]: string } = {
     checklists: 'mongoJsonSchemas',
+    users: 'users',
 };
 
 export function resolveApiResource(resource: string) {
     return resourceMap?.[resource] || resource;
 }
 
+const checklistRecordToId = (record: ChecklistProps) => ({
+    ...record,
+    id: `${record.accession}:${record.version}`,
+});
+
+const userRecordToId = (record) => ({
+    ...record,
+    id: record.username,
+});
+
 const dataProviderRegistry: { [k: string]: DataProvider } = {
-    'checklists': schemasDataProvider,
+    'checklists': schemasDataProvider(checklistRecordToId),
+    'users': schemasDataProvider(userRecordToId),
     'fields': fieldsDataProvider,
     'ontologies': ontologyDataProvider,
 };
+
 const callDataProviderFunction = function (resource: string, op: string, params: any) {
     if (Object.prototype.hasOwnProperty.call(dataProviderRegistry, resource)) {
         return dataProviderRegistry[resource]?.[op](resource, params);

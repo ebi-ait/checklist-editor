@@ -2,10 +2,10 @@
 import {DataProvider, fetchUtils, SortPayload} from "react-admin";
 import config from "../config.tsx";
 import {FieldProps} from "../model/Field.tsx";
+import {httpClient} from "./authClient.tsx";
 import {fixTrailingSlash, resolveApiResource} from "./schemaStoreDataProvider.tsx";
 
 const apiUrl = fixTrailingSlash(config.SCHEMA_STORE_URL);
-const httpClient = fetchUtils.fetchJson;
 
 const recordToId = (record: FieldProps) => ({
     id: `${record.name}:${record.version}`,
