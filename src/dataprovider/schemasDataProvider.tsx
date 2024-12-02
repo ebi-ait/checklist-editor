@@ -53,8 +53,11 @@ export const schemasDataProvider: DataProvider = (recordIdProvider) => ({
         } else {
             searchResource = `/${id}`;
         }
-        const query = searchParams.toString();
-        return httpClient(`${apiUrl}${resolveApiResource(resource)}${searchResource}?${query}`)
+        let query = searchParams.toString();
+        if (query != '') {
+           query = '?'+query;
+        }
+        return httpClient(`${apiUrl}${resolveApiResource(resource)}${searchResource}${query}`)
             .then(({json}) => {
                 let record = json; // Assuming json is the schema object itself
                 record = recordIdProvider(record);

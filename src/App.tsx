@@ -47,12 +47,6 @@ const App: React.FC = () => {
                       create={FieldCreate}
                       icon={ListIcon}
             />
-            <Resource name="users" list={UserList}
-                      edit={UserEdit}
-                      show={UserShow}
-                      create={UserCreate}
-                      icon={PeopleIcon}/>
-
         </Admin>
     );
 };
