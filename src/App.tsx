@@ -1,5 +1,6 @@
 import ChecklistIcon from '@mui/icons-material/Checklist';
 import ListIcon from '@mui/icons-material/List';
+import FieldGroupIcon from '@mui/icons-material/LibraryBooks'
 import PeopleIcon from '@mui/icons-material/People';
 import {QueryClient} from '@tanstack/react-query';
 import React from 'react';
@@ -16,6 +17,9 @@ import {FieldList} from "./components/FieldList.tsx";
 import checklistDataProvider from './dataprovider/schemaStoreDataProvider.tsx';
 import {appTheme, darkTheme} from "./theme.tsx";
 import {UserCreate, UserEdit, UserList, UserShow} from "./components/User.tsx";
+import {FieldGroupList} from "./components/FieldGroupList.tsx";
+import {FieldGroupEdit} from "./components/FieldGroupEdit.tsx";
+import {FieldGroupCreate} from "./components/FieldGroupCreate.tsx";
 
 const App: React.FC = () => {
     const queryClient = new QueryClient({
@@ -46,6 +50,12 @@ const App: React.FC = () => {
                       edit={FieldEdit}
                       create={FieldCreate}
                       icon={ListIcon}
+            />
+            <Resource name="fieldGroups"
+                      list={FieldGroupList}
+                      edit={FieldGroupEdit}
+                      create={FieldGroupCreate}
+                      icon={FieldGroupIcon}
             />
         </Admin>
     );
