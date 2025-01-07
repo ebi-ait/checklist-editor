@@ -1,16 +1,14 @@
-import React from "react";
+import React, {useState} from "react";
 import {
-    ArrayInput,
+    ArrayInput, AutocompleteArrayInput,
     AutocompleteInput,
     Edit,
-    FormDataConsumer,
     ReferenceInput,
     required,
     SimpleForm,
     SimpleFormIterator,
-    TextInput,
-    useRecordContext,
-    Validator
+    TextInput, useDataProvider,
+    useRecordContext
 } from "react-admin";
 import {FieldProps} from "../model/Field.tsx";
 import {Stack, Typography} from "@mui/material";
@@ -47,22 +45,39 @@ const FieldRender = () => {
     );
 }
 
-export const FieldGroupForm = () =>
-    <SimpleForm mode="onChange" reValidateMode="onChange">
+
+export const FieldGroupForm = () => {
+
+    const options = ['host disease stage', 'health'];
+
+    const dataProvider = useDataProvider();
+    const [fieldOptions, setFieldOptions] = useState([]);
+
+
+    return <SimpleForm mode="onChange" reValidateMode="onChange">
         <TextInput source="name" validate={required()}/>
         <TextInput source="description" multiline={true} validate={required()}/>
-        <ArrayInput source="schemaFieldAssociations" label="Fields">
+
+        <ArrayInput source="fields" label="Fields">
             <SimpleFormIterator inline>
-                <ReferenceInput source="fieldId"
-                                reference="fields"
-                                queryOptions={{meta: {size: 300}}}>
-                    <AutocompleteInput
-                        optionText={<FieldRender/>}
-                        inputText={(record) => `${record.label} (${record.type})`}/>
-                </ReferenceInput>
+                <TextInput name={""} source={""}/>
+                {/*<AutocompleteInput choices={options} />*/}
             </SimpleFormIterator>
         </ArrayInput>
+
+        {/*<ArrayInput source="fields" label="Fields">*/}
+        {/*    <SimpleFormIterator inline>*/}
+        {/*        <ReferenceInput source="fields"*/}
+        {/*                        reference="fields"*/}
+        {/*                        queryOptions={{meta: {size: 300}}}>*/}
+        {/*            <AutocompleteInput*/}
+        {/*                optionText={<FieldRender/>}*/}
+        {/*                inputText={(record) => `${record.label} (${record.type})`}/>*/}
+        {/*        </ReferenceInput>*/}
+        {/*    </SimpleFormIterator>*/}
+        {/*</ArrayInput>*/}
     </SimpleForm>;
+}
 
 export const FieldGroupEdit = () =>
     <Edit>
