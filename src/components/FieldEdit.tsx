@@ -1,19 +1,17 @@
-import React, {useEffect, useState} from "react";
+import React from "react";
 import {
-    ArrayInput, AutocompleteInput,
+    ArrayInput,
     Edit,
     FormDataConsumer,
-    RadioButtonGroupInput, ReferenceInput,
-    required, SelectInput,
+    RadioButtonGroupInput,
+    ReferenceInput,
+    required,
+    SelectInput,
     SimpleForm,
     SimpleFormIterator,
-    TextInput, useDataProvider, useRecordContext,
+    TextInput,
     Validator
 } from "react-admin";
-import {SelectAttrbiuteInput} from "./SelectAttrbiuteInput.tsx";
-import {FieldProps} from "../model/Field.tsx";
-import {Stack, Typography} from "@mui/material";
-import {FieldGroupProps} from "../model/FieldGroup.tsx";
 
 // registry of field types and their specific controls
 const inputMap = {
@@ -44,73 +42,15 @@ function toTitleCase(s: string) {
     return s[0]?.toUpperCase() + (s.length > 1 ? s.substring(1) : '');
 }
 
-
-const FieldGroupRender = () => {
-    const record: FieldGroupProps | undefined = useRecordContext();
-    if (!record) return null;
-    return (
-        <Stack direction="row" gap={1} alignItems="left">
-            <Stack>
-                {record.name}
-                <Typography variant="caption" color="text.secondary">
-                    {record.description}
-                </Typography>
-            </Stack>
-        </Stack>
-    );
-}
-
-export const FieldForm = () => {
-    // const dataProvider = useDataProvider();
-    // const [fieldGroupOptions, setFieldGroupOptions] = useState(true);
-    //
-    // useEffect(() => {
-    //     // Fetch attributes from the "Attributes" resource
-    //     dataProvider
-    //         .getList('fieldGroups', {
-    //             pagination: { page: 1, perPage: 100 },
-    //             sort: { field: 'name', order: 'ASC' },
-    //             filter: {},
-    //         })
-    //         .then(({ data }) => {
-    //             setFieldGroupOptions(
-    //                 data.map((attribute) => ({
-    //                     id: attribute.id,
-    //                     name: attribute.name,
-    //                 }))
-    //             );
-    //         })
-    //         .catch((error) => {
-    //             console.error('Error fetching attributes:', error);
-    //         });
-    // }, [dataProvider]);
-
-    return (
+export const FieldForm = () =>
     <SimpleForm mode="onChange" reValidateMode="onChange">
         <TextInput source="label" validate={required()}/>
         <TextInput source="description" multiline={true} validate={required()}/>
-        <SelectAttrbiuteInput source="group"/>
+        {/*<SelectAttrbiuteInput source="group"/>*/}
 
-        <SelectInput
-            source="group"
-            label="Field Group"
-            // choices={fieldGroupOptions}
-            optionText="name"
-            optionValue="id"
-        />
-
-        <ArrayInput source="group" label="Field Group">
-            <SimpleFormIterator inline>
-                <ReferenceInput source="fieldGroupId"
-                                reference="fieldGroups"
-                                queryOptions={{meta: {size: 300}}}>
-                    <AutocompleteInput
-                        optionText={<FieldGroupRender/>}
-                        inputText={(record) => `${record.name}`}/>
-                </ReferenceInput>
-            </SimpleFormIterator>
-        </ArrayInput>
-
+        <ReferenceInput label="group" source="group" reference="fieldGroups" perPage={200}>
+            <SelectInput/>
+        </ReferenceInput>
 
         <RadioButtonGroupInput source="type"
                                validate={required()}
@@ -125,8 +65,8 @@ export const FieldForm = () => {
                 <TextInput/>
             </ SimpleFormIterator>
         </ArrayInput>
-    </SimpleForm>);
-}
+    </SimpleForm>;
+
 // Custom input component based on an attribute
 export const ConditionalInput = ({selectorAttrName = 'type'}) =>
     <FormDataConsumer>

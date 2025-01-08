@@ -16,7 +16,7 @@ const idFromAttribute = (attribute: string) => (record) => ({id: record[attribut
 export const fieldGroupsDataProvider: DataProvider = {
 
     getList: (resource, params) => {
-        const {filter = {}, pagination, sort, meta} = params;
+        const {filter = {}, pagination, sort} = params;
 
         // Adjust the URL to point to the right endpoint for lists
         const apiResource = resolveApiResource(resource);
@@ -25,7 +25,7 @@ export const fieldGroupsDataProvider: DataProvider = {
             ...filter.q ? {text: filter.q} : {}, // Add the 'text' parameter if 'q' is provided
             page: (pagination.page - 1) + '', // react-admin is 1 based, spring is 0 based
             size: pagination.perPage + '',
-            sort: (meta.sort ?? [sort]).map((s: SortPayload) => `${s.field},${s.order}`),
+            sort: `${sort.field},${sort.order}`,
             ...filter
         };
 
