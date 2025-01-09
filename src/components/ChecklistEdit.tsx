@@ -33,7 +33,7 @@ const FieldRender = () => {
     );
 }
 
-export const ChecklistForm = () => {
+export const ChecklistForm = ({mandatoryFields}) => {
     const record = useRecordContext();
     if (record && !record.id) { // have the record and 'record.id' is not present => we are cloning a record
         // todo discuss
@@ -47,7 +47,8 @@ export const ChecklistForm = () => {
         record.id = "";
     }
 
-    return <SimpleForm>
+
+    return <SimpleForm defaultValues={mandatoryFields}>
         <TextInput source="title"/>
         <TextField source="accession" label="Accession"/>
         <TextField source="version" label="Version"/>
