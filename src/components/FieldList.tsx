@@ -52,8 +52,9 @@ export const FieldList = () =>
             <Datagrid expand={FieldPreviewPanel}>
                 <FieldTypeIcon/>
                 <TextField source="label"/>
-                <TextField source="group" label="Field Group"/>
-                <ReferenceField source="group" reference="fieldGroups" label="Group">
+                <ReferenceField source="group"
+                                reference="fieldGroups"
+                                label="Group">
                     <TextField source="name" />
                 </ReferenceField>
                 <TextField source="version"/>

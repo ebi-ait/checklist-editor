@@ -1,9 +1,9 @@
 // This data provider handles fields
-import {DataProvider, SortPayload} from "react-admin";
+import {DataProvider, HttpError} from "react-admin";
 import config from "../config.tsx";
+import {FieldGroupProps} from "../model/FieldGroup.tsx";
 import {httpClient} from "./authClient.tsx";
 import {fixTrailingSlash, resolveApiResource} from "./schemaStoreDataProvider.tsx";
-import {FieldGroupProps} from "../model/FieldGroup.tsx";
 
 const apiUrl = fixTrailingSlash(config.SCHEMA_STORE_URL);
 
@@ -86,7 +86,11 @@ export const fieldGroupsDataProvider: DataProvider = {
         const url = `${apiUrl}${apiResource}${searchResource}?${query}`;
         return httpClient(url)
             .then(({json}) => {
-                // Extract the embedded resources
+                if (!json._embedded) {
+                    return Promise.reject(
+                        new HttpError(`Missing _embedded attribute in HAL response from ${url}`, 500)
+                    );
+                }
                 let data = json._embedded?.[apiResource] || [];
                 data = data.map(recordToId)
                 return {
