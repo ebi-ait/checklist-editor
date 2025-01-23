@@ -66,6 +66,61 @@ deploy_prod:
   when: manual
   extends: .kube_deploy_script
 
+deploy_dev_primary:
+  variables:
+    ENVIRONMENT_NAME: dev
+  environment:
+    name: primary_hl_dev
+    url: https://wwwint.ebi.ac.uk/biosamples/checklist-editor
+  when: manual
+  extends: .kube_deploy_script
+
+deploy_test_primary:
+  variables:
+    ENVIRONMENT_NAME: primary_hl_test
+  environment:
+    name: test
+    url: https://wwwdev.ebi.ac.uk/biosamples/checklist-editor
+  only:
+    - dev
+    - main
+  when: manual
+  extends: .kube_deploy_script
+
+deploy_test_fallback:
+  variables:
+    ENVIRONMENT_NAME: test
+  environment:
+    name: fallback_hx_test
+    url: https://wwwdev.ebi.ac.uk/biosamples/checklist-editor
+  only:
+    - dev
+    - main
+  when: manual
+  extends: .kube_deploy_script
+
+deploy_prod_primary:
+  variables:
+    ENVIRONMENT_NAME: prod
+  environment:
+    name: primary_hl_prod
+    url: https://www.ebi.ac.uk/biosamples/checklist-editor
+  only:
+    - main
+  when: manual
+  extends: .kube_deploy_script
+
+deploy_prod_fallback:
+  variables:
+    ENVIRONMENT_NAME: prod
+  environment:
+    name: fallback_hx_prod
+    url: https://www.ebi.ac.uk/biosamples/checklist-editor
+  only:
+    - main
+  when: manual
+  extends: .kube_deploy_script
+
 .kube_deploy_script:
   stage: deploy
   image: dtzar/helm-kubectl
