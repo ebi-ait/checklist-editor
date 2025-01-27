@@ -66,7 +66,7 @@ deploy_prod:
   when: manual
   extends: .kube_deploy_script
 
-deploy_primary_int:
+deploy_int:
   variables:
     ENVIRONMENT_NAME: dev
   environment:
@@ -77,9 +77,9 @@ deploy_primary_int:
 
 deploy_primary_dev:
   variables:
-    ENVIRONMENT_NAME: primary_hl_test
+    ENVIRONMENT_NAME: test
   environment:
-    name: test
+    name: primary_hl_test
     url: https://wwwdev.ebi.ac.uk/biosamples/checklist-editor
   only:
     - dev
