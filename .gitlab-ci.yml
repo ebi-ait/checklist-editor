@@ -66,7 +66,7 @@ deploy_prod:
   when: manual
   extends: .kube_deploy_script
 
-deploy_dev_primary:
+deploy_primary_int:
   variables:
     ENVIRONMENT_NAME: dev
   environment:
@@ -75,7 +75,7 @@ deploy_dev_primary:
   when: manual
   extends: .kube_deploy_script
 
-deploy_test_primary:
+deploy_primary_dev:
   variables:
     ENVIRONMENT_NAME: primary_hl_test
   environment:
@@ -87,7 +87,7 @@ deploy_test_primary:
   when: manual
   extends: .kube_deploy_script
 
-deploy_test_fallback:
+deploy_fallback_dev:
   variables:
     ENVIRONMENT_NAME: test
   environment:
@@ -99,7 +99,7 @@ deploy_test_fallback:
   when: manual
   extends: .kube_deploy_script
 
-deploy_prod_primary:
+deploy_primary_prod:
   variables:
     ENVIRONMENT_NAME: prod
   environment:
@@ -110,7 +110,7 @@ deploy_prod_primary:
   when: manual
   extends: .kube_deploy_script
 
-deploy_prod_fallback:
+deploy_fallback_prod:
   variables:
     ENVIRONMENT_NAME: prod
   environment:
