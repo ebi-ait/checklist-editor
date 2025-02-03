@@ -26,7 +26,6 @@ const SchemaListActions = () => (
     </TopToolbar>
 );
 
-
 const filters = [
     <SearchInput source="searchable" alwaysOn/>,
     <SelectInput source="latest"
@@ -35,11 +34,11 @@ const filters = [
                  choices={[{id:"ENA", name:"ENA"}, {id:"BIOSAMPLES",name:'BioSamples'}]}/>,
     <SelectAttrbiuteInput source="group"/>
 ];
+
 const ConditionalEditButton = () => {
     const record = useRecordContext();
     return record && record.editable ? <EditButton/> : null;
 };
-
 
 export const ChecklistList = () => {
     return (
@@ -47,6 +46,7 @@ export const ChecklistList = () => {
             actions={<SchemaListActions/>}
             filters={filters}
             filterDefaultValues={{latest:true}}
+            sort={{ field: 'lastModifiedDate', order: 'DESC' }}
         >
             <Datagrid expand={ChecklistPreviewPanel}>
                 <TextField source="title"/>

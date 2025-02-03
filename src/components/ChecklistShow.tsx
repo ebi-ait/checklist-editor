@@ -12,12 +12,13 @@ import {FieldTypeIcon} from "./FieldTypeIcon.tsx";
 import {IconField} from "./IconField.tsx";
 
 export const ChecklistShow = () => (
-    <Show emptyWhileLoading actions={<PostShowActions />} >
+    <Show emptyWhileLoading
+          actions={<ChecklistShowActions />} >
         <ChecklistShowContent />
     </Show>
 );
 
-const PostShowActions = () => {
+const ChecklistShowActions = () => {
     const record = useRecordContext();
     return (
         <TopToolbar>
@@ -40,7 +41,7 @@ const ChecklistShowContent = () => {
                     <TextField source="group"/>
                     <ArrayField source="schemaFieldAssociations" label="Fields">
                         <Datagrid rowClick={false}>
-                            <ReferenceField source="fieldId" reference="fields" link={false}
+                            <ReferenceField source="fieldId" reference="fields"
                                             queryOptions={{ meta: { size: 300, parentId: record.id } }}>
                                 <TextField source="label"/>
                             </ReferenceField>
@@ -50,7 +51,11 @@ const ChecklistShowContent = () => {
                             </ReferenceField>
                             <ReferenceField label="Group" source="fieldId" reference="fields" link={false}
                                             queryOptions={{ meta: { size: 300, parentId: record.id } }}>
-                                <TextField source="group"/>
+                                <ReferenceField source="group"
+                                                reference="fieldGroups"
+                                                label="Group">
+                                    <TextField source="name" />
+                                </ReferenceField>
                             </ReferenceField>
                             <IconField source="requirementType" label="Required" iconMapping={{
                                 MANDATORY: PriorityHigh,

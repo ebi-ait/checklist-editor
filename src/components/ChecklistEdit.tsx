@@ -26,7 +26,7 @@ const FieldRender = () => {
             <Stack>
                 {record.label}
                 <Typography variant="caption" color="text.secondary">
-                    {record.type}, {record.group}
+                    {record.type}, {record.version} ({record.latest?'latest':'not latest'}), {record.group}
                 </Typography>
             </Stack>
         </Stack>
@@ -58,8 +58,9 @@ export const ChecklistForm = () => {
             <SimpleFormIterator inline>
                 <ReferenceInput source="fieldId"
                                 reference="fields"
-                                queryOptions={{meta: {size: 300}}}>
+                                queryOptions={{meta: {size: 300, latest: true}}}>
                     <AutocompleteInput
+                        filterToQuery={q => ({ q, searchIndex:q })}
                         optionText={<FieldRender/>}
                         inputText={(record) => `${record.label} (${record.type})`}/>
                 </ReferenceInput>
