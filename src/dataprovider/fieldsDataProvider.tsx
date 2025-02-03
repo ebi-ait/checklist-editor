@@ -22,22 +22,19 @@ export const fieldsDataProvider: DataProvider = {
         const apiResource = resolveApiResource(resource);
         const responseResourceName = apiResource
         const query = {
-            ...filter.q ? {text: filter.q} : {}, // Add the 'text' parameter if 'q' is provided
             page: (pagination.page - 1) + '', // react-admin is 1 based, spring is 0 based
             size: pagination.perPage + '',
             sort: (meta.sort ?? [sort]).map((s: SortPayload) => `${s.field},${s.order}`),
             ...filter
         };
-
+        if (Object.prototype.hasOwnProperty.call(meta, 'latest')) {
+            query.latest = meta.latest;
+        }
         const queryString = new URLSearchParams(query).toString();
         // Adjust the URL to point to the right endpoint for lists
         let searchResource = '';
         if (Object.keys(filter).length > 0) {
-            if (filter.q) { // it's a text search
-                searchResource = '/search/findAllByTextPartial'
-            } else { // it's a regular attribute search
-                searchResource = '/search/findByExample'
-            }
+            searchResource = '/search/findByExample'
         }
         const url = `${apiUrl}${apiResource}${searchResource}?${queryString}`;
         return httpClient(url)
@@ -81,6 +78,9 @@ export const fieldsDataProvider: DataProvider = {
         }
         if (Object.prototype.hasOwnProperty.call(meta, 'size')) {
             searchParams.append('size', meta.size)
+        }
+        if (Object.prototype.hasOwnProperty.call(meta, 'latest')) {
+            searchParams.append('latest', meta.latest)
         }
         const query = searchParams.toString();
         const url = `${apiUrl}${apiResource}${searchResource}?${query}`;

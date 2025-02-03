@@ -1,6 +1,8 @@
+import React from "react";
 import {
+    CanAccess, CloneButton,
     CreateButton,
-    Datagrid,
+    Datagrid, DateField,
     EditButton,
     FilterButton,
     List, ReferenceField,
@@ -22,14 +24,14 @@ const FieldListActions = () => (
 );
 
 const filters = [
-    <SearchInput source="q" alwaysOn/>,
+    <SearchInput source="searchIndex" alwaysOn/>,
     <SelectInput source="latest"
                  choices={[{id: true, name: 'True'}, {id: false, name: 'False'}]}/>,
     <SelectAttrbiuteInput source="type"/>,
     <SelectAttrbiuteInput source="group"/>
 
 ];
-const ConditionalEditButton = () => {
+export const ConditionalEditButton = () => {
     const record = useRecordContext();
     return record && record.latest ? <EditButton/> : null;
 };
@@ -40,6 +42,7 @@ export const FieldList = () =>
             actions={<FieldListActions/>}
             filters={filters}
             filterDefaultValues={{latest: true}}
+            sort={{ field: 'lastModifiedDate', order: 'DESC' }}
             queryOptions={{
                 meta: {
                     sort: [
@@ -58,6 +61,7 @@ export const FieldList = () =>
                     <TextField source="name" />
                 </ReferenceField>
                 <TextField source="version"/>
+                <DateField source="lastModifiedDate" showTime/>
                 <ConditionalEditButton/>
             </Datagrid>
         </List>

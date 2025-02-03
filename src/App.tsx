@@ -14,6 +14,7 @@ import {ChecklistShow} from "./components/ChecklistShow.tsx";
 import {FieldCreate} from "./components/FieldCreate.tsx";
 import {FieldEdit} from "./components/FieldEdit.tsx";
 import {FieldList} from "./components/FieldList.tsx";
+import {FieldShow} from "./components/FieldShow.tsx";
 import checklistDataProvider from './dataprovider/schemaStoreDataProvider.tsx';
 import {appTheme, darkTheme} from "./theme.tsx";
 import {UserCreate, UserEdit, UserList, UserShow} from "./components/User.tsx";
@@ -47,6 +48,7 @@ const App: React.FC = () => {
             />
             <Resource name="fields"
                       list={FieldList}
+                      show={FieldShow}
                       edit={FieldEdit}
                       create={FieldCreate}
                       icon={ListIcon}

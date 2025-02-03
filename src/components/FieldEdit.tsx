@@ -82,6 +82,7 @@ export const ConditionalInput = ({selectorAttrName = 'type'}) =>
 
 
 export const FieldEdit = () =>
-    <Edit>
+    <Edit mutationMode="pessimistic">
         <FieldForm/>
     </Edit>;
+
