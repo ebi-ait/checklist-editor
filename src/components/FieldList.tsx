@@ -2,11 +2,11 @@ import React from "react";
 import {
     CanAccess, CloneButton,
     CreateButton,
-    Datagrid, DateField,
+    Datagrid, DatagridConfigurable, DateField,
     EditButton,
     FilterButton,
     List, ReferenceField,
-    SearchInput,
+    SearchInput, SelectColumnsButton,
     SelectInput,
     TextField,
     TopToolbar,
@@ -20,6 +20,7 @@ const FieldListActions = () => (
     <TopToolbar>
         <FilterButton/>
         <CreateButton/>
+        <SelectColumnsButton/>
     </TopToolbar>
 );
 
@@ -52,7 +53,7 @@ export const FieldList = () =>
                 }
             }}
         >
-            <Datagrid expand={FieldPreviewPanel}>
+            <DatagridConfigurable expand={FieldPreviewPanel}>
                 <FieldTypeIcon/>
                 <TextField source="label"/>
                 <ReferenceField source="group"
@@ -64,6 +65,6 @@ export const FieldList = () =>
                 <TextField source="lastModifiedBy"/>
                 <DateField source="lastModifiedDate" showTime/>
                 <ConditionalEditButton/>
-            </Datagrid>
+            </DatagridConfigurable>
         </List>
     );

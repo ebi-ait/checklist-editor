@@ -1,15 +1,15 @@
-import React from "react";
 import {
     CanAccess,
     CloneButton,
     CreateButton,
-    Datagrid,
+    DatagridConfigurable,
     DateField,
     EditButton,
     FilterButton,
     FunctionField,
     List,
     SearchInput,
+    SelectColumnsButton,
     SelectInput,
     TextField,
     TopToolbar,
@@ -23,15 +23,16 @@ const SchemaListActions = () => (
     <TopToolbar>
         <FilterButton/>
         <CreateButton/>
+        <SelectColumnsButton/>
     </TopToolbar>
 );
 
 const filters = [
     <SearchInput source="searchable" alwaysOn/>,
     <SelectInput source="latest"
-                 choices={[{id:true,name:'True'}, {id:false,name:'False'}]}/>,
+                 choices={[{id: true, name: 'True'}, {id: false, name: 'False'}]}/>,
     <SelectInput source="authority"
-                 choices={[{id:"ENA", name:"ENA"}, {id:"BIOSAMPLES",name:'BioSamples'}]}/>,
+                 choices={[{id: 'ENA', name: 'ENA'}, {id: 'BIOSAMPLES', name: 'BioSamples'}]}/>,
     <SelectAttrbiuteInput source="group"/>
 ];
 
@@ -45,14 +46,13 @@ export const ChecklistList = () => {
         <List
             actions={<SchemaListActions/>}
             filters={filters}
-            filterDefaultValues={{latest:true}}
-            sort={{ field: 'lastModifiedDate', order: 'DESC' }}
+            filterDefaultValues={{latest: true, authority: 'ENA'}}
+            sort={{field: 'lastModifiedDate', order: 'DESC'}}
         >
-            <Datagrid expand={ChecklistPreviewPanel}>
+            <DatagridConfigurable expand={ChecklistPreviewPanel}>
                 <TextField source="title"/>
                 <TextField source="accession"/>
                 <TextField source="version"/>
-                <TextField source="authority"/>
                 <TextField source="group"/>
                 <TextField source="lastModifiedBy"/>
                 <DateField source="lastModifiedDate" showTime/>
@@ -64,7 +64,7 @@ export const ChecklistList = () => {
                 <CanAccess action="create">
                     <CloneButton/>
                 </CanAccess>
-            </Datagrid>
+            </DatagridConfigurable>
         </List>
     );
 };
