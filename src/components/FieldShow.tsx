@@ -31,6 +31,8 @@ export const FieldShow = () =>
                 <TextField source="name"/>
             </ReferenceField>
             <TextField source="version"/>
+            <TextField source="description"/>
+            <TextField source="lastModifiedBy"/>
             <DateField source="lastModifiedDate" showTime/>
             <ConditionalEditButton/>
         </SimpleShowLayout>

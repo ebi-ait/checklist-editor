@@ -49,6 +49,11 @@ const ChecklistShowContent = () => {
                                             queryOptions={{ meta: { size: 300, parentId: record.id } }}>
                                 <FieldTypeIcon/>
                             </ReferenceField>
+                            <ReferenceField label="Version" source="fieldId" reference="fields" link={false}
+                                            queryOptions={{ meta: { size: 300, parentId: record.id } }}>
+                                <TextField source="version"/>
+
+                            </ReferenceField>
                             <ReferenceField label="Group" source="fieldId" reference="fields" link={false}
                                             queryOptions={{ meta: { size: 300, parentId: record.id } }}>
                                 <ReferenceField source="group"

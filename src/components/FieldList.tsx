@@ -61,6 +61,7 @@ export const FieldList = () =>
                     <TextField source="name" />
                 </ReferenceField>
                 <TextField source="version"/>
+                <TextField source="lastModifiedBy"/>
                 <DateField source="lastModifiedDate" showTime/>
                 <ConditionalEditButton/>
             </Datagrid>
