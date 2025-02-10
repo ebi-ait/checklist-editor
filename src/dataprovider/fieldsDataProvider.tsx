@@ -100,9 +100,14 @@ export const fieldsDataProvider: DataProvider = {
             });
     },
     getManyReference: (resource, params) => {
-        const {id, target} = params;
+        const {id, target, pagination} = params;
         const apiResource = resolveApiResource(resource);
-        const searchParams = new URLSearchParams();
+        const searchParams = new URLSearchParams(
+            {
+                page: (pagination.page - 1) + '', // react-admin is 1 based, spring is 0 based
+                size: pagination.perPage + '',
+            }
+        );
         // target is the name of the query string parameter
         // id is the value
         // TODO: resolve search resource from target name

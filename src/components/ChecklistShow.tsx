@@ -1,20 +1,10 @@
-import {PriorityHigh, Recommend, ViewHeadline,} from '@mui/icons-material';
-import {
-    ArrayField,
-    Datagrid, EditButton,
-    ReferenceField,
-    Show,
-    SimpleShowLayout,
-    TextField, TopToolbar,
-    useRecordContext
-} from 'react-admin';
-import {FieldTypeIcon} from "./FieldTypeIcon.tsx";
-import {IconField} from "./IconField.tsx";
+import {EditButton, Show, SimpleShowLayout, TextField, TopToolbar, useRecordContext} from 'react-admin';
+import {PaginatedListField} from "./PaginatedListField.tsx";
 
 export const ChecklistShow = () => (
     <Show emptyWhileLoading
-          actions={<ChecklistShowActions />} >
-        <ChecklistShowContent />
+          actions={<ChecklistShowActions/>}>
+        <ChecklistShowContent/>
     </Show>
 );
 
@@ -22,7 +12,7 @@ const ChecklistShowActions = () => {
     const record = useRecordContext();
     return (
         <TopToolbar>
-            { record && record.editable &&  <EditButton /> }
+            {record && record.editable && <EditButton/>}
         </TopToolbar>
     );
 }
@@ -32,47 +22,17 @@ const ChecklistShowContent = () => {
     if (!record) return null;
 
     return (
-            <SimpleShowLayout>
-                    <TextField source="title"/>
-                    <TextField source="accession"/>
-                    <TextField source="version"/>
-                    <TextField source="description"/>
-                    <TextField source="authority"/>
-                    <TextField source="group"/>
-                    <ArrayField source="schemaFieldAssociations" label="Fields">
-                        <Datagrid rowClick={false}>
-                            <ReferenceField source="fieldId" reference="fields"
-                                            queryOptions={{ meta: { size: 300, parentId: record.id } }}>
-                                <TextField source="label"/>
-                            </ReferenceField>
-                            <ReferenceField label="Type" source="fieldId" reference="fields" link={false}
-                                            queryOptions={{ meta: { size: 300, parentId: record.id } }}>
-                                <FieldTypeIcon/>
-                            </ReferenceField>
-                            <ReferenceField label="Version" source="fieldId" reference="fields" link={false}
-                                            queryOptions={{ meta: { size: 300, parentId: record.id } }}>
-                                <TextField source="version"/>
-
-                            </ReferenceField>
-                            <ReferenceField label="Group" source="fieldId" reference="fields" link={false}
-                                            queryOptions={{ meta: { size: 300, parentId: record.id } }}>
-                                <ReferenceField source="group"
-                                                reference="fieldGroups"
-                                                label="Group">
-                                    <TextField source="name" />
-                                </ReferenceField>
-                            </ReferenceField>
-                            <IconField source="requirementType" label="Required" iconMapping={{
-                                MANDATORY: PriorityHigh,
-                                OPTIONAL: null,
-                                RECOMMENDED: Recommend,
-                            }}/>
-                            <IconField source="multiplicity" iconMapping={{
-                                Single: null,
-                                List: ViewHeadline,
-                            }}/>
-                        </Datagrid>
-                    </ArrayField>
+        <SimpleShowLayout>
+            <TextField source="title"/>
+            <SimpleShowLayout direction={"row"}>
+                <TextField source="accession"/>
+                <TextField source="version"/>
+                <TextField source="group"/>
+                <TextField source="authority"/>
             </SimpleShowLayout>
+            <TextField source="description"/>
+            <PaginatedListField source="schemaFieldAssociations" label="Fields"/>
+
+        </SimpleShowLayout>
     );
 };
