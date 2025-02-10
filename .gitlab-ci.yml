@@ -33,39 +33,6 @@ build_docker_image:
   after_script:
     - docker logout ${CI_REGISTRY}
 
-deploy_dev:
-  variables:
-    ENVIRONMENT_NAME: dev
-  environment:
-    name: dev
-    url: https://wwwint.ebi.ac.uk/biosamples/checklist-editor
-  when: manual
-  extends: .kube_deploy_script
-
-deploy_test:
-  variables:
-    ENVIRONMENT_NAME: test
-  environment:
-    name: test
-    url: https://wwwdev.ebi.ac.uk/biosamples/checklist-editor
-  only:
-    - dev
-    - main
-  when: manual
-  extends: .kube_deploy_script
-
-deploy_prod:
-  variables:
-    ENVIRONMENT_NAME: prod
-  environment:
-    name: prod
-    url: https://www.ebi.ac.uk/biosamples/checklist-editor
-  only:
-    - dev
-    - main
-  when: manual
-  extends: .kube_deploy_script
-
 deploy_int:
   variables:
     ENVIRONMENT_NAME: dev
@@ -147,5 +114,3 @@ deploy_fallback_prod:
                    --set "imagePullSecrets[0].name=$DOCKER_PULL_SECRET"
     - kubectl rollout restart deployment ${APP_NAME}
     - kubectl rollout status deployment ${APP_NAME} --timeout=90s
-    - kubectl wait --for=condition=Ready deployment/${APP_NAME} --timeout=60s
-
