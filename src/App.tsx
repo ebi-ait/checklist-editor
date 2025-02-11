@@ -15,6 +15,7 @@ import {FieldEdit} from "./components/FieldEdit.tsx";
 import {FieldGroupCreate} from "./components/FieldGroupCreate.tsx";
 import {FieldGroupEdit} from "./components/FieldGroupEdit.tsx";
 import {FieldGroupList} from "./components/FieldGroupList.tsx";
+import {FieldGroupShow} from "./components/FieldGroupShow.tsx";
 import {FieldList} from "./components/FieldList.tsx";
 import {FieldShow} from "./components/FieldShow.tsx";
 import checklistDataProvider from './dataprovider/schemaStoreDataProvider.tsx';
@@ -53,6 +54,7 @@ const App: React.FC = () => {
             />
             <Resource name="fieldGroups"
                       list={FieldGroupList}
+                      show={FieldGroupShow}
                       edit={FieldGroupEdit}
                       create={FieldGroupCreate}
                       icon={FieldGroupIcon}

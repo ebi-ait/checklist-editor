@@ -1,19 +1,21 @@
 import React from "react";
 import {
-    CanAccess, CloneButton,
     CreateButton,
-    Datagrid, DatagridConfigurable, DateField,
+    DatagridConfigurable,
+    DateField,
     EditButton,
     FilterButton,
-    List, ReferenceField,
-    SearchInput, SelectColumnsButton,
+    List,
+    ReferenceField,
+    SearchInput,
+    SelectColumnsButton,
     SelectInput,
     TextField,
     TopToolbar,
     useRecordContext
 } from 'react-admin';
-import {FieldTypeIcon} from "./FieldTypeIcon.tsx";
 import {FieldPreviewPanel} from "./FieldPreviewPanel.tsx";
+import {FieldTypeIcon} from "./FieldTypeIcon.tsx";
 import {SelectAttrbiuteInput} from "./SelectAttrbiuteInput.tsx";
 
 const FieldListActions = () => (
@@ -43,7 +45,7 @@ export const FieldList = () =>
             actions={<FieldListActions/>}
             filters={filters}
             filterDefaultValues={{latest: true}}
-            sort={{ field: 'lastModifiedDate', order: 'DESC' }}
+            sort={{field: 'lastModifiedDate', order: 'DESC'}}
             queryOptions={{
                 meta: {
                     sort: [
@@ -58,8 +60,9 @@ export const FieldList = () =>
                 <TextField source="label"/>
                 <ReferenceField source="group"
                                 reference="fieldGroups"
-                                label="Group">
-                    <TextField source="name" />
+                                label="Group"
+                                link={"show"}>
+                    <TextField source="name"/>
                 </ReferenceField>
                 <TextField source="version"/>
                 <TextField source="lastModifiedBy"/>
