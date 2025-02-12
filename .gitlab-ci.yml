@@ -9,12 +9,6 @@ variables:
   K8S_CLUSTER_URL: http://hx-rke-wp-webadmin-17-worker-1.caas.ebi.ac.uk
   APP_NAME: $CI_PROJECT_NAME
 
-cache:
-  key: ${CI_COMMIT_REF_SLUG}
-  paths:
-    - node_modules/
-    - dist/
-
 stages:
   - build
   - deploy
