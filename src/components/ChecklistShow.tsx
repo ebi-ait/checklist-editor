@@ -1,4 +1,4 @@
-import {EditButton, Show, SimpleShowLayout, TextField, TopToolbar, useRecordContext} from 'react-admin';
+import {DateField, EditButton, Show, SimpleShowLayout, TextField, TopToolbar, useRecordContext} from 'react-admin';
 import {PaginatedListField} from "./PaginatedListField.tsx";
 
 export const ChecklistShow = () => (
@@ -29,6 +29,8 @@ const ChecklistShowContent = () => {
                 <TextField source="version"/>
                 <TextField source="group"/>
                 <TextField source="authority"/>
+                <DateField source="lastModifiedDate"/>
+                <TextField source="lastModifiedBy"/>
             </SimpleShowLayout>
             <TextField source="description"/>
             <PaginatedListField source="schemaFieldAssociations" label="Fields"/>
