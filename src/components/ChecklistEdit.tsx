@@ -15,6 +15,7 @@ import {
     useRecordContext,
     useRedirect
 } from "react-admin";
+
 import {FieldProps} from "../model/Field.tsx";
 import {SelectAttrbiuteInput} from "./SelectAttrbiuteInput.tsx";
 
@@ -33,6 +34,7 @@ const FieldRender = () => {
     );
 }
 
+
 export const ChecklistForm = () => {
     const record = useRecordContext();
     if (record && !record.id) { // have the record and 'record.id' is not present => we are cloning a record
@@ -47,7 +49,7 @@ export const ChecklistForm = () => {
         record.id = "";
     }
 
-    return <SimpleForm>
+    return <SimpleForm warnWhenUnsavedChanges>
         <TextInput source="title"/>
         <TextField source="accession" label="Accession"/>
         <TextField source="version" label="Version"/>
@@ -58,9 +60,11 @@ export const ChecklistForm = () => {
             <SimpleFormIterator inline>
                 <ReferenceInput source="fieldId"
                                 reference="fields"
-                                queryOptions={{meta: {size: 300, latest: true}}}>
+                                queryOptions={{meta: {size: 300}}}
+                                sort={{field: 'fieldId', order:'ASC'}}
+                                filter={{latest:true}}>
                     <AutocompleteInput
-                        filterToQuery={q => ({ q, searchIndex:q })}
+                        filterToQuery={q => ({q, searchIndex: q, latest: true})}
                         optionText={<FieldRender/>}
                         inputText={(record) => `${record.label} (${record.type})`}/>
                 </ReferenceInput>
