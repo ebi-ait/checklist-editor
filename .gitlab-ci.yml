@@ -29,18 +29,18 @@ build_docker_image:
 
 deploy_int:
   variables:
-    ENVIRONMENT_NAME: dev
+    ENVIRONMENT_NAME: int
   environment:
-    name: primary_hl_dev
+    name: primary_hl_int
     url: https://wwwint.ebi.ac.uk/biosamples/checklist-editor
   when: manual
   extends: .kube_deploy_script
 
 deploy_primary_dev:
   variables:
-    ENVIRONMENT_NAME: test
+    ENVIRONMENT_NAME: dev
   environment:
-    name: primary_hl_test
+    name: primary_hl_dev
     url: https://wwwdev.ebi.ac.uk/biosamples/checklist-editor
   only:
     - dev
@@ -50,9 +50,9 @@ deploy_primary_dev:
 
 deploy_fallback_dev:
   variables:
-    ENVIRONMENT_NAME: test
+    ENVIRONMENT_NAME: dev
   environment:
-    name: fallback_hx_test
+    name: fallback_hx_dev
     url: https://wwwdev.ebi.ac.uk/biosamples/checklist-editor
   only:
     - dev
