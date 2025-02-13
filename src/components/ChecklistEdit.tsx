@@ -61,7 +61,7 @@ export const ChecklistForm = () => {
                 <ReferenceInput source="fieldId"
                                 reference="fields"
                                 queryOptions={{meta: {size: 300}}}
-                                sort={{field: 'fieldId', order:'ASC'}}
+                                sort={{field: 'name', order:'ASC'}}
                                 filter={{latest:true}}>
                     <AutocompleteInput
                         filterToQuery={q => ({q, searchIndex: q, latest: true})}
