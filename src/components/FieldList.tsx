@@ -31,6 +31,7 @@ const filters = [
     <SelectInput source="latest"
                  choices={[{id: true, name: 'True'}, {id: false, name: 'False'}]}/>,
     <SelectAttrbiuteInput source="type"/>,
+    <SelectAttrbiuteInput source="lastModifedBy"/>,
     <SelectAttrbiuteInput source="group"/>
 
 ];

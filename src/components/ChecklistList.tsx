@@ -33,7 +33,8 @@ const filters = [
                  choices={[{id: true, name: 'True'}, {id: false, name: 'False'}]}/>,
     <SelectInput source="authority"
                  choices={[{id: 'ENA', name: 'ENA'}, {id: 'BIOSAMPLES', name: 'BioSamples'}]}/>,
-    <SelectAttrbiuteInput source="group"/>
+    <SelectAttrbiuteInput source="group"/>,
+    <SelectAttrbiuteInput source="lastModifiedBy"/>,
 ];
 
 const ConditionalEditButton = () => {
