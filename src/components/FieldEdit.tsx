@@ -19,11 +19,11 @@ const inputMap = {
     'choice': () => <ChoiceField/>,
     'pattern': () => <TextInput source="pattern"
                                 validate={validateRegex}/>,
-    'ontology': () => <ReferenceInput source="ontology" reference="ontologies" />,
+    'ontology': () => <ReferenceInput source="ontology" reference="ontologies"/>,
     'taxon': () => null,
 }
 
-const validateRegex:Validator = (value: string) => {
+const validateRegex: Validator = (value: string) => {
     try {
         new RegExp(value);  // Try to create a RegExp
         return undefined;      // No error: it's a valid regex
@@ -43,7 +43,11 @@ function toTitleCase(s: string) {
 }
 
 export const FieldForm = () =>
-    <SimpleForm mode="onChange" reValidateMode="onChange">
+    <SimpleForm
+        mode="onChange"
+        reValidateMode="onChange"
+        warnWhenUnsavedChanges
+    >
         <TextInput source="label" validate={required()}/>
         <TextInput source="description" multiline={true} validate={required()}/>
         {/*<SelectAttrbiuteInput source="group"/>*/}
