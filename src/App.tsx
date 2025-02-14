@@ -19,6 +19,7 @@ import {FieldGroupShow} from "./components/FieldGroupShow.tsx";
 import {FieldList} from "./components/FieldList.tsx";
 import {FieldShow} from "./components/FieldShow.tsx";
 import checklistDataProvider from './dataprovider/schemaStoreDataProvider.tsx';
+import {LoginPage} from "./LoginPage.tsx";
 import {appTheme, darkTheme} from "./theme.tsx";
 
 const App: React.FC = () => {
@@ -37,6 +38,7 @@ const App: React.FC = () => {
                theme={appTheme}
                darkTheme={darkTheme}
                disableTelemetry
+               loginPage={LoginPage}
         >
             <Resource name="checklists"
                       list={ChecklistList}
@@ -59,6 +61,13 @@ const App: React.FC = () => {
                       create={FieldGroupCreate}
                       icon={FieldGroupIcon}
             />
+            {/*<Resource name="users"*/}
+            {/*          list={FieldGroupList}*/}
+            {/*          // show={FieldGroupShow}*/}
+            {/*          // edit={FieldGroupEdit}*/}
+            {/*          // create={FieldGroupCreate}*/}
+            {/*          icon={AccountBox}*/}
+            {/*/>*/}
         </Admin>
     );
 };
