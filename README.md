@@ -22,3 +22,8 @@ To set up your local environment, follow these steps:
 3. install dependencies `npm install`
 4. start dev server `npm run dev`
 
+## Deployment
+![Build Status](https://gitlab.ebi.ac.uk/fairification/checklist-editor/badges/dev/pipeline.svg "badge")
+
+Gitlab project: https://gitlab.ebi.ac.uk/fairification/checklist-editor
+

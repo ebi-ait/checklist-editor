@@ -1,19 +1,25 @@
 import {Stack, Typography} from "@mui/material";
 import {useQueryClient} from "@tanstack/react-query";
+import React from "react";
 import {
     ArrayInput,
     AutocompleteInput,
     Edit,
     ReferenceInput,
+    required,
     SelectInput,
     SimpleForm,
-    SimpleFormIterator, TextField,
+    SimpleFormIterator,
+    TextField,
     TextInput,
     useNotify,
     useRecordContext,
-    useRedirect
+    useRedirect,
+    Validator
 } from "react-admin";
+
 import {FieldProps} from "../model/Field.tsx";
+import {SelectAttrbiuteInput} from "./SelectAttrbiuteInput.tsx";
 
 const FieldRender = () => {
     const record: FieldProps | undefined = useRecordContext();
@@ -23,25 +29,57 @@ const FieldRender = () => {
             <Stack>
                 {record.label}
                 <Typography variant="caption" color="text.secondary">
-                    {record.type}
+                    {record.type}, {record.version} ({record.latest ? 'latest' : 'not latest'}), {record.group}
                 </Typography>
             </Stack>
         </Stack>
     );
 }
 
+const validateUnique: Validator = (value: string, values) => {
+    if (values.schemaFieldAssociations.filter(assoc => assoc.fieldId == value).length == 1) {
+        return undefined; // means valid
+    } else {
+        return `duplicate field are not allowed. Please check field ${value}`;
+    }
+};
 export const ChecklistForm = () => {
     const record = useRecordContext();
-    return <SimpleForm>
-        <TextInput source="title"/>
+    if (record && !record.id) { // have the record and 'record.id' is not present => we are cloning a record
+        // todo discuss
+        // 1. Why this method is executing twice
+        // 2. Why backend is throwing id not present exception if id == null. This is also happening in create checklist
+        if (record.accession) {
+            record.title = `${record.title} DUPLICATE`;
+        }
+        record.accession = null;
+        record.version = null;
+        record.id = "";
+    }
+
+    return <SimpleForm
+        mode="onChange"
+        reValidateMode="onChange"
+        warnWhenUnsavedChanges
+    >
+        <TextInput source="title" validate={required()}/>
         <TextField source="accession" label="Accession"/>
+        <TextField source="version" label="Version"/>
+        <TextField source="authority" label={"Authority"}/>
+        <SelectAttrbiuteInput source="group" validate={required()}/>
         <TextInput source="description" multiline={true} rows={2}/>
         <ArrayInput source="schemaFieldAssociations" label="Fields">
             <SimpleFormIterator inline>
-                <ReferenceInput source="fieldId" reference="fields" queryOptions={{ meta: { size: 300 } }}>
+                <ReferenceInput source="fieldId"
+                                reference="fields"
+                                queryOptions={{meta: {size: 300}}}
+                                sort={{field: 'name', order: 'ASC'}}
+                                filter={{latest: true}}>
                     <AutocompleteInput
+                        filterToQuery={q => ({q, searchIndex: q, latest: true})}
                         optionText={<FieldRender/>}
-                        inputText={(record) => `${record.label} (${record.type})`}/>
+                        inputText={(record) => `${record.label} (${record.type})`}
+                        validate={validateUnique}/>
                 </ReferenceInput>
                 <SelectInput source="requirementType"
                              choices={[

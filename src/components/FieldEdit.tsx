@@ -4,18 +4,33 @@ import {
     Edit,
     FormDataConsumer,
     RadioButtonGroupInput,
+    ReferenceInput,
+    required,
+    SelectInput,
     SimpleForm,
     SimpleFormIterator,
-    TextInput
+    TextInput,
+    Validator
 } from "react-admin";
 
 // registry of field types and their specific controls
 const inputMap = {
-    'text': (rest) => null,
-    'choice': (rest) => <ChoiceField/>,
-    'pattern': (rest) => <TextInput source="pattern"/>,
+    'text': () => null,
+    'choice': () => <ChoiceField/>,
+    'pattern': () => <TextInput source="pattern"
+                                validate={validateRegex}/>,
+    'ontology': () => <ReferenceInput source="ontology" reference="ontologies"/>,
+    'taxon': () => null,
 }
 
+const validateRegex: Validator = (value: string) => {
+    try {
+        new RegExp(value);  // Try to create a RegExp
+        return undefined;      // No error: it's a valid regex
+    } catch (e) {
+        return "Value should be a valid regular expression.";     // Error: it's not a valid regex
+    }
+}
 export const ChoiceField = () =>
     <ArrayInput source="choices">
         <SimpleFormIterator inline>
@@ -28,18 +43,34 @@ function toTitleCase(s: string) {
 }
 
 export const FieldForm = () =>
-    <SimpleForm>
-        <TextInput source="label"/>
-        <TextInput source="description"/>
-        <TextInput source="group"/>
+    <SimpleForm
+        mode="onChange"
+        reValidateMode="onChange"
+        warnWhenUnsavedChanges
+    >
+        <TextInput source="label" validate={required()}/>
+        <TextInput source="description" multiline={true} validate={required()}/>
+        {/*<SelectAttrbiuteInput source="group"/>*/}
+
+        <ReferenceInput label="group" source="group" reference="fieldGroups" perPage={200}>
+            <SelectInput/>
+        </ReferenceInput>
+
         <RadioButtonGroupInput source="type"
+                               validate={required()}
                                choices={
                                    Object.keys(inputMap)
                                        .map(id => ({id, name: toTitleCase(id)}))
                                }
         />
         <ConditionalInput/>
+        <ArrayInput source="units" label="Units">
+            <SimpleFormIterator>
+                <TextInput/>
+            </ SimpleFormIterator>
+        </ArrayInput>
     </SimpleForm>;
+
 // Custom input component based on an attribute
 export const ConditionalInput = ({selectorAttrName = 'type'}) =>
     <FormDataConsumer>
@@ -55,6 +86,7 @@ export const ConditionalInput = ({selectorAttrName = 'type'}) =>
 
 
 export const FieldEdit = () =>
-    <Edit>
+    <Edit mutationMode="pessimistic">
         <FieldForm/>
     </Edit>;
+

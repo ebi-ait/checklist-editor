@@ -1,60 +1,74 @@
+import React from "react";
 import {
-    ChipField,
     CreateButton,
-    Datagrid, DateField,
+    DatagridConfigurable,
+    DateField,
     EditButton,
     FilterButton,
-    FunctionField,
     List,
-    Pagination,
-    ReferenceArrayField,
+    ReferenceField,
     SearchInput,
-    SingleFieldList,
+    SelectColumnsButton,
+    SelectInput,
     TextField,
-    TopToolbar
+    TopToolbar,
+    useRecordContext
 } from 'react-admin';
+import {FieldPreviewPanel} from "./FieldPreviewPanel.tsx";
+import {FieldTypeIcon} from "./FieldTypeIcon.tsx";
+import {SelectAttrbiuteInput} from "./SelectAttrbiuteInput.tsx";
 
 const FieldListActions = () => (
     <TopToolbar>
         <FilterButton/>
         <CreateButton/>
+        <SelectColumnsButton/>
     </TopToolbar>
 );
 
 const filters = [
-    <SearchInput source="q" alwaysOn/>,
+    <SearchInput source="searchIndex" alwaysOn/>,
+    <SelectInput source="latest"
+                 choices={[{id: true, name: 'True'}, {id: false, name: 'False'}]}/>,
+    <SelectAttrbiuteInput source="type"/>,
+    <SelectAttrbiuteInput source="lastModifedBy"/>,
+    <SelectAttrbiuteInput source="group"/>
+
 ];
+export const ConditionalEditButton = () => {
+    const record = useRecordContext();
+    return record && record.latest ? <EditButton/> : null;
+};
 
 export const FieldList = () =>
     (
-        <List actions={<FieldListActions/>}
-              filters={filters}>
-            <Datagrid>
+        <List
+            actions={<FieldListActions/>}
+            filters={filters}
+            filterDefaultValues={{latest: true}}
+            sort={{field: 'lastModifiedDate', order: 'DESC'}}
+            queryOptions={{
+                meta: {
+                    sort: [
+                        {field: 'group', order: 'ASC'},
+                        {field: 'label', order: 'ASC'}
+                    ]
+                }
+            }}
+        >
+            <DatagridConfigurable expand={FieldPreviewPanel}>
+                <FieldTypeIcon/>
                 <TextField source="label"/>
-                <TextField source="description"/>
+                <ReferenceField source="group"
+                                reference="fieldGroups"
+                                label="Group"
+                                link={"show"}>
+                    <TextField source="name"/>
+                </ReferenceField>
                 <TextField source="version"/>
-                <TextField source="group" label ="Field Group"/>
-                <TextField source="type"/>
-                <DateField source="lastModifiedDate"/>
-
-                <ReferenceArrayField label="Used by Checklists"
-                                     reference="checklists"
-                                     source="usedBySchemas"
-                                     perPage={5}
-                                     pagination={<Pagination labelRowsPerPage={""}
-                                                             hidePrevButton hideNextButton
-                                                             size="small"/>}>
-                    <SingleFieldList>
-                        <FunctionField
-                            source="accession"
-                            render={record =>
-                                <ChipField record={record}
-                                           defaultValue={`${record.accession}:${record.version}`}
-                                />
-                            }/>
-                    </SingleFieldList>
-                </ReferenceArrayField>
-                <EditButton/>
-            </Datagrid>
+                <TextField source="lastModifiedBy"/>
+                <DateField source="lastModifiedDate" showTime/>
+                <ConditionalEditButton/>
+            </DatagridConfigurable>
         </List>
     );

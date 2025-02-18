@@ -1,6 +1,16 @@
 import {defineConfig, loadEnv} from 'vite'
 import react from '@vitejs/plugin-react'
 
+function logResponse(proxyRes) {
+    return console.log(`Response received from target with status: ${proxyRes.statusCode}`);
+}
+
+function logRequest(proxyReq, req)  {
+        console.log(`Proxying request to: ${proxyReq.getHeader('host')}${proxyReq.path}`);
+        console.log(`Original URL: ${req.url}`);
+        console.log(`Proxying request with Content-Type: ${proxyReq.getHeader('Content-Type')}`);
+}
+
 // see https://vitejs.dev/config/
 export default defineConfig(({command, mode}) => {
     // Load env file based on `mode` in the current working directory.
@@ -21,13 +31,25 @@ export default defineConfig(({command, mode}) => {
         ],
         server: {
             proxy: {
-                // Proxy requests to the API server
+                '/auth': {
+                    target: 'https://www.ebi.ac.uk/ena/submit/webin',
+                    changeOrigin: true,
+                    secure: false,
+                    configure: (proxy) => {
+                        proxy.on('proxyReq', logRequest);
+                        proxy.on('proxyRes', logResponse);
+                    }
+                },
+
                 '/api/v2': {
                     target: schemaStoreHost,
                     changeOrigin: true,
                     secure: false,
-                    // rewrite: (path:string) => path.replace(/^\/api\/v2/, ''),
-                },
+                    configure: (proxy) => {
+                        proxy.on('proxyReq', logRequest);
+                        proxy.on('proxyRes', logResponse);
+                    }
+                }
             },
         },
         base: '/biosamples/checklist-editor'

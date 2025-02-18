@@ -3,5 +3,7 @@ window.__CONFIG__ = {
     // to /api to the biosamples server
     // for docker based deployments /api
     SCHEMA_STORE_URL: "/api/v2",
-    CHECKLIST_EDITOR_BASE_URL: "/biosamples/checklist-editor"
+    OLS_URL: "https://www.ebi.ac.uk/ols4/api",
+    CHECKLIST_EDITOR_BASE_URL: "/biosamples/checklist-editor",
+    AUTH_API_URL: "/auth"
 };

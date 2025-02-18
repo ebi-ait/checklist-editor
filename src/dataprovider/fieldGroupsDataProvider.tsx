@@ -1,37 +1,50 @@
-import {DataProvider} from "react-admin";
+// This data provider handles fields
+import {DataProvider, HttpError} from "react-admin";
 import config from "../config.tsx";
+import {FieldGroupProps} from "../model/FieldGroup.tsx";
 import {httpClient} from "./authClient.tsx";
 import {fixTrailingSlash, resolveApiResource} from "./schemaStoreDataProvider.tsx";
 
 const apiUrl = fixTrailingSlash(config.SCHEMA_STORE_URL);
 
+const recordToId = (record: FieldGroupProps) => ({
+    id: `${record.id}`,
+    ...record
+});
+
 const idFromAttribute = (attribute: string) => (record) => ({id: record[attribute], ...record})
+export const fieldGroupsDataProvider: DataProvider = {
 
-export const schemasDataProvider: DataProvider = (recordIdProvider) => ({
-
-    getList: (resource:string, params) => {
+    getList: (resource, params) => {
         const {filter = {}, pagination, sort} = params;
 
         // Adjust the URL to point to the right endpoint for lists
-        let apiResource = resolveApiResource(resource);
+        const apiResource = resolveApiResource(resource);
         const responseResourceName = apiResource
-        const query = new URLSearchParams({
+        const query = {
+            ...filter.q ? {text: filter.q} : {}, // Add the 'text' parameter if 'q' is provided
             page: (pagination.page - 1) + '', // react-admin is 1 based, spring is 0 based
             size: pagination.perPage + '',
             sort: `${sort.field},${sort.order}`,
             ...filter
-        }).toString();
+        };
+
+        const queryString = new URLSearchParams(query).toString();
+        // Adjust the URL to point to the right endpoint for lists
         let searchResource = '';
         if (Object.keys(filter).length > 0) {
-            searchResource = '/search/findByExample'
-            apiResource = 'schemas'
+            if (filter.q) { // it's a text search
+                searchResource = '/search/findAllByTextPartial'
+            } else { // it's a regular attribute search
+                searchResource = '/search/findByExample'
+            }
         }
-        const url = `${apiUrl}${apiResource}${searchResource}?${query}`;
+        const url = `${apiUrl}${apiResource}${searchResource}?${queryString}`;
         return httpClient(url)
             .then(({json}) => {
                 // Extract the embedded resources
                 let data = json._embedded?.[responseResourceName] || [];
-                data = data.map(recordIdProvider);
+                data = data.map(recordToId);
                 return {
                     data,
                     total: json.page?.totalElements || data.length,
@@ -42,47 +55,44 @@ export const schemasDataProvider: DataProvider = (recordIdProvider) => ({
                 };
             });
     },
-    getOne : (resource:string, params) => {
-        const {id, meta = {}} = params;
-        let searchResource = '';
-        const searchParams = new URLSearchParams();
-
-        if (Object.prototype.hasOwnProperty.call(meta, 'searchResource')) {
-            searchParams.append('username', id);
-            searchResource = `/search/${meta.searchResource}`
-        } else {
-            searchResource = `/${id}`;
-        }
-        let query = searchParams.toString();
-        if (query != '') {
-           query = '?'+query;
-        }
-        return httpClient(`${apiUrl}${resolveApiResource(resource)}${searchResource}${query}`)
+    getOne: (resource, params) => {
+        const apiResource = resolveApiResource(resource);
+        return httpClient(`${apiUrl}${apiResource}/${params.id}`)
             .then(({json}) => {
-                let record = json; // Assuming json is the schema object itself
-                record = recordIdProvider(record);
-                return {data: record};
+                let data = json; // Assuming json is the schema object itself
+                data = recordToId(data);
+                return {data};
             });
     },
-
-    getMany : (resource:string, params) => {
+    getMany: (resource, params) => {
         const {ids, meta = {}} = params;
         const apiResource = resolveApiResource(resource);
         const searchParams = new URLSearchParams();
         // target is the name of the query string parameter
         // id is the value
         // TODO: resolve search resource from target name
-        searchParams.append('ids', ids);
-        if (meta.hasOwnProperty('size')) {
+        let searchResource = '';
+        if (Object.prototype.hasOwnProperty.call(meta, 'parentId')) {
+            searchParams.append('schemaId', meta.parentId);
+            searchResource = '/search/findByUsedBySchemas'
+        } else {
+            searchParams.append('ids', ids);
+            searchResource = '/search/findAllByIdIn'
+        }
+        if (Object.prototype.hasOwnProperty.call(meta, 'size')) {
             searchParams.append('size', meta.size)
         }
         const query = searchParams.toString();
-        const url = `${apiUrl}${apiResource}/search/findByIdIn?${query}`;
+        const url = `${apiUrl}${apiResource}${searchResource}?${query}`;
         return httpClient(url)
             .then(({json}) => {
-                // Extract the embedded resources
+                if (!json._embedded) {
+                    return Promise.reject(
+                        new HttpError(`Missing _embedded attribute in HAL response from ${url}`, 500)
+                    );
+                }
                 let data = json._embedded?.[apiResource] || [];
-                data = data.map(recordIdProvider)
+                data = data.map(recordToId)
                 return {
                     data,
                     total: json.page?.totalElements || data.length,
@@ -93,19 +103,45 @@ export const schemasDataProvider: DataProvider = (recordIdProvider) => ({
                 };
             });
     },
-    getManyReference : (resource) => Promise.reject(`${resource} getManyReference not implemented`),
-    create:  async (resource, params) => {
+    getManyReference: (resource, params) => {
+        const {id, target} = params;
+        const apiResource = resolveApiResource(resource);
+        const searchParams = new URLSearchParams();
+        // target is the name of the query string parameter
+        // id is the value
+        // TODO: resolve search resource from target name
+        searchParams.append(target, id);
+        const query = searchParams.toString();
+        let searchResource = '/search/findByUsedBySchemas';
+        const url = `${apiUrl}${apiResource}${searchResource}?${query}`;
+        return httpClient(url)
+            .then(({json}) => {
+                // Extract the embedded resources
+                let data = json._embedded?.[apiResource] || [];
+                data = data.map(recordToId)
+                return {
+                    data,
+                    total: json.page?.totalElements || data.length,
+                    pageInfo: {
+                        hasNextPage: json?._links?.next || false,
+                        hasPreviousPage: json?._links?.prev || false
+                    }
+                };
+            });
+    },
+    create: async (resource, params) => {
+
         const apiResource = resolveApiResource(resource);
         const url = `${apiUrl}${apiResource}`;
         const {json} = await httpClient(url, {
             method: 'POST',
             body: JSON.stringify(params.data),
         });
-
         return ({
             data: {...params.data, id: json.id},
         });
     },
+
     update: async (resource, params) => {
         const {id} = params;
         const apiResource = resolveApiResource(resource);
@@ -114,16 +150,15 @@ export const schemasDataProvider: DataProvider = (recordIdProvider) => ({
             method: 'PUT',
             body: JSON.stringify(params.data),
         });
-
         return ({
             data: {...params.data, id: json.id},
         });
     },
-    updateMany: (resource) => Promise.reject(`${resource} updateMany not implemented`),
-    deleteMany: (resource) => Promise.reject(`${resource} delete not implemented`),
+    updateMany: (resource, params) => Promise.reject(`${resource} updateMany not implemented`),
+    deleteMany: (resource, params) => Promise.reject(`${resource} delete not implemented`),
     getAttributeValues: (resource: string, attributeName: string) => {
-        const apiResource = 'schemas';
-        const responseResourceName = apiResource;
+        const apiResource = resolveApiResource(resource);
+        const responseResourceName = apiResource
         const query = {
             attributeName
         };
@@ -143,6 +178,7 @@ export const schemasDataProvider: DataProvider = (recordIdProvider) => ({
                     }
                 };
             });
-
     }
-});
+
+
+};

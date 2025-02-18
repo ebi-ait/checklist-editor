@@ -1,62 +1,40 @@
-import {
-    ArrayField,
-    ChipField,
-    Datagrid,
-    ReferenceField,
-    Show,
-    SimpleShowLayout,
-    SingleFieldList,
-    TextField,
-    useRecordContext
-} from 'react-admin';
-import {IconField} from "./IconField.tsx";
-import {LooksOne, RadioButtonChecked, RadioButtonUnchecked, ViewHeadline} from '@mui/icons-material';
+import {DateField, EditButton, Show, SimpleShowLayout, TextField, TopToolbar, useRecordContext} from 'react-admin';
+import {PaginatedListField} from "./PaginatedListField.tsx";
 
-const FieldPanel = () => {
+export const ChecklistShow = () => (
+    <Show emptyWhileLoading
+          actions={<ChecklistShowActions/>}>
+        <ChecklistShowContent/>
+    </Show>
+);
+
+const ChecklistShowActions = () => {
     const record = useRecordContext();
     return (
-        <SimpleShowLayout>
-            {record.type === 'choice' && (
-                <ArrayField source="choices">
-                    <SingleFieldList linkType={false}>
-                        <ChipField source="choice"/>
-                    </SingleFieldList>
-                </ArrayField>
-            )}
-            {record.type === 'pattern' && (
-                <TextField source="pattern"/>
-            )}
-        </SimpleShowLayout>
+        <TopToolbar>
+            {record && record.editable && <EditButton/>}
+        </TopToolbar>
     );
 }
-/**
- * Fetch a book from the API and display it
- */
-export const ChecklistShow = () => {
+
+const ChecklistShowContent = () => {
+    const record = useRecordContext();
+    if (!record) return null;
+
     return (
-        <Show emptyWhileLoading >
-            <SimpleShowLayout>
-                    <TextField source="title"/>
-                    <TextField source="description"/>
-                    <ArrayField source="schemaFieldAssociations" label="Fields">
-                        <Datagrid>
-                            <ReferenceField source="fieldId" reference="fields" link={false}>
-                                <TextField source="label"/>
-                            </ReferenceField>
-                            <ReferenceField label="Type" source="fieldId" reference="fields" link={false}>
-                                <TextField source="type"/>
-                            </ReferenceField>
-                            <IconField source="requirementType" label="Required" iconMapping={{
-                                MANDATORY: RadioButtonChecked,
-                                OPTIONAL: RadioButtonUnchecked,
-                            }}/>
-                            <IconField source="multiplicity" iconMapping={{
-                                Single: LooksOne,
-                                List: ViewHeadline,
-                            }}/>
-                        </Datagrid>
-                    </ArrayField>
+        <SimpleShowLayout>
+            <TextField source="title"/>
+            <SimpleShowLayout direction={"row"}>
+                <TextField source="accession"/>
+                <TextField source="version"/>
+                <TextField source="group"/>
+                <TextField source="authority"/>
+                <DateField source="lastModifiedDate"/>
+                <TextField source="lastModifiedBy"/>
             </SimpleShowLayout>
-        </Show>
+            <TextField source="description"/>
+            <PaginatedListField source="schemaFieldAssociations" label="Fields"/>
+
+        </SimpleShowLayout>
     );
 };

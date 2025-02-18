@@ -1,39 +1,47 @@
 // This data provider handles fields
-import {DataProvider, fetchUtils} from "react-admin";
+import {DataProvider, fetchUtils, SortPayload} from "react-admin";
 import config from "../config.tsx";
 import {FieldProps} from "../model/Field.tsx";
+import {httpClient} from "./authClient.tsx";
 import {fixTrailingSlash, resolveApiResource} from "./schemaStoreDataProvider.tsx";
 
 const apiUrl = fixTrailingSlash(config.SCHEMA_STORE_URL);
-const httpClient = fetchUtils.fetchJson;
 
-const addIdFromSelfLink = (record: FieldProps, apiResource: string) => ({
+const recordToId = (record: FieldProps) => ({
     id: `${record.name}:${record.version}`,
     ...record
 });
+
+const idFromAttribute = (attribute: string) => (record) => ({id: record[attribute], ...record})
 export const fieldsDataProvider: DataProvider = {
 
     getList: (resource, params) => {
-        const {filter = {}, pagination, sort} = params;
+        const {filter = {}, pagination, sort, meta} = params;
 
-        const query = new URLSearchParams({
-            ...filter.q ? {text: filter.q} : {}, // Add the 'text' parameter if 'q' is provided
-            page: (pagination.page - 1)+''    , // react-admin is 1 based, spring is 0 based
-            size: pagination.perPage+'',
-            sort: `${sort.field},${sort.order}`,
-        }).toString();
         // Adjust the URL to point to the right endpoint for lists
         const apiResource = resolveApiResource(resource);
-        let searchResource = '';
-        if(filter.q) {
-            searchResource = '/search/findAllByTextPartial'
+        const responseResourceName = apiResource
+        const query = {
+            page: (pagination.page - 1) + '', // react-admin is 1 based, spring is 0 based
+            size: pagination.perPage + '',
+            sort: (meta.sort ?? [sort]).map((s: SortPayload) => `${s.field},${s.order}`),
+            ...filter
+        };
+        if (Object.prototype.hasOwnProperty.call(meta, 'latest')) {
+            query.latest = meta.latest;
         }
-        const url = `${apiUrl}${apiResource}${searchResource}?${query}`;
+        const queryString = new URLSearchParams(query).toString();
+        // Adjust the URL to point to the right endpoint for lists
+        let searchResource = '';
+        if (Object.keys(filter).length > 0) {
+            searchResource = '/search/findByExample'
+        }
+        const url = `${apiUrl}${apiResource}${searchResource}?${queryString}`;
         return httpClient(url)
             .then(({json}) => {
                 // Extract the embedded resources
-                let data = json._embedded?.[apiResource] || [];
-                data = data.map(record => addIdFromSelfLink(record, apiResource));
+                let data = json._embedded?.[responseResourceName] || [];
+                data = data.map(recordToId);
                 return {
                     data,
                     total: json.page?.totalElements || data.length,
@@ -46,31 +54,41 @@ export const fieldsDataProvider: DataProvider = {
     },
     getOne: (resource, params) => {
         const apiResource = resolveApiResource(resource);
-        return httpClient(`${apiUrl}${resolveApiResource(resource)}/${params.id}`)
+        return httpClient(`${apiUrl}${apiResource}/${params.id}`)
             .then(({json}) => {
                 let data = json; // Assuming json is the schema object itself
-                data = addIdFromSelfLink(data, apiResource);
+                data = recordToId(data);
                 return {data};
             });
     },
     getMany: (resource, params) => {
-        const {ids, meta={}  } = params;
+        const {ids, meta = {}} = params;
         const apiResource = resolveApiResource(resource);
         const searchParams = new URLSearchParams();
         // target is the name of the query string parameter
         // id is the value
         // TODO: resolve search resource from target name
-        searchParams.append('ids', ids);
-        if(meta.hasOwnProperty('size')) {
+        let searchResource = '';
+        if (Object.prototype.hasOwnProperty.call(meta, 'parentId')) {
+            searchParams.append('schemaId', meta.parentId);
+            searchResource = '/search/findByUsedBySchemas'
+        } else {
+            searchParams.append('ids', ids);
+            searchResource = '/search/findAllByIdIn'
+        }
+        if (Object.prototype.hasOwnProperty.call(meta, 'size')) {
             searchParams.append('size', meta.size)
         }
+        if (Object.prototype.hasOwnProperty.call(meta, 'latest')) {
+            searchParams.append('latest', meta.latest)
+        }
         const query = searchParams.toString();
-        const url = `${apiUrl}${apiResource}/search/findAllByIdIn?${query}`;
+        const url = `${apiUrl}${apiResource}${searchResource}?${query}`;
         return httpClient(url)
             .then(({json}) => {
                 // Extract the embedded resources
                 let data = json._embedded?.[apiResource] || [];
-                data = data.map((record: FieldProps) => addIdFromSelfLink(record, apiResource))
+                data = data.map(recordToId)
                 return {
                     data,
                     total: json.page?.totalElements || data.length,
@@ -82,9 +100,14 @@ export const fieldsDataProvider: DataProvider = {
             });
     },
     getManyReference: (resource, params) => {
-        const {id, target} = params;
+        const {id, target, pagination} = params;
         const apiResource = resolveApiResource(resource);
-        const searchParams = new URLSearchParams();
+        const searchParams = new URLSearchParams(
+            {
+                page: (pagination.page - 1) + '', // react-admin is 1 based, spring is 0 based
+                size: pagination.perPage + '',
+            }
+        );
         // target is the name of the query string parameter
         // id is the value
         // TODO: resolve search resource from target name
@@ -96,7 +119,7 @@ export const fieldsDataProvider: DataProvider = {
             .then(({json}) => {
                 // Extract the embedded resources
                 let data = json._embedded?.[apiResource] || [];
-                data = data.map((record: FieldProps) => addIdFromSelfLink(record, apiResource))
+                data = data.map(recordToId)
                 return {
                     data,
                     total: json.page?.totalElements || data.length,
@@ -132,11 +155,31 @@ export const fieldsDataProvider: DataProvider = {
             data: {...params.data, id: json.id},
         });
     },
-    updateMany: (resource, params) => {
+    updateMany: (resource, params) => Promise.reject(`${resource} updateMany not implemented`),
+    deleteMany: (resource, params) => Promise.reject(`${resource} delete not implemented`),
+    getAttributeValues: (resource: string, attributeName: string) => {
+        const apiResource = resolveApiResource(resource);
+        const responseResourceName = apiResource
+        const query = {
+            attributeName
+        };
+        const queryString = new URLSearchParams(query).toString();
+        const searchResource: string = '/search/findAttributeValues';
+        const url = `${apiUrl}${apiResource}${searchResource}?${queryString}`;
+        return httpClient(url)
+            .then(({json}) => {
+                let data = json._embedded?.[responseResourceName] || Array.isArray(json) ? json : [];
+                data = data.map(idFromAttribute('attributeName'));
+                return {
+                    data,
+                    total: json.page?.totalElements || data.length,
+                    pageInfo: {
+                        hasNextPage: json?._links?.next || false,
+                        hasPreviousPage: json?._links?.prev || false
+                    }
+                };
+            });
+    }
 
-        return Promise.reject('field updateMany not implemented');
-    },
-    deleteMany: (resource, params) => Promise.reject('field delete not implemented'),
-}
 
-
+};
