@@ -1,4 +1,5 @@
 import {DateField, EditButton, Show, SimpleShowLayout, TextField, TopToolbar, useRecordContext} from 'react-admin';
+import {recordClickEvent} from "../analytics.tsx";
 import {PaginatedListField} from "./PaginatedListField.tsx";
 
 export const ChecklistShow = () => (
@@ -12,7 +13,7 @@ const ChecklistShowActions = () => {
     const record = useRecordContext();
     return (
         <TopToolbar>
-            {record && record.editable && <EditButton/>}
+            {record && record.editable && <EditButton onClick={recordClickEvent}/>}
         </TopToolbar>
     );
 }

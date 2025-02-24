@@ -15,15 +15,16 @@ import {
     TopToolbar,
     useRecordContext,
 } from "react-admin";
+import {recordClickEvent} from "../analytics.tsx";
 import {ChecklistPreviewPanel} from "./ChecklistPreviewPanel.tsx";
 import {SelectAttrbiuteInput} from "./SelectAttrbiuteInput.tsx";
 
 
 const SchemaListActions = () => (
     <TopToolbar>
-        <FilterButton/>
-        <CreateButton/>
-        <SelectColumnsButton/>
+        <FilterButton onClick={recordClickEvent}/>
+        <CreateButton onClick={recordClickEvent}/>
+        <SelectColumnsButton onClick={recordClickEvent}/>
     </TopToolbar>
 );
 
@@ -39,7 +40,7 @@ const filters = [
 
 const ConditionalEditButton = () => {
     const record = useRecordContext();
-    return record && record.editable ? <EditButton/> : null;
+    return record && record.editable ? <EditButton onClick={recordClickEvent}/> : null;
 };
 
 export const ChecklistList = () => {
@@ -63,7 +64,7 @@ export const ChecklistList = () => {
                 />
                 <ConditionalEditButton/>
                 <CanAccess action="create">
-                    <CloneButton/>
+                    <CloneButton onClick={recordClickEvent}/>
                 </CanAccess>
             </DatagridConfigurable>
         </List>
