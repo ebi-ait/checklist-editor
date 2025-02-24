@@ -7,11 +7,10 @@ export const LoginPage = (props) => {
         <Login {...props}>
             <Card>
                 <CardContent>
-                    <Typography variant="h5">Welcome to The Checklist Editor</Typography>
-                    <Typography>Please use your Webin credentials. </Typography>
-                    <Typography variant={"small"}>For editor credentials,
-                        contact ENA/BioSamples teams.</Typography>
+                    <Typography variant="h4" align="center">Samples Checklist Editor</Typography>
+                    <Typography variant="subtitle2" align="center">Use ENA-Webin credentials to login </Typography>
                     <LoginForm className="centered-login-form"/>
+                    <Typography variant="subtitle2" align="center">Contact ENA/BioSamples teams to request edit access</Typography>
                 </CardContent>
             </Card>
         </Login>
