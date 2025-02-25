@@ -6,6 +6,7 @@ import {
     AutocompleteInput,
     Edit,
     ReferenceInput,
+    required,
     SelectInput,
     SimpleForm,
     SimpleFormIterator,
@@ -16,6 +17,7 @@ import {
     useRedirect,
     Validator
 } from "react-admin";
+
 import {FieldProps} from "../model/Field.tsx";
 import {SelectAttrbiuteInput} from "./SelectAttrbiuteInput.tsx";
 
