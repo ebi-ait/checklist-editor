@@ -15,13 +15,16 @@ stages:
 
 build_docker_image:
   stage: build
-  image: docker:27
+  image:
+    name: docker:27
+    pull_policy: if-not-present
   tags: ["dind"]
   services:
     - docker:27-dind
   script:
     - docker --version
     - echo "$CI_REGISTRY_PASSWORD" | docker login --username "$CI_REGISTRY_USER" --password-stdin "$CI_REGISTRY"
+    - docker images
     - docker build -t $DOCKER_IMAGE_NAME .
     - docker push --quiet $DOCKER_IMAGE_NAME
   after_script:
