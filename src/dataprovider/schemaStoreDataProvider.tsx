@@ -4,6 +4,7 @@ import {ChecklistProps} from "../model/Checklist.tsx";
 import {fieldsDataProvider} from "./fieldsDataProvider.tsx";
 import {ontologyDataProvider} from "./ontologyDataProvider.tsx";
 import {schemasDataProvider} from "./schemasDataProvider.tsx";
+import {fieldGroupsDataProvider} from "./fieldGroupsDataProvider.tsx";
 
 export function fixTrailingSlash(url: string) {
     return url + (url.at(-1) != '/' ? '/' : '');
@@ -32,6 +33,7 @@ const dataProviderRegistry: { [k: string]: DataProvider } = {
     'checklists': schemasDataProvider(checklistRecordToId),
     'users': schemasDataProvider(userRecordToId),
     'fields': fieldsDataProvider,
+    'fieldGroups': fieldGroupsDataProvider,
     'ontologies': ontologyDataProvider,
 };
 

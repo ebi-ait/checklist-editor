@@ -13,6 +13,34 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+
+.RaLogin-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;  /* Centers everything inside */
+  justify-content: center;
+  margin: auto;  /* Ensures it doesn't stick to the left */
+  width: 100vw;
+  hegith: 100vh;
+  min-width: 350px;
+  padding: 20px;
+}
+
+.RaLogin-form {
+  width: 100vw;  /* Ensures the form stretches correctly */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.centered-login-form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+
 a {
   font-weight: 500;
   color: #646cff;

@@ -1,40 +1,43 @@
 // This data provider handles fields
-import {DataProvider, fetchUtils, SortPayload} from "react-admin";
+import {DataProvider, HttpError} from "react-admin";
 import config from "../config.tsx";
-import {FieldProps} from "../model/Field.tsx";
+import {FieldGroupProps} from "../model/FieldGroup.tsx";
 import {httpClient} from "./authClient.tsx";
 import {fixTrailingSlash, resolveApiResource} from "./schemaStoreDataProvider.tsx";
 
 const apiUrl = fixTrailingSlash(config.SCHEMA_STORE_URL);
 
-const recordToId = (record: FieldProps) => ({
-    id: `${record.name}:${record.version}`,
+const recordToId = (record: FieldGroupProps) => ({
+    id: `${record.id}`,
     ...record
 });
 
 const idFromAttribute = (attribute: string) => (record) => ({id: record[attribute], ...record})
-export const fieldsDataProvider: DataProvider = {
+export const fieldGroupsDataProvider: DataProvider = {
 
     getList: (resource, params) => {
-        const {filter = {}, pagination, sort, meta} = params;
+        const {filter = {}, pagination, sort} = params;
 
         // Adjust the URL to point to the right endpoint for lists
         const apiResource = resolveApiResource(resource);
         const responseResourceName = apiResource
         const query = {
+            ...filter.q ? {text: filter.q} : {}, // Add the 'text' parameter if 'q' is provided
             page: (pagination.page - 1) + '', // react-admin is 1 based, spring is 0 based
             size: pagination.perPage + '',
-            sort: (meta.sort ?? [sort]).map((s: SortPayload) => `${s.field},${s.order}`),
+            sort: `${sort.field},${sort.order}`,
             ...filter
         };
-        if (Object.prototype.hasOwnProperty.call(meta, 'latest')) {
-            query.latest = meta.latest;
-        }
+
         const queryString = new URLSearchParams(query).toString();
         // Adjust the URL to point to the right endpoint for lists
         let searchResource = '';
         if (Object.keys(filter).length > 0) {
-            searchResource = '/search/findByExample'
+            if (filter.q) { // it's a text search
+                searchResource = '/search/findAllByTextPartial'
+            } else { // it's a regular attribute search
+                searchResource = '/search/findByExample'
+            }
         }
         const url = `${apiUrl}${apiResource}${searchResource}?${queryString}`;
         return httpClient(url)
@@ -79,14 +82,15 @@ export const fieldsDataProvider: DataProvider = {
         if (Object.prototype.hasOwnProperty.call(meta, 'size')) {
             searchParams.append('size', meta.size)
         }
-        if (Object.prototype.hasOwnProperty.call(meta, 'latest')) {
-            searchParams.append('latest', meta.latest)
-        }
         const query = searchParams.toString();
         const url = `${apiUrl}${apiResource}${searchResource}?${query}`;
         return httpClient(url)
             .then(({json}) => {
-                // Extract the embedded resources
+                if (!json._embedded) {
+                    return Promise.reject(
+                        new HttpError(`Missing _embedded attribute in HAL response from ${url}`, 500)
+                    );
+                }
                 let data = json._embedded?.[apiResource] || [];
                 data = data.map(recordToId)
                 return {
@@ -100,14 +104,9 @@ export const fieldsDataProvider: DataProvider = {
             });
     },
     getManyReference: (resource, params) => {
-        const {id, target, pagination} = params;
+        const {id, target} = params;
         const apiResource = resolveApiResource(resource);
-        const searchParams = new URLSearchParams(
-            {
-                page: (pagination.page - 1) + '', // react-admin is 1 based, spring is 0 based
-                size: pagination.perPage + '',
-            }
-        );
+        const searchParams = new URLSearchParams();
         // target is the name of the query string parameter
         // id is the value
         // TODO: resolve search resource from target name

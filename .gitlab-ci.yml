@@ -9,22 +9,16 @@ variables:
   K8S_CLUSTER_URL: http://hx-rke-wp-webadmin-17-worker-1.caas.ebi.ac.uk
   APP_NAME: $CI_PROJECT_NAME
 
-cache:
-  key: ${CI_COMMIT_REF_SLUG}
-  paths:
-    - node_modules/
-    - dist/
-
 stages:
   - build
   - deploy
 
 build_docker_image:
+  stage: build
   image: docker:27
   tags: ["dind"]
   services:
     - docker:27-dind
-  stage: build
   script:
     - docker --version
     - echo "$CI_REGISTRY_PASSWORD" | docker login --username "$CI_REGISTRY_USER" --password-stdin "$CI_REGISTRY"
@@ -33,20 +27,20 @@ build_docker_image:
   after_script:
     - docker logout ${CI_REGISTRY}
 
-deploy_dev:
+deploy_int:
   variables:
-    ENVIRONMENT_NAME: dev
+    ENVIRONMENT_NAME: int
   environment:
-    name: dev
+    name: primary_hl_int
     url: https://wwwint.ebi.ac.uk/biosamples/checklist-editor
   when: manual
   extends: .kube_deploy_script
 
-deploy_test:
+deploy_primary_dev:
   variables:
-    ENVIRONMENT_NAME: test
+    ENVIRONMENT_NAME: dev
   environment:
-    name: test
+    name: primary_hl_dev
     url: https://wwwdev.ebi.ac.uk/biosamples/checklist-editor
   only:
     - dev
@@ -54,21 +48,43 @@ deploy_test:
   when: manual
   extends: .kube_deploy_script
 
-deploy_prod:
+deploy_fallback_dev:
   variables:
-    ENVIRONMENT_NAME: prod
+    ENVIRONMENT_NAME: dev
   environment:
-    name: prod
-    url: https://www.ebi.ac.uk/biosamples/checklist-editor
+    name: fallback_hx_dev
+    url: https://wwwdev.ebi.ac.uk/biosamples/checklist-editor
   only:
     - dev
     - main
   when: manual
   extends: .kube_deploy_script
 
+deploy_primary_prod:
+  variables:
+    ENVIRONMENT_NAME: prod
+  environment:
+    name: primary_hl_prod
+    url: https://www.ebi.ac.uk/biosamples/checklist-editor
+  only:
+    - main
+  when: manual
+  extends: .kube_deploy_script
+
+deploy_fallback_prod:
+  variables:
+    ENVIRONMENT_NAME: prod
+  environment:
+    name: fallback_hx_prod
+    url: https://www.ebi.ac.uk/biosamples/checklist-editor
+  only:
+    - main
+  when: manual
+  extends: .kube_deploy_script
+
 .kube_deploy_script:
   stage: deploy
-  image: dtzar/helm-kubectl
+  image: dtzar/helm-kubectl:3.16
   tags: ["dind"]
   services:
     - docker:27-dind
@@ -78,8 +94,17 @@ deploy_prod:
     - kubectl create namespace ${K8S_NAMESPACE} || true
     - kubectl config set-context --current --namespace=${K8S_NAMESPACE}
     - kubectl delete secret $DOCKER_PULL_SECRET || true
-    - kubectl create secret docker-registry $DOCKER_PULL_SECRET --docker-server=$CI_REGISTRY --docker-username=$CI_REGISTRY_USER --docker-password=$CI_REGISTRY_PASSWORD
-    - helm upgrade --install $APP_NAME ./chart --values ./chart/values-${ENVIRONMENT_NAME}.yaml --set image.repository=$CI_REGISTRY_IMAGE --set image.tag=$DOCKER_TAG --set "imagePullSecrets[0].name=$DOCKER_PULL_SECRET"
+    - |
+      kubectl create secret docker-registry $DOCKER_PULL_SECRET \
+              --docker-server=$CI_REGISTRY \
+              --docker-username=$CI_REGISTRY_USER \
+              --docker-password=$CI_REGISTRY_PASSWORD
+    - |
+      helm upgrade \
+                   --install $APP_NAME ./chart \
+                   --values ./chart/values-${ENVIRONMENT_NAME}.yaml \
+                   --set image.repository=$CI_REGISTRY_IMAGE \
+                   --set image.tag=$DOCKER_TAG \
+                   --set "imagePullSecrets[0].name=$DOCKER_PULL_SECRET"
     - kubectl rollout restart deployment ${APP_NAME}
     - kubectl rollout status deployment ${APP_NAME} --timeout=90s
-

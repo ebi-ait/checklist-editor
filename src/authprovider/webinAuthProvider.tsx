@@ -23,11 +23,11 @@ type CanAccessParams = {
 
 const accessControlStrategies = {
     reader: ({ resource, action }) => {
-        return ['checklists', 'fields', 'ontologies'].includes(resource)
+        return ['checklists', 'fields', 'fieldGroups', 'ontologies'].includes(resource)
             && ['list', 'show'].includes(action);
     },
     editor: ({ resource, action }) => {
-        return ['checklists', 'fields'].includes(resource)
+        return ['checklists', 'fields', 'fieldGroups'].includes(resource)
             && ['create', 'edit'].includes(action) ;
     },
     admin: ({ resource, action }) => {

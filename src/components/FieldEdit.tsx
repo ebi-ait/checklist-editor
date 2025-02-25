@@ -3,14 +3,15 @@ import {
     ArrayInput,
     Edit,
     FormDataConsumer,
-    RadioButtonGroupInput, ReferenceInput,
+    RadioButtonGroupInput,
+    ReferenceInput,
     required,
+    SelectInput,
     SimpleForm,
     SimpleFormIterator,
     TextInput,
     Validator
 } from "react-admin";
-import {SelectAttrbiuteInput} from "./SelectAttrbiuteInput.tsx";
 
 // registry of field types and their specific controls
 const inputMap = {
@@ -18,11 +19,11 @@ const inputMap = {
     'choice': () => <ChoiceField/>,
     'pattern': () => <TextInput source="pattern"
                                 validate={validateRegex}/>,
-    'ontology': () => <ReferenceInput source="ontology" reference="ontologies" />,
+    'ontology': () => <ReferenceInput source="ontology" reference="ontologies"/>,
     'taxon': () => null,
 }
 
-const validateRegex:Validator = (value: string) => {
+const validateRegex: Validator = (value: string) => {
     try {
         new RegExp(value);  // Try to create a RegExp
         return undefined;      // No error: it's a valid regex
@@ -41,12 +42,20 @@ function toTitleCase(s: string) {
     return s[0]?.toUpperCase() + (s.length > 1 ? s.substring(1) : '');
 }
 
-
 export const FieldForm = () =>
-    <SimpleForm mode="onChange" reValidateMode="onChange">
+    <SimpleForm
+        mode="onChange"
+        reValidateMode="onChange"
+        warnWhenUnsavedChanges
+    >
         <TextInput source="label" validate={required()}/>
         <TextInput source="description" multiline={true} validate={required()}/>
-        <SelectAttrbiuteInput source="group"/>
+        {/*<SelectAttrbiuteInput source="group"/>*/}
+
+        <ReferenceInput label="group" source="group" reference="fieldGroups" perPage={200}>
+            <SelectInput/>
+        </ReferenceInput>
+
         <RadioButtonGroupInput source="type"
                                validate={required()}
                                choices={
@@ -61,6 +70,7 @@ export const FieldForm = () =>
             </ SimpleFormIterator>
         </ArrayInput>
     </SimpleForm>;
+
 // Custom input component based on an attribute
 export const ConditionalInput = ({selectorAttrName = 'type'}) =>
     <FormDataConsumer>
@@ -76,6 +86,7 @@ export const ConditionalInput = ({selectorAttrName = 'type'}) =>
 
 
 export const FieldEdit = () =>
-    <Edit>
+    <Edit mutationMode="pessimistic">
         <FieldForm/>
     </Edit>;
+
