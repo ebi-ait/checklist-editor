@@ -16,11 +16,11 @@ stages:
 build_docker_image:
   stage: build
   image:
-    name: ${DOCKER_REGISTRY}/docker:27
+    name: ${CI_REGISTRY_IMAGE}/docker:27
     pull_policy: if-not-present
   tags: ["dind", "docker"]
   services:
-    - ${DOCKER_REGISTRY}/docker:27-dind
+    - ${CI_REGISTRY_IMAGE}/docker:27-dind
   before_script:
     - echo "$CI_REGISTRY_PASSWORD" | docker login --username "$CI_REGISTRY_USER" --password-stdin "$CI_REGISTRY"
   script:
@@ -86,10 +86,10 @@ deploy_fallback_prod:
 
 .kube_deploy_script:
   stage: deploy
-  image: ${DOCKER_REGISTRY}/dtzar/helm-kubectl:3.16
+  image: ${CI_REGISTRY_IMAGE}/dtzar/helm-kubectl:3.16
   tags: ["dind", "docker"]
   services:
-    - ${DOCKER_REGISTRY}/docker:27-dind
+    - ${CI_REGISTRY_IMAGE}/docker:27-dind
   variables:
     K8S_NAMESPACE: ${K8S_NAMESPACE_PREFIX}-${ENVIRONMENT_NAME}
   script:
