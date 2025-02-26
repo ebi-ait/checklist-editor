@@ -1,4 +1,3 @@
-import React from "react";
 import {
     ArrayInput,
     Edit,
@@ -12,6 +11,7 @@ import {
     TextInput,
     Validator
 } from "react-admin";
+import {TrackResourcePage} from "../analytics.tsx";
 
 // registry of field types and their specific controls
 const inputMap = {
@@ -85,8 +85,12 @@ export const ConditionalInput = ({selectorAttrName = 'type'}) =>
     </FormDataConsumer>;
 
 
-export const FieldEdit = () =>
-    <Edit mutationMode="pessimistic">
-        <FieldForm/>
-    </Edit>;
+export const FieldEdit = () => {
+    return (
+        <Edit mutationMode="pessimistic">
+            <TrackResourcePage action={"edit"}/>
+            <FieldForm/>
+        </Edit>
+    );
+};
 

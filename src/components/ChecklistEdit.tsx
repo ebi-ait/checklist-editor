@@ -17,9 +17,10 @@ import {
     useRedirect,
     Validator
 } from "react-admin";
+import {TrackResourcePage} from "../analytics.tsx";
 
 import {FieldProps} from "../model/Field.tsx";
-import {SelectAttrbiuteInput} from "./SelectAttrbiuteInput.tsx";
+import {SelectAttributeInput} from "./SelectAttributeInput.tsx";
 
 const FieldRender = () => {
     const record: FieldProps | undefined = useRecordContext();
@@ -68,7 +69,7 @@ export const ChecklistForm = ({mandatoryFields}) => {
         <TextField source="accession" label="Accession"/>
         <TextField source="version" label="Version"/>
         <TextField source="authority" label={"Authority"}/>
-        <SelectAttrbiuteInput source="group" validate={required()}/>
+        <SelectAttributeInput source="group" validate={required()}/>
         <TextInput source="description" multiline={true} rows={2}/>
         <ArrayInput source="schemaFieldAssociations" label="Fields">
             <SimpleFormIterator inline>
@@ -115,6 +116,7 @@ export const ChecklistEdit = () => {
             mutationMode={"pessimistic"}
             mutationOptions={{onSuccess: handleSuccess}}
         >
+            <TrackResourcePage action={"edit"}/>
             <ChecklistForm/>
         </Edit>
     );

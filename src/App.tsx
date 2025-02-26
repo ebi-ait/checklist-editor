@@ -5,7 +5,7 @@ import {QueryClient} from '@tanstack/react-query';
 import React from 'react';
 
 import {Admin, Layout, Resource} from 'react-admin';
-import {initAnalyticsCollection, usePageTracking} from "./analytics.tsx";
+import {initAnalyticsCollection, usePageViewTracking} from "./analytics.tsx";
 import webinAuthProvider from "./authprovider/webinAuthProvider.tsx";
 import {ChecklistCreate} from "./components/ChecklistCreate.tsx";
 import {ChecklistEdit} from "./components/ChecklistEdit.tsx";
@@ -26,7 +26,7 @@ import {appTheme, darkTheme} from "./theme.tsx";
 initAnalyticsCollection();
 
 export const MyLayout = ({ children }) => {
-    usePageTracking();
+    usePageViewTracking();
     return <Layout>{children}</Layout>;
 }
 const App: React.FC = () => {

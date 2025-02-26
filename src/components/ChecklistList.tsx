@@ -17,7 +17,7 @@ import {
 } from "react-admin";
 import {recordClickEvent} from "../analytics.tsx";
 import {ChecklistPreviewPanel} from "./ChecklistPreviewPanel.tsx";
-import {SelectAttrbiuteInput} from "./SelectAttrbiuteInput.tsx";
+import {SelectAttributeInput} from "./SelectAttributeInput.tsx";
 
 
 const SchemaListActions = () => (
@@ -34,8 +34,8 @@ const filters = [
                  choices={[{id: true, name: 'True'}, {id: false, name: 'False'}]}/>,
     <SelectInput source="authority"
                  choices={[{id: 'ENA', name: 'ENA'}, {id: 'BIOSAMPLES', name: 'BioSamples'}]}/>,
-    <SelectAttrbiuteInput source="group"/>,
-    <SelectAttrbiuteInput source="lastModifiedBy"/>,
+    <SelectAttributeInput source="group"/>,
+    <SelectAttributeInput source="lastModifiedBy"/>,
 ];
 
 const ConditionalEditButton = () => {

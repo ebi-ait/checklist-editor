@@ -1,6 +1,6 @@
 import {
     DateField,
-    EditButton,
+    EditButton, Loading,
     ReferenceField,
     Show,
     SimpleShowLayout,
@@ -8,6 +8,7 @@ import {
     TopToolbar,
     useRecordContext
 } from "react-admin";
+import {TrackResourcePage} from "../analytics.tsx";
 import {ConditionalEditButton} from "./FieldList.tsx";
 import {FieldTypeIcon} from "./FieldTypeIcon.tsx";
 
@@ -19,9 +20,10 @@ const FieldShowActions = () => {
         </TopToolbar>
     );
 }
-export const FieldShow = () =>
-    <Show emptyWhileLoading
-          actions={<FieldShowActions />}>
+export const FieldShow = () => {
+    return <Show emptyWhileLoading
+                 actions={<FieldShowActions/>}>
+        <TrackResourcePage action={"show"}/>
         <SimpleShowLayout>
             <FieldTypeIcon/>
             <TextField source="label"/>
@@ -36,4 +38,5 @@ export const FieldShow = () =>
             <DateField source="lastModifiedDate" showTime/>
             <ConditionalEditButton/>
         </SimpleShowLayout>
-    </Show>
+    </Show>;
+}
