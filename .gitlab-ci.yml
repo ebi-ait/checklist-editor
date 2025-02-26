@@ -16,15 +16,13 @@ stages:
 build_docker_image:
   stage: build
   image:
-    name: docker:27
+    name: ${DOCKER_REGISTRY}/docker:27
     pull_policy: if-not-present
   tags: ["dind", "docker"]
   services:
-    - docker:27-dind
+    - ${DOCKER_REGISTRY}/docker:27-dind
   before_script:
     - echo "$CI_REGISTRY_PASSWORD" | docker login --username "$CI_REGISTRY_USER" --password-stdin "$CI_REGISTRY"
-    - docker pull node:20-alpine
-    - docker pull nginx:1.25.4-alpine-slim
   script:
     - docker build -t $DOCKER_IMAGE_NAME .
     - docker push --quiet $DOCKER_IMAGE_NAME
@@ -88,10 +86,10 @@ deploy_fallback_prod:
 
 .kube_deploy_script:
   stage: deploy
-  image: dtzar/helm-kubectl:3.16
+  image: ${DOCKER_REGISTRY}/dtzar/helm-kubectl:3.16
   tags: ["dind", "docker"]
   services:
-    - docker:27-dind
+    - ${DOCKER_REGISTRY}/docker:27-dind
   variables:
     K8S_NAMESPACE: ${K8S_NAMESPACE_PREFIX}-${ENVIRONMENT_NAME}
   script:
