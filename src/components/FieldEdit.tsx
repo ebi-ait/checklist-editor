@@ -34,7 +34,7 @@ const validateRegex: Validator = (value: string) => {
 export const ChoiceField = () =>
     <ArrayInput source="choices">
         <SimpleFormIterator inline>
-            <TextInput source="."/>
+            <TextInput isRequired={true} resettable={true} label={"Choice Text"}/>
         </SimpleFormIterator>
     </ArrayInput>;
 
@@ -48,8 +48,8 @@ export const FieldForm = () =>
         reValidateMode="onChange"
         warnWhenUnsavedChanges
     >
-        <TextInput source="label" validate={required()}/>
-        <TextInput source="description" multiline={true} validate={required()}/>
+        <TextInput source="label" isRequired={true}/>
+        <TextInput source="description" multiline={true} isRequired={true}/>
         {/*<SelectAttrbiuteInput source="group"/>*/}
 
         <ReferenceInput label="group" source="group" reference="fieldGroups" perPage={200}>
@@ -66,7 +66,7 @@ export const FieldForm = () =>
         <ConditionalInput/>
         <ArrayInput source="units" label="Units">
             <SimpleFormIterator>
-                <TextInput/>
+                <TextInput isRequired={true}/>
             </ SimpleFormIterator>
         </ArrayInput>
     </SimpleForm>;
