@@ -1,6 +1,5 @@
 import {Stack, Typography} from "@mui/material";
 import {useQueryClient} from "@tanstack/react-query";
-import React from "react";
 import {
     ArrayInput,
     AutocompleteInput,

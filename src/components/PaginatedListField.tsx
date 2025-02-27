@@ -41,19 +41,19 @@ export const PaginatedListField = (props) => {
             <Datagrid data={filteredItems.slice(page * rowsPerPage, (page + 1) * rowsPerPage)} rowClick="false"
                       bulkActionButtons={false}>
                 <ReferenceField source="fieldId" reference="fields"
-                                queryOptions={{meta: {size: 300, parentId: record.id}}}>
+                                queryOptions={{meta: {parentId: record.id}}}>
                     <TextField source="label"/>
                 </ReferenceField>
                 <ReferenceField label="Type" source="fieldId" reference="fields" link={false}
-                                queryOptions={{meta: {size: 300, parentId: record.id}}}>
+                                queryOptions={{meta: {parentId: record.id}}}>
                     <FieldTypeIcon/>
                 </ReferenceField>
                 <ReferenceField label="Version" source="fieldId" reference="fields" link={false}
-                                queryOptions={{meta: {size: 300, parentId: record.id}}}>
+                                queryOptions={{meta: {parentId: record.id}}}>
                     <TextField source="version"/>
                 </ReferenceField>
                 <ReferenceField label="Group" source="fieldId" reference="fields" link={false}
-                                queryOptions={{meta: {size: 300, parentId: record.id}}}>
+                                queryOptions={{meta: {parentId: record.id}}}>
                     <ReferenceField source="group"
                                     reference="fieldGroups"
                                     label="Group">
