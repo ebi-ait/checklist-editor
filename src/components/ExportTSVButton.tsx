@@ -8,7 +8,7 @@ export const ExportTSVButton = () => {
     if (!record) return null;
 
     const handleExport = async () => {
-        const {data} = await dataProvider.getMany('fields', {ids: [], meta: {parentId: record.id}})
+        const {data} = await dataProvider.getMany('fields', {ids: [], meta: {size:300, parentId: record.id}})
         const fieldIds = data.map(f => f.id) || [];
         const fieldUnits = data.map(f => f.units?.join(',')) || [];
         let tsvContent = `Checklist\t${record.id}\t${record.title}\n`; // Single row with headers
