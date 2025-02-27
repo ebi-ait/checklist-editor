@@ -1,8 +1,10 @@
 import {
+    ArrayField,
     DateField,
-    EditButton, Loading,
+    EditButton,
     ReferenceField,
     Show,
+    SimpleList,
     SimpleShowLayout,
     TextField,
     TopToolbar,
@@ -16,11 +18,14 @@ const FieldShowActions = () => {
     const record = useRecordContext();
     return (
         <TopToolbar>
-            { record && record.editable &&  <EditButton /> }
+            {record && record.editable && <EditButton/>}
         </TopToolbar>
     );
 }
+
+
 export const FieldShow = () => {
+    const record = useRecordContext();
     return <Show emptyWhileLoading
                  actions={<FieldShowActions/>}>
         <TrackResourcePage action={"show"}/>
@@ -36,6 +41,12 @@ export const FieldShow = () => {
             <TextField source="description"/>
             <TextField source="lastModifiedBy"/>
             <DateField source="lastModifiedDate" showTime/>
+            <ArrayField source="units">
+                <SimpleList
+                    primaryText={record => record}
+                >
+                </SimpleList>
+            </ArrayField>
             <ConditionalEditButton/>
         </SimpleShowLayout>
     </Show>;
