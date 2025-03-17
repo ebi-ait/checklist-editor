@@ -1,6 +1,5 @@
 import {Stack, Typography} from "@mui/material";
 import {useQueryClient} from "@tanstack/react-query";
-import React from "react";
 import {
     ArrayInput,
     AutocompleteInput,
@@ -17,9 +16,10 @@ import {
     useRedirect,
     Validator
 } from "react-admin";
+import {TrackResourcePage} from "../analytics.tsx";
 
 import {FieldProps} from "../model/Field.tsx";
-import {SelectAttrbiuteInput} from "./SelectAttrbiuteInput.tsx";
+import {SelectAttributeInput} from "./SelectAttributeInput.tsx";
 
 const FieldRender = () => {
     const record: FieldProps | undefined = useRecordContext();
@@ -43,7 +43,8 @@ const validateUnique: Validator = (value: string, values) => {
         return `duplicate field are not allowed. Please check field ${value}`;
     }
 };
-export const ChecklistForm = () => {
+
+export const ChecklistForm = ({mandatoryFields}) => {
     const record = useRecordContext();
     if (record && !record.id) { // have the record and 'record.id' is not present => we are cloning a record
         // todo discuss
@@ -57,16 +58,17 @@ export const ChecklistForm = () => {
         record.id = "";
     }
 
+
     return <SimpleForm
+        defaultValues={mandatoryFields}
         mode="onChange"
         reValidateMode="onChange"
-        warnWhenUnsavedChanges
-    >
+        warnWhenUnsavedChanges >
         <TextInput source="title" validate={required()}/>
         <TextField source="accession" label="Accession"/>
         <TextField source="version" label="Version"/>
         <TextField source="authority" label={"Authority"}/>
-        <SelectAttrbiuteInput source="group" validate={required()}/>
+        <SelectAttributeInput source="group" validate={required()}/>
         <TextInput source="description" multiline={true} rows={2}/>
         <ArrayInput source="schemaFieldAssociations" label="Fields">
             <SimpleFormIterator inline>
@@ -113,6 +115,7 @@ export const ChecklistEdit = () => {
             mutationMode={"pessimistic"}
             mutationOptions={{onSuccess: handleSuccess}}
         >
+            <TrackResourcePage action={"edit"}/>
             <ChecklistForm/>
         </Edit>
     );

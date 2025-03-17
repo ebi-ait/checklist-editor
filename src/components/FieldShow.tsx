@@ -1,13 +1,16 @@
 import {
+    ArrayField,
     DateField,
     EditButton,
     ReferenceField,
     Show,
+    SimpleList,
     SimpleShowLayout,
     TextField,
     TopToolbar,
     useRecordContext
 } from "react-admin";
+import {TrackResourcePage} from "../analytics.tsx";
 import {ConditionalEditButton} from "./FieldList.tsx";
 import {FieldTypeIcon} from "./FieldTypeIcon.tsx";
 
@@ -15,13 +18,16 @@ const FieldShowActions = () => {
     const record = useRecordContext();
     return (
         <TopToolbar>
-            { record && record.editable &&  <EditButton /> }
+            {record && record.editable && <EditButton/>}
         </TopToolbar>
     );
 }
-export const FieldShow = () =>
-    <Show emptyWhileLoading
-          actions={<FieldShowActions />}>
+
+
+export const FieldShow = () => {
+    return <Show emptyWhileLoading
+                 actions={<FieldShowActions/>}>
+        <TrackResourcePage action={"show"}/>
         <SimpleShowLayout>
             <FieldTypeIcon/>
             <TextField source="label"/>
@@ -34,6 +40,10 @@ export const FieldShow = () =>
             <TextField source="description"/>
             <TextField source="lastModifiedBy"/>
             <DateField source="lastModifiedDate" showTime/>
+            <ArrayField source="units">
+                <SimpleList primaryText={string => string}/>
+            </ArrayField>
             <ConditionalEditButton/>
         </SimpleShowLayout>
-    </Show>
+    </Show>;
+}

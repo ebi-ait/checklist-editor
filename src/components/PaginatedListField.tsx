@@ -14,14 +14,18 @@ export const PaginatedListField = (props) => {
     const items = get(record, source) || [];
 
     const [page, setPage] = useState(0);
-    const [rowsPerPage] = useState(10);
+    const [rowsPerPage, setRowsPerPage] = useState(2);
     const [filter, setFilter] = useState('');
 
     const handleChangePage = (_, newPage) => {
         setPage(newPage);
     };
-    const handleFilterChange = (event) => {
-        setFilter(event.target.value);
+    const handleRowsPerPageChange = (_,newRowsPerPage)=>{
+        setRowsPerPage(parseInt(_.target.value, 10));
+        setPage(0);
+    }
+    const handleFilterChange = (_) => {
+        setFilter(_.target.value);
         setPage(0); // Reset to first page when filtering
     };
 
@@ -38,22 +42,23 @@ export const PaginatedListField = (props) => {
                 onChange={handleFilterChange}
                 style={{ marginBottom: '1rem' }}
             />
-            <Datagrid data={filteredItems.slice(page * rowsPerPage, (page + 1) * rowsPerPage)} rowClick="false"
+            <Datagrid data={filteredItems.slice(page * rowsPerPage, (page + 1) * rowsPerPage)}
+                      rowClick="false"
                       bulkActionButtons={false}>
                 <ReferenceField source="fieldId" reference="fields"
-                                queryOptions={{meta: {size: 300, parentId: record.id}}}>
+                                queryOptions={{meta: {size:300, parentId: record.id}}}>
                     <TextField source="label"/>
                 </ReferenceField>
                 <ReferenceField label="Type" source="fieldId" reference="fields" link={false}
-                                queryOptions={{meta: {size: 300, parentId: record.id}}}>
+                                queryOptions={{meta: {size:300, parentId: record.id}}}>
                     <FieldTypeIcon/>
                 </ReferenceField>
                 <ReferenceField label="Version" source="fieldId" reference="fields" link={false}
-                                queryOptions={{meta: {size: 300, parentId: record.id}}}>
+                                queryOptions={{meta: {size:300, parentId: record.id}}}>
                     <TextField source="version"/>
                 </ReferenceField>
                 <ReferenceField label="Group" source="fieldId" reference="fields" link={false}
-                                queryOptions={{meta: {size: 300, parentId: record.id}}}>
+                                queryOptions={{meta: {size:300, parentId: record.id}}}>
                     <ReferenceField source="group"
                                     reference="fieldGroups"
                                     label="Group">
@@ -75,6 +80,7 @@ export const PaginatedListField = (props) => {
                 count={filteredItems.length}
                 page={page}
                 onPageChange={handleChangePage}
+                onRowsPerPageChange={handleRowsPerPageChange}
                 rowsPerPage={rowsPerPage}
                 rowsPerPageOptions={[5, 10, 20]}
             />

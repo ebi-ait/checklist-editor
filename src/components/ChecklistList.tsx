@@ -15,15 +15,16 @@ import {
     TopToolbar,
     useRecordContext,
 } from "react-admin";
+import {recordClickEvent} from "../analytics.tsx";
 import {ChecklistPreviewPanel} from "./ChecklistPreviewPanel.tsx";
-import {SelectAttrbiuteInput} from "./SelectAttrbiuteInput.tsx";
+import {SelectAttributeInput} from "./SelectAttributeInput.tsx";
 
 
 const SchemaListActions = () => (
     <TopToolbar>
-        <FilterButton/>
-        <CreateButton/>
-        <SelectColumnsButton/>
+        <FilterButton onClick={recordClickEvent}/>
+        <CreateButton onClick={recordClickEvent}/>
+        <SelectColumnsButton onClick={recordClickEvent}/>
     </TopToolbar>
 );
 
@@ -33,13 +34,13 @@ const filters = [
                  choices={[{id: true, name: 'True'}, {id: false, name: 'False'}]}/>,
     <SelectInput source="authority"
                  choices={[{id: 'ENA', name: 'ENA'}, {id: 'BIOSAMPLES', name: 'BioSamples'}]}/>,
-    <SelectAttrbiuteInput source="group"/>,
-    <SelectAttrbiuteInput source="lastModifiedBy"/>,
+    <SelectAttributeInput source="group"/>,
+    <SelectAttributeInput source="lastModifiedBy"/>,
 ];
 
 const ConditionalEditButton = () => {
     const record = useRecordContext();
-    return record && record.editable ? <EditButton/> : null;
+    return record && record.editable ? <EditButton onClick={recordClickEvent}/> : null;
 };
 
 export const ChecklistList = () => {
@@ -63,7 +64,7 @@ export const ChecklistList = () => {
                 />
                 <ConditionalEditButton/>
                 <CanAccess action="create">
-                    <CloneButton/>
+                    <CloneButton onClick={recordClickEvent}/>
                 </CanAccess>
             </DatagridConfigurable>
         </List>

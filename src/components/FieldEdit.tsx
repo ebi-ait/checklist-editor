@@ -1,4 +1,3 @@
-import React from "react";
 import {
     ArrayInput,
     Edit,
@@ -12,6 +11,7 @@ import {
     TextInput,
     Validator
 } from "react-admin";
+import {TrackResourcePage} from "../analytics.tsx";
 
 // registry of field types and their specific controls
 const inputMap = {
@@ -34,7 +34,7 @@ const validateRegex: Validator = (value: string) => {
 export const ChoiceField = () =>
     <ArrayInput source="choices">
         <SimpleFormIterator inline>
-            <TextInput source="."/>
+            <TextInput isRequired={true} resettable={true} label={"Choice Text"}/>
         </SimpleFormIterator>
     </ArrayInput>;
 
@@ -48,8 +48,8 @@ export const FieldForm = () =>
         reValidateMode="onChange"
         warnWhenUnsavedChanges
     >
-        <TextInput source="label" validate={required()}/>
-        <TextInput source="description" multiline={true} validate={required()}/>
+        <TextInput source="label" isRequired={true}/>
+        <TextInput source="description" multiline={true} isRequired={true}/>
         {/*<SelectAttrbiuteInput source="group"/>*/}
 
         <ReferenceInput label="group" source="group" reference="fieldGroups" perPage={200}>
@@ -66,7 +66,7 @@ export const FieldForm = () =>
         <ConditionalInput/>
         <ArrayInput source="units" label="Units">
             <SimpleFormIterator>
-                <TextInput/>
+                <TextInput isRequired={true}/>
             </ SimpleFormIterator>
         </ArrayInput>
     </SimpleForm>;
@@ -85,8 +85,12 @@ export const ConditionalInput = ({selectorAttrName = 'type'}) =>
     </FormDataConsumer>;
 
 
-export const FieldEdit = () =>
-    <Edit mutationMode="pessimistic">
-        <FieldForm/>
-    </Edit>;
+export const FieldEdit = () => {
+    return (
+        <Edit mutationMode="pessimistic">
+            <TrackResourcePage action={"edit"}/>
+            <FieldForm/>
+        </Edit>
+    );
+};
 

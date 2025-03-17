@@ -5,5 +5,6 @@ window.__CONFIG__ = {
     SCHEMA_STORE_URL: "/api/v2",
     OLS_URL: "https://www.ebi.ac.uk/ols4/api",
     CHECKLIST_EDITOR_BASE_URL: "/biosamples/checklist-editor",
-    AUTH_API_URL: "/auth"
+    AUTH_API_URL: "/auth",
+    GA_MEASUREMENT_ID: "G-0ZM1483QSF",
 };

@@ -1,5 +1,6 @@
 # Step 1: Build
-FROM node:20-alpine AS builder
+ARG DOCKER_REGISTRY=docker.io/library
+FROM ${DOCKER_REGISTRY}/node:20-alpine AS builder
 
 WORKDIR /app
 
@@ -12,7 +13,7 @@ COPY . .
 RUN npm run build
 
 
-FROM nginx:1.25.4-alpine-slim
+FROM ${DOCKER_REGISTRY}/nginx:1.25.4-alpine-slim
 
 COPY --from=builder /app/dist /usr/share/nginx/html
 

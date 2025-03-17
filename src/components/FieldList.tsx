@@ -16,13 +16,14 @@ import {
 } from 'react-admin';
 import {FieldPreviewPanel} from "./FieldPreviewPanel.tsx";
 import {FieldTypeIcon} from "./FieldTypeIcon.tsx";
-import {SelectAttrbiuteInput} from "./SelectAttrbiuteInput.tsx";
+import {recordClickEvent} from "../analytics.tsx";
+import {SelectAttributeInput} from "./SelectAttributeInput.tsx";
 
 const FieldListActions = () => (
     <TopToolbar>
-        <FilterButton/>
-        <CreateButton/>
-        <SelectColumnsButton/>
+        <FilterButton onClick={recordClickEvent}/>
+        <CreateButton onClick={recordClickEvent}/>
+        <SelectColumnsButton onClick={recordClickEvent}/>
     </TopToolbar>
 );
 
@@ -30,14 +31,14 @@ const filters = [
     <SearchInput source="searchIndex" alwaysOn/>,
     <SelectInput source="latest"
                  choices={[{id: true, name: 'True'}, {id: false, name: 'False'}]}/>,
-    <SelectAttrbiuteInput source="type"/>,
-    <SelectAttrbiuteInput source="lastModifedBy"/>,
-    <SelectAttrbiuteInput source="group"/>
-
+    <SelectAttributeInput source="type"/>,
+    <SelectAttributeInput source="lastModifedBy"/>,
+    <SelectAttributeInput source="group"/>,
 ];
+
 export const ConditionalEditButton = () => {
     const record = useRecordContext();
-    return record && record.latest ? <EditButton/> : null;
+    return record && record.latest ? <EditButton onClick={recordClickEvent}/> : null;
 };
 
 export const FieldList = () =>

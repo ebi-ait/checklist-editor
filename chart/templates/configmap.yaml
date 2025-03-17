@@ -7,9 +7,10 @@ metadata:
 data:
   config.js: |
     window.__CONFIG__ = {
-        SCHEMA_STORE_URL: "{{.Values.checklistEditor.baseUrl}}/api/v2",
-        OLS_URL: "https://www.ebi.ac.uk/ols4/api",
-        AUTH_API_URL: "{{.Values.checklistEditor.baseUrl}}/auth"
+        SCHEMA_STORE_URL: "{{ .Values.checklistEditor.baseUrl }}/api/v2",
+        OLS_URL: "{{ .Values.checklistEditor.olsUrl }}",
+        AUTH_API_URL: "{{ .Values.checklistEditor.baseUrl }}/auth",
+        GA_MEASUREMENT_ID: "{{ .Values.checklistEditor.gaMeasurementId}}",
     };
   nginx.conf: |
     server {
@@ -20,19 +21,22 @@ data:
       error_log /var/log/nginx/access.log debug;
 
       # redirect /api requests to the json-schema-store
-      location {{.Values.checklistEditor.baseUrl}}/api {
-          proxy_pass "{{ .Values.checklistEditor.schemaStoreUrl}}/api";
+      location {{ .Values.checklistEditor.baseUrl }}/api {
+          proxy_pass "{{ .Values.checklistEditor.schemaStoreUrl }}/api";
+          proxy_set_header Host $host;
+          proxy_set_header X-Real-IP $remote_addr;
+          proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
       }
 
       # redirect /auth requests to the webin
-      location {{.Values.checklistEditor.baseUrl}}/auth {
-          proxy_pass "{{ .Values.checklistEditor.webinUrl}}/auth";
+      location {{ .Values.checklistEditor.baseUrl }}/auth {
+          proxy_pass "{{ .Values.checklistEditor.webinUrl }}/auth";
       }
 
-      location {{.Values.checklistEditor.baseUrl}} {
+      location {{ .Values.checklistEditor.baseUrl }} {
         alias   /usr/share/nginx/html;
         index  index.html;
-        try_files $uri $uri/ {{.Values.checklistEditor.baseUrl}}/index.html;
+        try_files $uri $uri/ {{ .Values.checklistEditor.baseUrl }}/index.html;
       }
       # redirect server error pages to the static page /50x.html
       #

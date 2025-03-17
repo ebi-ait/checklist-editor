@@ -4,7 +4,8 @@ import ListIcon from '@mui/icons-material/List';
 import {QueryClient} from '@tanstack/react-query';
 import React from 'react';
 
-import {Admin, Resource} from 'react-admin';
+import {Admin, Layout, Resource} from 'react-admin';
+import {initAnalyticsCollection, usePageViewTracking} from "./analytics.tsx";
 import webinAuthProvider from "./authprovider/webinAuthProvider.tsx";
 import {ChecklistCreate} from "./components/ChecklistCreate.tsx";
 import {ChecklistEdit} from "./components/ChecklistEdit.tsx";
@@ -22,6 +23,12 @@ import checklistDataProvider from './dataprovider/schemaStoreDataProvider.tsx';
 import {LoginPage} from "./LoginPage.tsx";
 import {appTheme, darkTheme} from "./theme.tsx";
 
+initAnalyticsCollection();
+
+export const MyLayout = ({ children }) => {
+    usePageViewTracking();
+    return <Layout>{children}</Layout>;
+}
 const App: React.FC = () => {
     const queryClient = new QueryClient({
         defaultOptions: {
@@ -39,6 +46,8 @@ const App: React.FC = () => {
                darkTheme={darkTheme}
                disableTelemetry
                loginPage={LoginPage}
+               requireAuth
+               layout={MyLayout}
         >
             <Resource name="checklists"
                       list={ChecklistList}
@@ -46,6 +55,7 @@ const App: React.FC = () => {
                       edit={ChecklistEdit}
                       create={ChecklistCreate}
                       icon={ChecklistIcon}
+                      recordRepresentation={(record) => `${record.title} (${record.id})`}
             />
             <Resource name="fields"
                       list={FieldList}
@@ -53,6 +63,7 @@ const App: React.FC = () => {
                       edit={FieldEdit}
                       create={FieldCreate}
                       icon={ListIcon}
+                      recordRepresentation={(record) => `${record.name} (${record.id})`}
             />
             <Resource name="fieldGroups"
                       list={FieldGroupList}
